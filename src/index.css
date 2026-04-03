@@ -1,0 +1,562 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    overflow-x: hidden;
+    /* Ultra-luxurious brand background */
+    background: linear-gradient(135deg, 
+      rgba(248, 250, 252, 0.95) 0%, 
+      rgba(241, 245, 249, 0.92) 25%, 
+      rgba(248, 250, 252, 0.95) 50%, 
+      rgba(241, 245, 249, 0.92) 75%, 
+      rgba(248, 250, 252, 0.95) 100%
+    );
+    background-attachment: fixed;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  
+  /* Optimize font loading - locally hosted font */
+  @font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 300;
+    font-display: swap;
+    src: url('/inter-font.woff2') format('woff2');
+  }
+  
+  @font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('/inter-font.woff2') format('woff2');
+  }
+  
+  @font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url('/inter-font.woff2') format('woff2');
+  }
+  
+  @font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url('/inter-font.woff2') format('woff2');
+  }
+  
+  /* Apply consistent typography */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Inter', system-ui, sans-serif;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+  }
+  
+  p, a, button, input, textarea, select, li, span {
+    font-family: 'Inter', system-ui, sans-serif;
+    letter-spacing: -0.01em;
+  }
+  
+  /* Luxury page container base */
+  .luxury-page-bg {
+    background: linear-gradient(135deg, 
+      rgba(248, 250, 252, 0.98) 0%, 
+      rgba(241, 245, 249, 0.95) 25%, 
+      rgba(248, 250, 252, 0.98) 50%, 
+      rgba(241, 245, 249, 0.95) 75%, 
+      rgba(248, 250, 252, 0.98) 100%
+    );
+    backdrop-filter: blur(20px);
+    position: relative;
+  }
+  
+  /* Ultra-luxury section backgrounds */
+  .luxury-section-light {
+    background: linear-gradient(135deg, 
+      rgba(255, 255, 255, 0.85) 0%, 
+      rgba(248, 250, 252, 0.90) 50%, 
+      rgba(255, 255, 255, 0.85) 100%
+    );
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(226, 232, 240, 0.3);
+    box-shadow: 
+      0 8px 32px rgba(71, 85, 105, 0.08), 
+      0 4px 16px rgba(100, 116, 139, 0.04),
+      inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  }
+  
+  .luxury-section-dark {
+    background: linear-gradient(135deg, 
+      rgba(241, 245, 249, 0.90) 0%, 
+      rgba(226, 232, 240, 0.85) 50%, 
+      rgba(241, 245, 249, 0.90) 100%
+    );
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(203, 213, 225, 0.4);
+    box-shadow: 
+      0 8px 32px rgba(71, 85, 105, 0.10), 
+      0 4px 16px rgba(100, 116, 139, 0.06),
+      inset 0 1px 0 rgba(248, 250, 252, 0.8);
+  }
+  
+  /* Luxury card backgrounds */
+  .luxury-card {
+    background: linear-gradient(135deg, 
+      rgba(255, 255, 255, 0.95) 0%, 
+      rgba(248, 250, 252, 0.90) 100%
+    );
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(226, 232, 240, 0.4);
+    box-shadow: 
+      0 10px 40px rgba(71, 85, 105, 0.12), 
+      0 4px 20px rgba(100, 116, 139, 0.08),
+      inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  }
+  
+  /* Floating luxury elements */
+  .luxury-floating-elements::before {
+    content: '';
+    position: absolute;
+    top: 10%;
+    left: 5%;
+    width: 2px;
+    height: 2px;
+    background: radial-gradient(circle, rgba(203, 213, 225, 0.6) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: luxuryFloat 6s ease-in-out infinite;
+  }
+  
+  .luxury-floating-elements::after {
+    content: '';
+    position: absolute;
+    top: 60%;
+    right: 8%;
+    width: 1px;
+    height: 1px;
+    background: radial-gradient(circle, rgba(226, 232, 240, 0.5) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: luxuryFloat 8s ease-in-out infinite reverse;
+  }
+  
+  /* Optimize image rendering */
+  img {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    max-width: 100%;
+    height: auto;
+  }
+  
+  /* Prevent layout shift */
+  .aspect-square {
+    aspect-ratio: 1 / 1;
+  }
+  
+  /* Line clamp utilities */
+  .line-clamp-1 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+  }
+  
+  .line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+  
+  .line-clamp-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+  
+  /* Mobile optimizations */
+  @media (max-width: 640px) {
+    .luxury-card {
+      padding: 1rem;
+    }
+    
+    h1, h2, h3 {
+      word-break: break-word;
+    }
+    
+    .prose {
+      font-size: 0.95rem;
+    }
+  }
+  
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .scrollbar-hide {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+}
+
+@layer utilities {
+  .animate-scroll {
+    animation: scroll 20s linear infinite;
+  }
+  
+  .animate-scroll-slow {
+    animation: scrollSlow 120s linear infinite;
+  }
+  
+  .animate-scroll-readable {
+    animation: scrollReadable 60s linear infinite;
+  }
+  
+  .animate-scroll-banner {
+    animation: scrollBanner 30s linear infinite;
+  }
+  
+  .animate-fade-in {
+    animation: fadeIn 0.8s ease-out forwards;
+  }
+  
+  .animate-slide-up {
+    animation: slideUp 0.8s ease-out forwards;
+  }
+  
+  .animate-slide-in-left {
+    animation: slideInLeft 0.8s ease-out forwards;
+  }
+  
+  .animate-slide-in-right {
+    animation: slideInRight 0.8s ease-out forwards;
+  }
+  
+  .animate-scale-in {
+    animation: scaleIn 0.6s ease-out forwards;
+  }
+  
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  .animate-pulse-slow {
+    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  
+  .animate-shimmer {
+    animation: shimmer 2s linear infinite;
+  }
+  
+  .animate-scroll-banner {
+    animation: scrollBanner 30s linear infinite;
+  }
+  
+  .animate-luxury-glow {
+    animation: luxuryGlow 4s ease-in-out infinite;
+  }
+  
+  .animate-luxury-float {
+    animation: luxuryFloat 6s ease-in-out infinite;
+  }
+  
+  .animate-slide-down {
+    animation: slideDown 0.5s ease-out forwards;
+  }
+  
+  .animate-bounce-gentle {
+    animation: bounceGentle 2s ease-in-out infinite;
+  }
+  
+  /* Performance optimizations */
+  .will-change-transform {
+    will-change: transform;
+  }
+  
+  .will-change-opacity {
+    will-change: opacity;
+  }
+  
+  .gpu-accelerated {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+  
+  /* Mobile optimizations */
+  @media (max-width: 640px) {
+    .sm\:space-x-8 {
+      margin-right: 1rem;
+    }
+    
+    .sm\:space-y-8 {
+      margin-bottom: 1rem;
+    }
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    max-height: 200px;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes bounceGentle {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes luxuryGlow {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes luxuryFloat {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px);
+    opacity: 0.3;
+  }
+  25% {
+    transform: translateY(-8px) translateX(4px);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateY(-12px) translateX(-2px);
+    opacity: 0.4;
+  }
+  75% {
+    transform: translateY(-6px) translateX(-6px);
+    opacity: 0.5;
+  }
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes scrollSlow {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes scrollReadable {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes scrollBanner {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+/* Smooth transitions for all interactive elements */
+* {
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+/* Custom scrollbar with luxury styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: linear-gradient(to bottom, rgba(241, 245, 249, 0.5), rgba(226, 232, 240, 0.3));
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, rgba(148, 163, 184, 0.6), rgba(100, 116, 139, 0.8));
+  border-radius: 4px;
+  border: 1px solid rgba(203, 213, 225, 0.3);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, rgba(100, 116, 139, 0.8), rgba(71, 85, 105, 0.9));
+}
+
+/* Luxury text selection */
+::selection {
+  background: rgba(148, 163, 184, 0.3);
+  color: rgba(15, 23, 42, 0.9);
+}
+
+::-moz-selection {
+  background: rgba(148, 163, 184, 0.3);
+  color: rgba(15, 23, 42, 0.9);
+}
+
+/* Performance optimizations */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Critical loading states */
+.loading-skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Mobile optimizations */
+@media (max-width: 640px) {
+  .prose {
+    font-size: 0.95rem;
+  }
+  
+  .prose h2 {
+    font-size: 1.5rem;
+  }
+  
+  .prose h3 {
+    font-size: 1.25rem;
+  }
+  
+  /* Fix for mobile buttons */
+  button, .button, a.button, input[type="button"], input[type="submit"] {
+    touch-action: manipulation;
+  }
+  
+  /* Improve tap targets */
+  nav a, button, .button, input[type="checkbox"], input[type="radio"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Fix for mobile forms */
+  input, select, textarea {
+    font-size: 16px !important; /* Prevents iOS zoom on focus */
+  }
+}

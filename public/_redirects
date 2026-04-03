@@ -1,0 +1,19 @@
+# Netlify redirects for SPA routing and SEO
+
+# SPA routing - serve index.html for all routes
+/*    /index.html   200
+
+# Redirect old URLs (if any)
+/products/*  /all-products  301
+/shop/*      /all-products  301
+
+# Force HTTPS
+http://atomra-home-romania.com/*  https://atomra-home-romania.com/:splat  301!
+http://www.atomra-home-romania.com/*  https://atomra-home-romania.com/:splat  301!
+
+# Redirect www to non-www
+https://www.atomra-home-romania.com/*  https://atomra-home-romania.com/:splat  301!
+
+# Ensure assets are properly served with correct content types
+/assets/*.js    Content-Type=application/javascript
+/assets/*.css   Content-Type=text/css

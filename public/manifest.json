@@ -1,0 +1,27 @@
+{
+  "name": "Atomra Home Romania",
+  "short_name": "Atomra",
+  "description": "Refillable candles powered by wax pearls. Clean, eco-friendly, customizable.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1e293b",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/AtomraICON WHITE TRANSP.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/AtomraICON WHITE TRANSP.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["shopping", "lifestyle"],
+  "lang": "ro",
+  "dir": "ltr"
+}
