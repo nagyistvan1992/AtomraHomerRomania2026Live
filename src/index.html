@@ -7,9 +7,11 @@
     
     <!-- Preconnect to external domains -->
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://images.pexels.com" crossorigin>
     <link rel="dns-prefetch" href="//api.stripe.com">
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     
     <!-- Critical CSS inline -->
     <style>
@@ -72,14 +74,6 @@
         height: auto;
       }
       
-      /* Optimize font loading */
-      @font-face {
-        font-family: 'Inter';
-        font-style: normal;
-        font-weight: 300 600;
-        font-display: swap;
-        src: url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
-      }
     </style>
     
     <title>Atomra Home Romania | Refillable Pearled Candles</title>
@@ -133,9 +127,6 @@
     <link rel="preload" href="%BASE_URL%photoshoot-image (11).webp" as="image" type="image/webp" fetchpriority="high">
     <link rel="preload" href="%BASE_URL%AtomraICON WHITE TRANSP.png" as="image" type="image/png">
     
-    <!-- Preload fonts with proper as attribute -->
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap"></noscript>
   </head>
   <body>
     <!-- Loading screen -->

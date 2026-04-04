@@ -4,7 +4,7 @@ import { useCart } from '../context/CartContext';
 import { useLanguage } from '../context/LanguageContext'; 
 import { useAuth } from '../context/AuthContext';
 import { useStripe } from '../context/StripeContext';
-import { supabase } from '../lib/supabase';
+import { isSupabaseConfigured, supabase } from '../lib/supabase';
 import SEOHead from '../components/SEOHead';
 import { ShoppingCart, Plus, Minus, X, CreditCard, Truck, ArrowLeft, ArrowRight, Check, ShieldCheck, User, Trash2, Lock, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -30,6 +30,7 @@ const CartPage = () => {
   const [notes, setNotes] = useState('');
   const [loading, setLoading] = useState(false);
   const [orderNumber, setOrderNumber] = useState('');
+  const supabaseFunctionsBaseUrl = isSupabaseConfigured ? `${import.meta.env.VITE_SUPABASE_URL}/functions/v1` : '';
 
   const shippingCost = getTotalPrice() >= 149 ? 0 : 25;
   const totalAmount = getTotalPrice() + shippingCost;
@@ -131,6 +132,10 @@ const CartPage = () => {
   const processStripePayment = async () => {
     setLoading(true);
     try {
+      if (!isSupabaseConfigured || !supabaseFunctionsBaseUrl || !import.meta.env.VITE_SUPABASE_ANON_KEY) {
+        throw new Error('Stripe checkout is not configured. Add the GitHub Actions Supabase and Stripe secrets first.');
+      }
+
       const stripe = await stripePromise; 
       if (!stripe) throw new Error('Stripe failed to initialize');
 
@@ -171,7 +176,7 @@ const CartPage = () => {
         console.log('Using fallback product for checkout:', fallbackProduct.name);
         
         // Call Stripe checkout with the fallback product
-        const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/stripe-checkout`, {
+        const response = await fetch(`${supabaseFunctionsBaseUrl}/stripe-checkout`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -209,7 +214,7 @@ const CartPage = () => {
         const { stripeProduct } = firstMatchingItem;
         
         // Call Stripe checkout with the matching product's price_id
-        const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/stripe-checkout`, {
+        const response = await fetch(`${supabaseFunctionsBaseUrl}/stripe-checkout`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

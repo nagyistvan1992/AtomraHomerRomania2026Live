@@ -24,39 +24,6 @@
     text-rendering: optimizeLegibility;
   }
   
-  /* Optimize font loading - locally hosted font */
-  @font-face {
-    font-family: 'Inter';
-    font-style: normal;
-    font-weight: 300;
-    font-display: swap;
-    src: url('../public/inter-font.woff2') format('woff2');
-  }
-  
-  @font-face {
-    font-family: 'Inter';
-    font-style: normal;
-    font-weight: 400;
-    font-display: swap;
-    src: url('../public/inter-font.woff2') format('woff2');
-  }
-  
-  @font-face {
-    font-family: 'Inter';
-    font-style: normal;
-    font-weight: 500;
-    font-display: swap;
-    src: url('../public/inter-font.woff2') format('woff2');
-  }
-  
-  @font-face {
-    font-family: 'Inter';
-    font-style: normal;
-    font-weight: 600;
-    font-display: swap;
-    src: url('../public/inter-font.woff2') format('woff2');
-  }
-  
   /* Apply consistent typography */
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Inter', system-ui, sans-serif;

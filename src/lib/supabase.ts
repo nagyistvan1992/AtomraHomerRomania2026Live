@@ -2,16 +2,22 @@ import { createClient } from '@supabase/supabase-js'
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+const isSupabaseConfigured = Boolean(supabaseUrl && supabaseAnonKey)
+const fallbackSupabaseUrl = 'https://placeholder.supabase.co'
+const fallbackSupabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBsYWNlaG9sZGVyIiwicm9sZSI6ImFub24iLCJpYXQiOjAsImV4cCI6NDA3MDkwODgwMH0.placeholder'
 
 // Validate environment variables
-if (!supabaseUrl || !supabaseAnonKey) {
+if (!isSupabaseConfigured) {
   console.error('Missing Supabase environment variables:', {
     url: supabaseUrl ? 'SET' : 'MISSING',
     key: supabaseAnonKey ? 'SET' : 'MISSING'
   });
 }
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+export const supabase = createClient(
+  isSupabaseConfigured ? supabaseUrl : fallbackSupabaseUrl,
+  isSupabaseConfigured ? supabaseAnonKey : fallbackSupabaseAnonKey,
+  {
   auth: {
     persistSession: true,
     autoRefreshToken: true,
@@ -26,6 +32,8 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     }
   }
 })
+
+export { isSupabaseConfigured }
 
 // Test connection function
 export const testSupabaseConnection = async () => {
