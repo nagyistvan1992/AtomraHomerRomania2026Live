@@ -2,8 +2,8 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
 // https://vitejs.dev/config/
-export default defineConfig(({ command }) => ({
-  base: command === 'build' ? '/AtomraHomerRomania2026Live/' : '/',
+export default defineConfig(() => ({
+  base: '/',
   plugins: [react()],
   optimizeDeps: {
     exclude: ['lucide-react'],
