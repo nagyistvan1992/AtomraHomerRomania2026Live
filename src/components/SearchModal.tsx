@@ -3,6 +3,7 @@ import { X, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { supabase } from '../lib/supabase';
+import { getAssetPath } from '../utils/assetPath';
 
 interface SearchModalProps {
   isOpen: boolean;
@@ -161,12 +162,12 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
                   >
                     <div className="aspect-square bg-gray-100 overflow-hidden">
                       <img
-                        src={product.images[0] || '/placeholder-image.jpg'}
+                        src={product.images[0] || getAssetPath('/placeholder-image.jpg')}
                         alt={product.name}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                         onError={(e) => {
                           const target = e.target as HTMLImageElement;
-                          target.src = '/placeholder-image.jpg';
+                          target.src = getAssetPath('/placeholder-image.jpg');
                         }}
                       />
                     </div>

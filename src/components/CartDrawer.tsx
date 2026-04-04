@@ -4,6 +4,7 @@ import { useCart } from '../context/CartContext';
 import { useLanguage } from '../context/LanguageContext'; 
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { getAssetPath } from '../utils/assetPath';
 
 const CartDrawer = () => {
   const { state, removeItem, updateQuantity, closeCart, getTotalItems, getTotalPrice } = useCart();
@@ -143,12 +144,12 @@ const CartDrawer = () => {
                       >
                         <div className="w-14 h-14 sm:w-16 sm:h-16 flex-shrink-0 relative overflow-hidden rounded">
                           <img
-                            src={item.image || '/placeholder-image.jpg'}
+                            src={item.image || getAssetPath('/placeholder-image.jpg')}
                             alt={item.name}
                             className="w-full h-full object-cover"
                             onError={(e) => {
                               const target = e.target as HTMLImageElement;
-                              target.src = '/placeholder-image.jpg';
+                              target.src = getAssetPath('/placeholder-image.jpg');
                             }}
                           />
                           {state.lastAddedItem?.id === item.id && state.showAddAnimation && (

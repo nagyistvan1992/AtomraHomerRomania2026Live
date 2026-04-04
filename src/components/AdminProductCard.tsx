@@ -2,6 +2,7 @@ import React from 'react';
 import { Edit3, Trash2, Star, Eye, ShoppingBag, Tag, Calendar } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { getAssetPath } from '../utils/assetPath';
 
 interface Product {
   id: string;
@@ -55,7 +56,7 @@ const AdminProductCard: React.FC<ProductCardProps> = ({
               className="w-full h-full object-cover"
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
-                target.src = '/placeholder-image.jpg';
+                target.src = getAssetPath('/placeholder-image.jpg');
               }}
             />
           ) : (
@@ -134,7 +135,7 @@ const AdminProductCard: React.FC<ProductCardProps> = ({
             className="w-full h-full object-cover"
             onError={(e) => {
               const target = e.target as HTMLImageElement;
-              target.src = '/placeholder-image.jpg';
+              target.src = getAssetPath('/placeholder-image.jpg');
             }}
           />
         ) : (

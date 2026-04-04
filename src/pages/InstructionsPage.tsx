@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import SEOHead from '../components/SEOHead';
 import { motion } from 'framer-motion';
+import { getAssetPath } from '../utils/assetPath';
 
 const InstructionsPage = () => {
   const { language } = useLanguage();
@@ -35,27 +36,27 @@ const InstructionsPage = () => {
               {
                 title: 'Pregătirea Recipientului',
                 description: 'Alege un recipient rezistent la căldură, cum ar fi un pahar de sticlă, ceramică sau metal. Asigură-te că recipientul este curat și uscat înainte de utilizare.',
-                image: '/DSC_2075_710x.webp'
+                image: getAssetPath('/DSC_2075_710x.webp')
               },
               {
                 title: 'Adăugarea Ceară de Nisip',
                 description: 'Toarnă granulele de ceară de nisip în recipient, umplând-l până la aproximativ 1-2 cm de marginea superioară. Nu umple complet recipientul pentru a permite expansiunea ceară la aprindere.',
-                image: '/DSC_2075_710x.webp'
+                image: getAssetPath('/DSC_2075_710x.webp')
               },
               {
                 title: 'Plasarea Fitilului',
                 description: 'Inserează fitilul în centrul ceară de nisip, asigurându-te că atinge fundul recipientului. Fitilul ar trebui să se extindă aproximativ 1 cm deasupra suprafeței ceară.',
-                image: '/DSC_2082_710x.webp'
+                image: getAssetPath('/DSC_2082_710x.webp')
               },
               {
                 title: 'Aprinderea Lumânării',
                 description: 'Aprinde fitilul și permite flăcării să ardă. Ceara de nisip va începe să se topească în jurul fitilului, creând un bazin de ceară lichidă.',
-                image: '/regregrg_cedf33bb-8bb4-4797-899b-f9d3cb8f33f7_710x.webp'
+                image: getAssetPath('/regregrg_cedf33bb-8bb4-4797-899b-f9d3cb8f33f7_710x.webp')
               },
               {
                 title: 'Reumplerea',
                 description: 'Când nivelul ceară scade, stinge lumânarea și lasă-o să se răcească. Adaugă mai multe granule de ceară de nisip și un fitil nou dacă este necesar. Apoi, aprinde din nou pentru a continua să te bucuri de lumânarea ta.',
-                image: '/DSC_2075_710x.webp'
+                image: getAssetPath('/DSC_2075_710x.webp')
               }
             ]
           },
@@ -126,27 +127,27 @@ const InstructionsPage = () => {
               {
                 title: 'Tartály Előkészítése',
                 description: 'Válassz hőálló tartályt, például üveg-, kerámia- vagy fémpohárat. Győződj meg róla, hogy a tartály tiszta és száraz használat előtt.',
-                image: '/DSC_2075_710x.webp'
+                image: getAssetPath('/DSC_2075_710x.webp')
               },
               {
                 title: 'Homokviasz Hozzáadása',
                 description: 'Öntsd a homokviasz gyöngyöket a tartályba, körülbelül 1-2 cm-re a felső széltől. Ne töltsd meg teljesen a tartályt, hogy helyet hagyj a viasz tágulásának meggyújtáskor.',
-                image: '/DSC_2075_710x.webp'
+                image: getAssetPath('/DSC_2075_710x.webp')
               },
               {
                 title: 'Kanóc Elhelyezése',
                 description: 'Helyezd a kanócot a homokviasz közepébe, ügyelve arra, hogy elérje a tartály alját. A kanócnak körülbelül 1 cm-rel kell a viasz felszíne fölé nyúlnia.',
-                image: '/DSC_2082_710x.webp'
+                image: getAssetPath('/DSC_2082_710x.webp')
               },
               {
                 title: 'Gyertya Meggyújtása',
                 description: 'Gyújtsd meg a kanócot és hagyd égni. A homokviasz elkezd olvadni a kanóc körül, folyékony viasztócsát képezve.',
-                image: '/regregrg_cedf33bb-8bb4-4797-899b-f9d3cb8f33f7_710x.webp'
+                image: getAssetPath('/regregrg_cedf33bb-8bb4-4797-899b-f9d3cb8f33f7_710x.webp')
               },
               {
                 title: 'Újratöltés',
                 description: 'Amikor a viasz szintje csökken, oltsd el a gyertyát és hagyd kihűlni. Adj hozzá több homokviasz gyöngyöt és szükség esetén új kanócot. Ezután gyújtsd meg újra, hogy továbbra is élvezhesd a gyertyádat.',
-                image: '/DSC_2075_710x.webp'
+                image: getAssetPath('/DSC_2075_710x.webp')
               }
             ]
           },
@@ -217,27 +218,27 @@ const InstructionsPage = () => {
               {
                 title: 'Preparing the Container',
                 description: 'Choose a heat-resistant container, such as a glass, ceramic, or metal vessel. Make sure the container is clean and dry before use.',
-                image: '/DSC_2075_710x.webp'
+                image: getAssetPath('/DSC_2075_710x.webp')
               },
               {
                 title: 'Adding Sand Wax',
                 description: 'Pour the sand wax pearls into the container, filling it to about 1-2 cm from the top edge. Don\'t fill the container completely to allow for wax expansion when lit.',
-                image: '/DSC_2075_710x.webp'
+                image: getAssetPath('/DSC_2075_710x.webp')
               },
               {
                 title: 'Placing the Wick',
                 description: 'Insert the wick into the center of the sand wax, making sure it reaches the bottom of the container. The wick should extend about 1 cm above the wax surface.',
-                image: '/DSC_2082_710x.webp'
+                image: getAssetPath('/DSC_2082_710x.webp')
               },
               {
                 title: 'Lighting the Candle',
                 description: 'Light the wick and allow the flame to burn. The sand wax will begin to melt around the wick, creating a pool of liquid wax.',
-                image: '/regregrg_cedf33bb-8bb4-4797-899b-f9d3cb8f33f7_710x.webp'
+                image: getAssetPath('/regregrg_cedf33bb-8bb4-4797-899b-f9d3cb8f33f7_710x.webp')
               },
               {
                 title: 'Refilling',
                 description: 'When the wax level drops, extinguish the candle and let it cool. Add more sand wax pearls and a new wick if necessary. Then, light again to continue enjoying your candle.',
-                image: '/DSC_2075_710x.webp'
+                image: getAssetPath('/DSC_2075_710x.webp')
               }
             ]
           },

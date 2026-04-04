@@ -8,6 +8,7 @@ import { supabase } from '../lib/supabase';
 import SEOHead from '../components/SEOHead';
 import { ShoppingCart, Plus, Minus, X, CreditCard, Truck, ArrowLeft, ArrowRight, Check, ShieldCheck, User, Trash2, Lock, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { getAssetPath } from '../utils/assetPath';
 
 const CartPage = () => {
   const { state, removeItem, updateQuantity, clearCart, closeCart, getTotalItems, getTotalPrice } = useCart();
@@ -297,12 +298,12 @@ const CartPage = () => {
                 <div className="flex items-center space-x-4 flex-1">
                   <div className="relative w-16 h-16 flex-shrink-0">
                     <img
-                      src={item.image || '/placeholder-image.jpg'}
+                      src={item.image || getAssetPath('/placeholder-image.jpg')}
                       alt={item.name}
                       className="w-full h-full object-cover rounded-md shadow-sm"
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
-                        target.src = '/placeholder-image.jpg';
+                        target.src = getAssetPath('/placeholder-image.jpg');
                       }}
                     />
                   </div>
@@ -632,8 +633,8 @@ const CartPage = () => {
                   
                   {/* Payment method icons */}
                   <div className="flex items-center mt-2 sm:mt-4 space-x-2 sm:space-x-4">
-                    <img src="/visa-card.png" alt="Visa" className="h-6 sm:h-8 shadow-md rounded transform group-hover:scale-105 transition-transform duration-300" />
-                    <img src="/mastercard.png" alt="Mastercard" className="h-6 sm:h-8 shadow-md rounded transform group-hover:scale-105 transition-transform duration-300" />
+                    <img src={getAssetPath('/visa-card.png')} alt="Visa" className="h-6 sm:h-8 shadow-md rounded transform group-hover:scale-105 transition-transform duration-300" />
+                    <img src={getAssetPath('/mastercard.png')} alt="Mastercard" className="h-6 sm:h-8 shadow-md rounded transform group-hover:scale-105 transition-transform duration-300" />
                   </div>
                 </div>
                 

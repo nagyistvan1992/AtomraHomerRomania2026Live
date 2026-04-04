@@ -1,3 +1,5 @@
+import { getAssetPath } from './assetPath';
+
 export const generateStructuredData = (type: string, data: any) => {
   const baseData = {
     '@context': 'https://schema.org',
@@ -81,10 +83,10 @@ export const preloadCriticalResources = () => {
 
   // Preload critical images
   const heroImage = new Image();
-  heroImage.src = '/81vj9gjxRBL._AC_SL1500_.jpg';
+  heroImage.src = getAssetPath('/81vj9gjxRBL._AC_SL1500_.jpg');
   
   const logoImage = new Image();
-  logoImage.src = '/AtomraICON%20WHITE%20TRANSP.png';
+  logoImage.src = getAssetPath('/AtomraICON WHITE TRANSP.png');
 };
 
 export const optimizeImages = () => {

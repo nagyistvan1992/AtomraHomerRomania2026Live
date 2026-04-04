@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
+import { getAssetPath } from '../utils/assetPath';
 
 const Hero = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -18,7 +19,7 @@ const Hero = () => {
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
-            backgroundImage: `url('/81vj9gjxRBL._AC_SL1500_.jpg')`
+            backgroundImage: `url('${getAssetPath('/81vj9gjxRBL._AC_SL1500_.jpg')}')`
           }}
         ></div>
         

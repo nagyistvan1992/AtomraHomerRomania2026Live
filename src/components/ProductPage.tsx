@@ -11,6 +11,7 @@ import { StripeCheckoutButton } from './StripeCheckoutButton';
 import { generateProductStructuredData, generateBreadcrumbStructuredData } from '../utils/seoUtils';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getProductById } from '../stripe-config';
+import { getAssetPath } from '../utils/assetPath';
 
 interface Product {
   id: string;
@@ -102,7 +103,7 @@ const ProductPage = () => {
         id: parseInt(product.id),
         name: product.name,
         price: `${product.price.toFixed(0)} Lei`,
-        image: product.images && product.images.length > 0 ? product.images[0] : '/placeholder-image.jpg',
+        image: product.images && product.images.length > 0 ? product.images[0] : getAssetPath('/placeholder-image.jpg'),
         category: product.category
       });
     }
@@ -313,7 +314,7 @@ const ProductPage = () => {
         title={getSeoTitle()}
         description={`${product.description} Lumânare din ceară naturală de soia, personalizabilă și reîncărcabilă.`}
         keywords={`lumanare ceara naturala, ceara de soia, lumanari ceara naturala, lumanare personalizata, lumanari din ceara naturala, ${product.name}, ${product.category}, ${product.tags?.join(', ')}`}
-        image={product.images && product.images.length > 0 ? product.images[0] : '/placeholder-image.jpg'}
+        image={product.images && product.images.length > 0 ? product.images[0] : getAssetPath('/placeholder-image.jpg')}
         url={`https://atomra-home-romania.com/product/${product.slug}`}
         type="product"
         structuredData={`[${productStructuredData}, ${breadcrumbStructuredData}]`}
@@ -421,7 +422,7 @@ const ProductPage = () => {
                   onClick={toggleFullscreen}
                 >
                   <LazyImage
-                    src={product.images && product.images.length > 0 ? product.images[selectedImage] : '/placeholder-image.jpg'}
+                    src={product.images && product.images.length > 0 ? product.images[selectedImage] : getAssetPath('/placeholder-image.jpg')}
                     alt={getImageAltText(selectedImage)}
                     className="w-full"
                     aspectRatio="square"
@@ -493,7 +494,7 @@ const ProductPage = () => {
                       aria-label={`View image ${index + 1} of ${product.name}`}
                     >
                       <LazyImage
-                        src={image || '/placeholder-image.jpg'}
+                        src={image || getAssetPath('/placeholder-image.jpg')}
                         alt={getImageAltText(index)}
                         aspectRatio="square"
                         objectFit="cover"

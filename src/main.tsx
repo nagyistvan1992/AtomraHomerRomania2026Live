@@ -2,6 +2,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
+import { getAssetPath } from './utils/assetPath';
 
 // Performance optimizations
 const startTime = performance.now();
@@ -10,9 +11,9 @@ const startTime = performance.now();
 const preloadCriticalResources = () => {
   // Preload critical images
   const criticalImages = [
-    '/photoshoot-image (11).webp',
-    '/81vj9gjxRBL._AC_SL1500_.jpg',
-    '/AtomraICON WHITE TRANSP.png'
+    getAssetPath('/photoshoot-image (11).webp'),
+    getAssetPath('/81vj9gjxRBL._AC_SL1500_.jpg'),
+    getAssetPath('/AtomraICON WHITE TRANSP.png')
   ];
   
   criticalImages.forEach(src => {

@@ -8,6 +8,7 @@ import SEOHead from '../components/SEOHead';
 import LazyImage from '../components/LazyImage'; 
 import AddToCartButton from '../components/AddToCartButton';
 import { motion, AnimatePresence } from 'framer-motion';
+import { getAssetPath } from '../utils/assetPath';
 
 interface Product {
   id: string;
@@ -286,7 +287,7 @@ const EventsCollectionPage = () => {
                           >
                             <div className="aspect-square relative">
                               <LazyImage
-                                src={product.images && product.images.length > 0 ? product.images[0] : '/placeholder-image.jpg'}
+                                src={product.images && product.images.length > 0 ? product.images[0] : getAssetPath('/placeholder-image.jpg')}
                                 alt={product.name}
                                 className="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-105"
                                 aspectRatio="square"

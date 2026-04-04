@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { Plus, Edit, Trash2, RefreshCw } from 'lucide-react';
 import AdminCategoryForm from './AdminCategoryForm';
+import { getAssetPath } from '../utils/assetPath';
 
 const AdminCategories = () => {
   const [categories, setCategories] = useState([]);
@@ -213,7 +214,7 @@ const AdminCategories = () => {
                           alt={category.name}
                           className="h-10 w-10 rounded-md object-cover mr-3"
                           onError={(e) => {
-                            e.target.src = '/placeholder-image.jpg';
+                            (e.target as HTMLImageElement).src = getAssetPath('/placeholder-image.jpg');
                           }}
                         />
                       ) : (

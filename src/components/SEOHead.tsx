@@ -1,5 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
+import { getAbsoluteAssetUrl, getAssetPath } from '../utils/assetPath';
 
 interface SEOHeadProps {
   title?: string;
@@ -26,6 +27,8 @@ const SEOHead: React.FC<SEOHeadProps> = ({
   noindex = false,
   preloadImages = []
 }) => {
+  const resolvedImage = getAbsoluteAssetUrl(image);
+
   return (
     <Helmet>
       {/* Basic Meta Tags */}
@@ -45,12 +48,12 @@ const SEOHead: React.FC<SEOHeadProps> = ({
       <link rel="preconnect" href="https://images.pexels.com" crossOrigin="anonymous" />
       
       {/* Critical resource preloads */}
-      <link rel="preload" href="/AtomraICON%20WHITE%20TRANSP.png" as="image" type="image/png" />
-      <link rel="preload" href="/81vj9gjxRBL._AC_SL1500_.jpg" as="image" type="image/jpeg" />
+      <link rel="preload" href={getAssetPath('/AtomraICON WHITE TRANSP.png')} as="image" type="image/png" />
+      <link rel="preload" href={getAssetPath('/81vj9gjxRBL._AC_SL1500_.jpg')} as="image" type="image/jpeg" />
       
       {/* Additional image preloads */}
       {preloadImages.map((imgSrc, index) => (
-        <link key={index} rel="preload" href={imgSrc} as="image" />
+        <link key={index} rel="preload" href={getAssetPath(imgSrc)} as="image" />
       ))}
       
       {/* Language and locale */}
@@ -60,7 +63,7 @@ const SEOHead: React.FC<SEOHeadProps> = ({
       {/* Open Graph Meta Tags */}
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
-      <meta property="og:image" content={image} />
+      <meta property="og:image" content={resolvedImage} />
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
       <meta property="og:image:alt" content={title} />
@@ -73,7 +76,7 @@ const SEOHead: React.FC<SEOHeadProps> = ({
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
-      <meta name="twitter:image" content={image} />
+      <meta name="twitter:image" content={resolvedImage} />
       <meta name="twitter:image:alt" content={title} />
       <meta name="twitter:site" content="@atomra_romania" />
       <meta name="twitter:creator" content="@atomra_romania" />
@@ -111,7 +114,7 @@ const SEOHead: React.FC<SEOHeadProps> = ({
             "description": description,
             "url": url,
             "logo": "https://atomra-home-romania.com/AtomraICON%20WHITE%20TRANSP.png",
-            "image": image,
+            "image": resolvedImage,
             "address": {
               "@type": "PostalAddress",
               "addressCountry": "RO"

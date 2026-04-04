@@ -8,6 +8,7 @@ import SEOHead from '../components/SEOHead';
 import AdminSetupInstructions from '../components/AdminSetupInstructions';
 import { useStripeCheckout } from '../hooks/useStripeCheckout';
 import { motion } from 'framer-motion';
+import { getAssetPath } from '../utils/assetPath';
 
 const MemberPage = () => {
   const navigate = useNavigate();
@@ -782,7 +783,7 @@ const MemberPage = () => {
                                 className="w-16 h-16 object-cover rounded"
                                 onError={(e) => {
                                   const target = e.target as HTMLImageElement;
-                                  target.src = '/placeholder-image.jpg';
+                                  target.src = getAssetPath('/placeholder-image.jpg');
                                 }}
                               />
                               <div className="flex-1">

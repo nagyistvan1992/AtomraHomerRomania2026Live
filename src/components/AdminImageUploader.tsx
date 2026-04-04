@@ -3,6 +3,7 @@ import { useDropzone } from 'react-dropzone';
 import { Upload, X, Image as ImageIcon, Check, AlertCircle, FileImage, Trash2, RefreshCw } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { motion, AnimatePresence } from 'framer-motion';
+import { getAssetPath } from '../utils/assetPath';
 
 interface ImageUploaderProps {
   onImageUploaded: (url: string, altText?: string) => void;
@@ -306,7 +307,7 @@ const AdminImageUploader: React.FC<ImageUploaderProps> = ({
                       className="w-full h-full object-cover"
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
-                        target.src = '/placeholder-image.jpg';
+                        target.src = getAssetPath('/placeholder-image.jpg');
                       }}
                     />
                   </div>

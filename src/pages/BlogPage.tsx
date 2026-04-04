@@ -4,6 +4,7 @@ import SEOHead from '../components/SEOHead';
 import { motion } from 'framer-motion';
 import { Calendar, User, Tag, ArrowRight, ChevronRight, ChevronLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { getAssetPath } from '../utils/assetPath';
 
 const BlogPage = () => {
   const { language } = useLanguage();
@@ -63,7 +64,7 @@ const BlogPage = () => {
           date: '15 Ianuarie 2025',
           author: 'Maria Popescu',
           category: 'Sfaturi',
-          image: '/CandleSand-6 copy.webp',
+          image: getAssetPath('/CandleSand-6 copy.webp'),
           tags: ['iarnă', 'relaxare', 'ceară naturală', 'atmosferă']
         },
         {
@@ -103,7 +104,7 @@ const BlogPage = () => {
           date: '28 Decembrie 2024',
           author: 'Elena Marinescu',
           category: 'Evenimente',
-          image: '/7_a312f04c-8c83-41b7-835e-4097a635502f_1024x1024.webp',
+          image: getAssetPath('/7_a312f04c-8c83-41b7-835e-4097a635502f_1024x1024.webp'),
           tags: ['nuntă', 'evenimente', 'decor', 'ceară naturală']
         },
         {
@@ -143,7 +144,7 @@ const BlogPage = () => {
           date: '10 Decembrie 2024',
           author: 'Ana Dumitrescu',
           category: 'Wellness',
-          image: '/Screenshot 2024-06-15 154827.webp',
+          image: getAssetPath('/Screenshot 2024-06-15 154827.webp'),
           tags: ['self-care', 'wellness', 'meditație', 'ceară de soia']
         },
         {
@@ -183,7 +184,7 @@ const BlogPage = () => {
           date: '5 Octombrie 2024',
           author: 'Mihai Ionescu',
           category: 'Decorațiuni',
-          image: '/1_Chameleon-Sand-Candles_photo-by-Curated-St-1024x935.webp',
+          image: getAssetPath('/1_Chameleon-Sand-Candles_photo-by-Curated-St-1024x935.webp'),
           tags: ['toamnă', 'decorațiuni', 'ceară naturală', 'ambient']
         },
         {
@@ -223,7 +224,7 @@ const BlogPage = () => {
           date: '20 Septembrie 2024',
           author: 'Dr. Laura Popescu',
           category: 'Wellness',
-          image: '/il_fullxfull.5794329172_3eft.webp',
+          image: getAssetPath('/il_fullxfull.5794329172_3eft.webp'),
           tags: ['somn', 'relaxare', 'ritual', 'ceară de soia', 'wellness']
         }
       ];
@@ -236,7 +237,7 @@ const BlogPage = () => {
           date: '2025. január 15.',
           author: 'Kovács Mária',
           category: 'Tippek',
-          image: '/CandleSand-6 copy.webp'
+          image: getAssetPath('/CandleSand-6 copy.webp')
         },
         {
           id: 2,
@@ -245,7 +246,7 @@ const BlogPage = () => {
           date: '2024. december 28.',
           author: 'Nagy Ilona',
           category: 'Események',
-          image: '/7_a312f04c-8c83-41b7-835e-4097a635502f_1024x1024.webp'
+          image: getAssetPath('/7_a312f04c-8c83-41b7-835e-4097a635502f_1024x1024.webp')
         },
         {
           id: 3,
@@ -254,7 +255,7 @@ const BlogPage = () => {
           date: '2024. december 10.',
           author: 'Szabó Anna',
           category: 'Wellness',
-          image: '/Screenshot 2024-06-15 154827.webp'
+          image: getAssetPath('/Screenshot 2024-06-15 154827.webp')
         }
       ];
     } else {
@@ -266,7 +267,7 @@ const BlogPage = () => {
           date: 'January 15, 2025',
           author: 'Maria Johnson',
           category: 'Tips',
-          image: '/CandleSand-6 copy.webp'
+          image: getAssetPath('/CandleSand-6 copy.webp')
         },
         {
           id: 2,
@@ -275,7 +276,7 @@ const BlogPage = () => {
           date: 'December 28, 2024',
           author: 'Elena Williams',
           category: 'Events',
-          image: '/7_a312f04c-8c83-41b7-835e-4097a635502f_1024x1024.webp'
+          image: getAssetPath('/7_a312f04c-8c83-41b7-835e-4097a635502f_1024x1024.webp')
         },
         {
           id: 3,
@@ -284,7 +285,7 @@ const BlogPage = () => {
           date: 'December 10, 2024',
           author: 'Anna Smith',
           category: 'Wellness',
-          image: '/Screenshot 2024-06-15 154827.webp'
+          image: getAssetPath('/Screenshot 2024-06-15 154827.webp')
         }
       ];
     }
@@ -399,17 +400,17 @@ const BlogPage = () => {
             <h3 className="text-xl font-light text-slate-900 mb-4">Produse recomandate</h3>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <Link to="/product/granule-box-750g" className="flex flex-col items-center bg-white p-4 rounded-lg border border-slate-200 hover:shadow-md transition-shadow duration-200">
-                <img src="/photoshoot-image (11).webp" alt="Granule Box 750g" className="w-24 h-24 object-cover rounded-md mb-2" />
+                <img src={getAssetPath('/photoshoot-image (11).webp')} alt="Granule Box 750g" className="w-24 h-24 object-cover rounded-md mb-2" />
                 <h4 className="text-sm font-medium text-slate-900">Granule Box 750g</h4>
                 <p className="text-xs text-slate-500">98 Lei</p>
               </Link>
               <Link to="/product/pachet-splendore-250g" className="flex flex-col items-center bg-white p-4 rounded-lg border border-slate-200 hover:shadow-md transition-shadow duration-200">
-                <img src="/Untitled (7).webp" alt="Pachet Splendore 250g" className="w-24 h-24 object-cover rounded-md mb-2" />
+                <img src={getAssetPath('/Untitled (7).webp')} alt="Pachet Splendore 250g" className="w-24 h-24 object-cover rounded-md mb-2" />
                 <h4 className="text-sm font-medium text-slate-900">Pachet Splendore 250g</h4>
                 <p className="text-xs text-slate-500">59 Lei</p>
               </Link>
               <Link to="/product/pachet-essenza-150g" className="flex flex-col items-center bg-white p-4 rounded-lg border border-slate-200 hover:shadow-md transition-shadow duration-200">
-                <img src="/Untitled (8) copy.webp" alt="Pachet Essenza 150g" className="w-24 h-24 object-cover rounded-md mb-2" />
+                <img src={getAssetPath('/Untitled (8) copy.webp')} alt="Pachet Essenza 150g" className="w-24 h-24 object-cover rounded-md mb-2" />
                 <h4 className="text-sm font-medium text-slate-900">Pachet Essenza 150g</h4>
                 <p className="text-xs text-slate-500">39 Lei</p>
               </Link>
@@ -548,7 +549,7 @@ const BlogPage = () => {
                           {/* Product recommendation */}
                           <div className="mb-6 p-4 bg-slate-50 rounded-lg border border-slate-200 flex items-center space-x-4">
                             <img 
-                              src="/photoshoot-image (11).webp" 
+                              src={getAssetPath('/photoshoot-image (11).webp')} 
                               alt="Granule Box 750g" 
                               className="w-16 h-16 object-cover rounded-md"
                             />
@@ -634,7 +635,7 @@ const BlogPage = () => {
                     <div className="text-center">
                       <Link to="/product/granule-box-750g" className="block">
                         <img 
-                          src="/photoshoot-image (11).webp" 
+                          src={getAssetPath('/photoshoot-image (11).webp')} 
                           alt="Granule Box 750g" 
                           className="w-40 h-40 object-cover mx-auto rounded-lg mb-4 hover:scale-105 transition-transform duration-300"
                         />
@@ -764,7 +765,7 @@ const BlogPage = () => {
                       <Link to="/product/granule-box-750g" className="flex items-start space-x-3 group hover:bg-slate-50 p-2 rounded-lg transition-colors duration-200">
                         <div className="w-16 h-16 flex-shrink-0 overflow-hidden rounded">
                           <img 
-                            src="/photoshoot-image (11).webp" 
+                            src={getAssetPath('/photoshoot-image (11).webp')} 
                             alt="Granule Box 750g"
                             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                           />
@@ -780,7 +781,7 @@ const BlogPage = () => {
                       <Link to="/product/pachet-splendore-250g" className="flex items-start space-x-3 group hover:bg-slate-50 p-2 rounded-lg transition-colors duration-200">
                         <div className="w-16 h-16 flex-shrink-0 overflow-hidden rounded">
                           <img 
-                            src="/Untitled (7).webp" 
+                            src={getAssetPath('/Untitled (7).webp')} 
                             alt="Pachet Splendore 250g"
                             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                           />
@@ -796,7 +797,7 @@ const BlogPage = () => {
                       <Link to="/product/pachet-essenza-150g" className="flex items-start space-x-3 group hover:bg-slate-50 p-2 rounded-lg transition-colors duration-200">
                         <div className="w-16 h-16 flex-shrink-0 overflow-hidden rounded">
                           <img 
-                            src="/Untitled (8) copy.webp" 
+                            src={getAssetPath('/Untitled (8) copy.webp')} 
                             alt="Pachet Essenza 150g"
                             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                           />

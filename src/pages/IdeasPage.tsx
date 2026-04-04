@@ -4,6 +4,7 @@ import SEOHead from '../components/SEOHead';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
+import { getAssetPath } from '../utils/assetPath';
 
 const IdeasPage = () => {
   const { language } = useLanguage();
@@ -27,7 +28,7 @@ const IdeasPage = () => {
   // Gallery images with optimized metadata
   const galleryImages = [
     {
-      src: "/1_Chameleon-Sand-Candles_photo-by-Curated-St-1024x935.webp",
+      src: getAssetPath('/1_Chameleon-Sand-Candles_photo-by-Curated-St-1024x935.webp'),
       alt: "Aranjament elegant cu lumânări din ceară naturală pentru masă festivă",
       title: "Decor Minimalist",
       description: "Simplitate și eleganță pentru mese festive cu lumânări din ceară naturală",
@@ -37,7 +38,7 @@ const IdeasPage = () => {
       link: "/product/granule-box-750g"
     },
     {
-      src: "/7_a312f04c-8c83-41b7-835e-4097a635502f_1024x1024.webp",
+      src: getAssetPath('/7_a312f04c-8c83-41b7-835e-4097a635502f_1024x1024.webp'),
       alt: "Lumânare personalizată în recipient de sticlă colorată pe suport din lemn natural",
       title: "Accente Naturale",
       description: "Combinația perfectă între lemn și sticlă colorată pentru lumânări personalizate",
@@ -47,7 +48,7 @@ const IdeasPage = () => {
       link: "/product/pachet-splendore-250g"
     },
     {
-      src: "/Screenshot 2024-06-15 154827.webp",
+      src: getAssetPath('/Screenshot 2024-06-15 154827.webp'),
       alt: "Masă elegantă decorată cu multiple lumânări din ceară de soia pentru cină festivă",
       title: "Aranjamente pentru Cină",
       description: "Creează o atmosferă intimă pentru cine speciale cu lumânări din ceară naturală",
@@ -57,7 +58,7 @@ const IdeasPage = () => {
       link: "/product/ceara-nisip-4-5kg-evenimente"
     },
     {
-      src: "/CandleSand-6 copy.webp",
+      src: getAssetPath('/CandleSand-6 copy.webp'),
       alt: "Lumânare personalizată pe măsuță de cafea lângă carte pentru moment de relaxare",
       title: "Colțuri de Relaxare",
       description: "Transformă spațiile de lectură în oaze de liniște cu lumânări din ceară naturală",
@@ -67,7 +68,7 @@ const IdeasPage = () => {
       link: "/product/pachet-essenza-150g"
     },
     {
-      src: "/il_fullxfull.5794329172_3eft.webp",
+      src: getAssetPath('/il_fullxfull.5794329172_3eft.webp'),
       alt: "Lumânare din ceară naturală în recipient decorativ de sticlă pentru decor interior",
       title: "Recipiente Unice",
       description: "Alege vase deosebite pentru un impact vizual maxim al lumânărilor din ceară naturală",
@@ -160,7 +161,7 @@ const IdeasPage = () => {
                 </div>
                 <div className="order-1 lg:order-2">
                   <img 
-                    src="/photoshoot-image (11).webp" 
+                    src={getAssetPath('/photoshoot-image (11).webp')} 
                     alt="Granule Box - Ceară naturală pentru lumânări personalizate" 
                     className="w-full h-auto rounded-lg shadow-lg"
                   />
@@ -246,7 +247,7 @@ const IdeasPage = () => {
                   <div className="flex flex-col md:flex-row gap-6 items-center">
                     <div className="md:w-1/3">
                       <img 
-                        src="/CandleSand-6 copy.webp" 
+                        src={getAssetPath('/CandleSand-6 copy.webp')} 
                         alt="Lumânări pentru acasă" 
                         className="w-full h-auto rounded-lg shadow-md"
                       />
@@ -288,7 +289,7 @@ const IdeasPage = () => {
                     </div>
                     <div className="md:w-1/3 order-1 md:order-2">
                       <img 
-                        src="/7_a312f04c-8c83-41b7-835e-4097a635502f_1024x1024.webp" 
+                        src={getAssetPath('/7_a312f04c-8c83-41b7-835e-4097a635502f_1024x1024.webp')} 
                         alt="Lumânări pentru evenimente" 
                         className="w-full h-auto rounded-lg shadow-md"
                       />
@@ -298,7 +299,7 @@ const IdeasPage = () => {
                   <div className="flex flex-col md:flex-row gap-6 items-center">
                     <div className="md:w-1/3">
                       <img 
-                        src="/Screenshot 2024-06-15 154827.webp" 
+                        src={getAssetPath('/Screenshot 2024-06-15 154827.webp')} 
                         alt="Lumânări personalizate" 
                         className="w-full h-auto rounded-lg shadow-md"
                       />
@@ -326,7 +327,7 @@ const IdeasPage = () => {
                   <h3 className="text-xl font-medium text-slate-900 mb-4 text-center">Produsul Nostru Recomandat</h3>
                   <div className="flex flex-col sm:flex-row items-center gap-6">
                     <img 
-                      src="/photoshoot-image (11).webp" 
+                      src={getAssetPath('/photoshoot-image (11).webp')} 
                       alt="Granule Box 750g" 
                       className="w-40 h-40 object-cover rounded-lg"
                     />

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Package, User, MapPin, Phone, Mail, Calendar, DollarSign, Truck, CheckCircle, Clock, AlertCircle } from 'lucide-react';
 import { supabase } from '../lib/supabase';
+import { getAssetPath } from '../utils/assetPath';
 
 interface OrderItem {
   id: number;
@@ -330,7 +331,7 @@ const AdminOrderDetails: React.FC<OrderDetailsProps> = ({
                               alt={item.name}
                               onError={(e) => {
                                 const target = e.target as HTMLImageElement;
-                                target.src = '/placeholder-image.jpg';
+                                target.src = getAssetPath('/placeholder-image.jpg');
                               }}
                             />
                           </div>

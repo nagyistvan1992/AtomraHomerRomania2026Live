@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Droplets, Plus, Flame, RotateCcw } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
+import { getAssetPath } from '../utils/assetPath';
 
 const HowItWorks = () => {
   const [visibleSteps, setVisibleSteps] = useState<boolean[]>([]);
@@ -12,19 +13,19 @@ const HowItWorks = () => {
       icon: <Droplets size={48} strokeWidth={1.5} />,
       title: t('howItWorks.pour.title'),
       description: t('howItWorks.pour.description'),
-      image: '/DSC_2075_710x.webp'
+      image: getAssetPath('/DSC_2075_710x.webp')
     },
     {
       icon: <Plus size={48} strokeWidth={1.5} />,
       title: t('howItWorks.insert.title'),
       description: t('howItWorks.insert.description'),
-      image: '/DSC_2082_710x.webp'
+      image: getAssetPath('/DSC_2082_710x.webp')
     },
     {
       icon: <Flame size={48} strokeWidth={1.5} />,
       title: t('howItWorks.light.title'),
       description: t('howItWorks.light.description'),
-      image: '/regregrg_cedf33bb-8bb4-4797-899b-f9d3cb8f33f7_710x.webp'
+      image: getAssetPath('/regregrg_cedf33bb-8bb4-4797-899b-f9d3cb8f33f7_710x.webp')
     },
     {
       icon: <RotateCcw size={48} strokeWidth={1.5} />,

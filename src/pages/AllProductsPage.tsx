@@ -8,6 +8,7 @@ import SEOHead from '../components/SEOHead';
 import LazyImage from '../components/LazyImage'; 
 import AddToCartButton from '../components/AddToCartButton';
 import { motion, AnimatePresence } from 'framer-motion';
+import { getAssetPath } from '../utils/assetPath';
 
 interface Product {
   id: string;
@@ -474,7 +475,7 @@ const AllProductsPage = () => {
                               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                             >
                               <LazyImage
-                                src={product.images && product.images.length > 0 ? product.images[0] : '/placeholder-image.jpg'}
+                                src={product.images && product.images.length > 0 ? product.images[0] : getAssetPath('/placeholder-image.jpg')}
                                 alt={product.name}
                                 className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
                                 aspectRatio="square"
@@ -564,7 +565,7 @@ const AllProductsPage = () => {
                               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                             >
                               <LazyImage
-                                src={product.images && product.images.length > 0 ? product.images[0] : '/placeholder-image.jpg'}
+                                src={product.images && product.images.length > 0 ? product.images[0] : getAssetPath('/placeholder-image.jpg')}
                                 alt={product.name}
                                 className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
                                 aspectRatio="square"
