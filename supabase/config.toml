@@ -1,4 +1,13 @@
 project_id = "atomrahomeromanialive-main"
 
+[functions.get-session-details]
+verify_jwt = false
+
+[functions.send-order-emails]
+verify_jwt = false
+
+[functions.stripe-checkout]
+verify_jwt = false
+
 [functions.stripe-webhook]
 verify_jwt = false
