@@ -15,6 +15,8 @@ const SuccessPage = () => {
   const { clearCart, getTotalItems } = useCart();
   const [countdown, setCountdown] = useState(5);
   const sessionId = searchParams.get('session_id');
+  const orderNumberParam = searchParams.get('order_number');
+  const paymentMethodParam = searchParams.get('payment_method');
   const [domainInfo, setDomainInfo] = useState<any>(null);
   const [orderDetails, setOrderDetails] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -45,6 +47,21 @@ const SuccessPage = () => {
           } catch (error) {
             console.error('Error fetching session details:', error);
           }
+        } else if (orderNumberParam) {
+          try {
+            const { data, error } = await supabase
+              .from('orders')
+              .select('order_number,total_amount,customer_email,created_at,payment_method')
+              .eq('order_number', orderNumberParam)
+              .single();
+
+            if (!error && data) {
+              setOrderDetails(data);
+              console.log('COD order details retrieved:', data);
+            }
+          } catch (error) {
+            console.error('Error fetching COD order details:', error);
+          }
         }
 
         // Get domain info
@@ -60,7 +77,7 @@ const SuccessPage = () => {
     };
     
     fetchData();
-  }, [clearCart, sessionId, getTotalItems]);
+  }, [clearCart, sessionId, orderNumberParam, getTotalItems]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -141,7 +158,7 @@ const SuccessPage = () => {
                       transition={{ duration: 0.5, delay: 0.3 }}
                       className="text-3xl font-light text-slate-900 mb-4"
                     >
-                      Payment Successful!
+                      {paymentMethodParam === 'cod' ? 'Order Confirmed!' : 'Payment Successful!'}
                     </motion.h1>
                     
                     <motion.p 
@@ -150,10 +167,12 @@ const SuccessPage = () => {
                       transition={{ duration: 0.5, delay: 0.4 }}
                       className="text-slate-600 mb-8 font-light"
                     >
-                      Thank you for your purchase! Your payment has been processed successfully.
-                      {orderDetails?.order_number && (
+                      {paymentMethodParam === 'cod'
+                        ? 'Thank you for your order! Your cash on delivery order was placed successfully.'
+                        : 'Thank you for your purchase! Your payment has been processed successfully.'}
+                      {(orderDetails?.order_number || orderNumberParam) && (
                         <span className="block mt-2 text-sm font-medium text-slate-700">
-                          Order Number: <span className="font-bold">{orderDetails.order_number}</span>
+                          Order Number: <span className="font-bold">{orderDetails?.order_number || orderNumberParam}</span>
                         </span>
                       )}
                     </motion.p>
@@ -166,15 +185,22 @@ const SuccessPage = () => {
                         className="bg-slate-50 p-4 rounded-lg mb-8 text-left border border-slate-200"
                       >
                         <h3 className="text-lg font-medium text-slate-900 mb-2">Order Summary</h3>
+                        {typeof orderDetails.amount_total === 'number' && (
+                          <p className="text-sm text-slate-600 mb-1">
+                            <span className="font-medium">Total:</span> {sessionId ? orderDetails.amount_total / 100 : orderDetails.amount_total} Lei
+                          </p>
+                        )}
                         <p className="text-sm text-slate-600 mb-1">
-                          <span className="font-medium">Total:</span> {orderDetails.amount_total / 100} Lei
-                        </p>
-                        <p className="text-sm text-slate-600 mb-1">
-                          <span className="font-medium">Date:</span> {new Date().toLocaleDateString()}
+                          <span className="font-medium">Date:</span> {new Date(orderDetails.created_at || Date.now()).toLocaleDateString()}
                         </p>
                         <p className="text-sm text-slate-600">
                           <span className="font-medium">Email:</span> {orderDetails.customer_email || 'Not available'}
                         </p>
+                        {orderDetails.payment_method && (
+                          <p className="text-sm text-slate-600 mt-1">
+                            <span className="font-medium">Payment:</span> {orderDetails.payment_method === 'cod' ? 'Cash on delivery' : orderDetails.payment_method}
+                          </p>
+                        )}
                       </motion.div>
                     )}
                   </motion.div>
@@ -190,7 +216,9 @@ const SuccessPage = () => {
                 <div className="flex items-center justify-center space-x-2 text-green-700">
                   <CheckCircle size={20} />
                   <span className="font-light">
-                    You will receive a confirmation email shortly with your order details.
+                    {paymentMethodParam === 'cod'
+                      ? 'Your order was recorded successfully. You will receive a confirmation email shortly.'
+                      : 'You will receive a confirmation email shortly with your order details.'}
                   </span>
                 </div>
               </motion.div>

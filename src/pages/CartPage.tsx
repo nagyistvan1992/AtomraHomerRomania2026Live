@@ -128,9 +128,10 @@ const CartPage = () => {
       if (error) throw error;
       setOrderNumber(orderNum);
       addOrder(orderData);
-      setStep('confirmation');
       clearCart();
       sendOrderEmailsInBackground(orderNum);
+      navigate(`/success?order_number=${encodeURIComponent(orderNum)}&payment_method=${encodeURIComponent(paymentMethod)}`);
+      return;
     } catch (error) {
       console.error('Error creating order:', error);
       alert(t('cart.error.orderFailed'));
