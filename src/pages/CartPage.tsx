@@ -46,6 +46,53 @@ const CartPage = () => {
     return `ORD-${timestamp}-${random}`;
   };
 
+  const sendOrderEmailsInBackground = (orderNum: string) => {
+    const emailPayload = {
+      orderData: {
+        orderId: orderNum,
+        orderNumber: orderNum,
+        customerName: customerDetails.name,
+        customerEmail: customerDetails.email,
+        customerPhone: customerDetails.phone,
+        customerAddress: `${customerDetails.address}, ${customerDetails.city}, ${customerDetails.postalCode}`,
+        items: state.items.map(item => ({
+          name: item.name,
+          quantity: item.quantity,
+          price: item.price
+        })),
+        total: totalAmount,
+        paymentMethod: paymentMethod,
+        orderDate: new Date().toISOString()
+      }
+    };
+
+    const emailRequest = supabase.functions.invoke('send-order-emails', {
+      body: emailPayload
+    });
+
+    const timeoutRequest = new Promise<never>((_, reject) => {
+      window.setTimeout(() => reject(new Error('Email request timed out')), 8000);
+    });
+
+    void Promise.race([emailRequest, timeoutRequest])
+      .then(({ data: emailData, error: emailError }) => {
+        if (emailError) {
+          console.error('Error invoking send-order-emails function:', emailError);
+          return;
+        }
+
+        if (emailData && !emailData.success) {
+          console.warn('Email function reported non-success:', emailData.error || emailData.message);
+          return;
+        }
+
+        console.log('Email function invoked successfully.');
+      })
+      .catch((invokeError) => {
+        console.error('Unexpected error during email function invocation:', invokeError);
+      });
+  };
+
   const handleCheckout = async () => {
     if (paymentMethod === 'cod') {
       await processOrder();
@@ -79,48 +126,11 @@ const CartPage = () => {
       const { error } = await supabase.from('orders').insert([orderData]);
       
       if (error) throw error;
-
-      // --- Invoke email sending function ---
-      try {
-        const { data: emailData, error: emailError } = await supabase.functions.invoke('send-order-emails', {
-          body: {
-            orderData: {
-              orderId: orderNum,
-              orderNumber: orderNum,
-              customerName: customerDetails.name,
-              customerEmail: customerDetails.email,
-              customerPhone: customerDetails.phone,
-              customerAddress: `${customerDetails.address}, ${customerDetails.city}, ${customerDetails.postalCode}`,
-              items: state.items.map(item => ({
-                name: item.name,
-                quantity: item.quantity,
-                price: item.price
-              })),
-              total: totalAmount,
-              paymentMethod: paymentMethod,
-              orderDate: new Date().toISOString()
-            }
-          }
-        });
-
-        if (emailError) {
-          console.error('Error invoking send-order-emails function:', emailError);
-          // Log this error but don't prevent order confirmation
-        } else if (emailData && !emailData.success) {
-          console.warn('Email function reported non-success:', emailData.error || emailData.message);
-          // Log this warning but don't prevent order confirmation
-        } else {
-          console.log('Email function invoked successfully.');
-        }
-      } catch (invokeError) {
-        console.error('Unexpected error during email function invocation:', invokeError);
-        // Log this error but don't prevent order confirmation
-      }
-      // --- End email sending invocation ---
       setOrderNumber(orderNum);
       addOrder(orderData);
       setStep('confirmation');
       clearCart();
+      sendOrderEmailsInBackground(orderNum);
     } catch (error) {
       console.error('Error creating order:', error);
       alert(t('cart.error.orderFailed'));
