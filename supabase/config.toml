@@ -1,0 +1,4 @@
+project_id = "atomrahomeromanialive-main"
+
+[functions.stripe-webhook]
+verify_jwt = false
