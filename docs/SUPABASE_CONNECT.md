@@ -18,6 +18,15 @@ VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 VITE_STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
 ```
 
+These values are used by:
+
+- the local frontend app
+- the GitHub Pages build workflow
+- Netlify frontend deploys, if you switch to Netlify later
+
+Only `VITE_*` values belong in frontend environment files.
+Do not place server-side secrets here.
+
 ## 2. GitHub Actions secrets
 
 In GitHub repository settings, add these Actions secrets:
@@ -27,6 +36,13 @@ In GitHub repository settings, add these Actions secrets:
 - `VITE_STRIPE_PUBLISHABLE_KEY`
 
 The Pages workflow reads these during build.
+
+If you deploy on Netlify instead of GitHub Pages, use the exact same three
+frontend variables in Netlify environment variables:
+
+- `VITE_SUPABASE_URL`
+- `VITE_SUPABASE_ANON_KEY`
+- `VITE_STRIPE_PUBLISHABLE_KEY`
 
 ## 3. Supabase project secrets for Edge Functions
 
@@ -42,6 +58,9 @@ Set these in your Supabase project because the server-side functions use them:
 Optional, only if you use the alternate notification flow:
 
 - `RESEND_API_KEY`
+
+These values must stay server-side only and should be configured in the
+Supabase project secrets for Edge Functions, not in the frontend `.env`.
 
 ## 4. Deploy schema and functions to your Supabase project
 

@@ -10,13 +10,14 @@
 5. Copy your secret key from the Stripe dashboard
 
 ### 2. Update Stripe Configuration
-Add your Stripe keys to the `.env` file:
+Add only your frontend-safe Stripe key to the `.env` file:
 
 ```env
 # Stripe Configuration
 VITE_STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
-STRIPE_SECRET_KEY=your_stripe_secret_key
 ```
+
+Do not place `STRIPE_SECRET_KEY` in the frontend `.env` file.
 
 ### 3. Supabase Edge Function Setup
 The `create-payment-intent` edge function is already set up in this project. To deploy it:
@@ -29,6 +30,12 @@ The `create-payment-intent` edge function is already set up in this project. To 
 6. Add your Stripe secret key as an environment variable:
    - Name: `STRIPE_SECRET_KEY`
    - Value: Your Stripe secret key
+7. Add the rest of the required server-side secrets in Supabase:
+   - `SUPABASE_URL`
+   - `SUPABASE_SERVICE_ROLE_KEY`
+   - `STRIPE_WEBHOOK_SECRET`
+   - `GMAIL_USERNAME`
+   - `GMAIL_APP_PASSWORD`
 
 ### 4. Testing the Integration
 
