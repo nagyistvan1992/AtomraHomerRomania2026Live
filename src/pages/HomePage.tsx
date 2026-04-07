@@ -2,6 +2,7 @@ import React, { Suspense, lazy, useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import SEOHead from '../components/SEOHead';
 import Hero from '../components/Hero';
+import StorefrontOverview from '../components/StorefrontOverview';
 import AnswerHighlights from '../components/AnswerHighlights';
 import IntentGuides from '../components/IntentGuides';
 import ComparisonGuides from '../components/ComparisonGuides';
@@ -101,9 +102,7 @@ const HomePage = () => {
 
       <div className="relative z-10">
         <Hero />
-        <AnswerHighlights />
-        <IntentGuides />
-        <ComparisonGuides />
+        <StorefrontOverview />
         <DeferredSection className="luxury-section-light">
           <Suspense fallback={sectionFallback}>
             <CategoryGallery />
@@ -129,6 +128,9 @@ const HomePage = () => {
             <FAQ />
           </Suspense>
         </DeferredSection>
+        <AnswerHighlights />
+        <IntentGuides />
+        <ComparisonGuides />
       </div>
     </div>
   );
