@@ -75,6 +75,92 @@ const CartPage = () => {
       category: item.category,
     }));
 
+  const findExistingOrder = async (orderNumber: string) => {
+    const { data, error } = await withTimeout(
+      supabase
+        .from('orders')
+        .select('order_number')
+        .eq('order_number', orderNumber)
+        .maybeSingle(),
+      8000,
+      'Order verification timed out.',
+    );
+
+    if (error) {
+      throw error;
+    }
+
+    return data;
+  };
+
+  const createOrderWithRecovery = async (orderData: {
+    order_number: string;
+    customer_name: string;
+    customer_email: string;
+    customer_phone: string;
+    customer_address: string;
+    customer_city: string;
+    customer_postal_code: string;
+    items: ReturnType<typeof sanitizeOrderItems>;
+    subtotal: number;
+    shipping_cost: number;
+    total_amount: number;
+    payment_method: 'cod' | 'card';
+    payment_status: 'pending' | 'paid';
+    order_status: 'pending';
+    notes: string | null;
+  }) => {
+    const insertOrder = async () => {
+      const { error } = await withTimeout(
+        supabase.from('orders').insert([orderData]),
+        12000,
+        'Order creation timed out. Please try again.',
+      );
+
+      if (error) {
+        throw error;
+      }
+    };
+
+    try {
+      await insertOrder();
+      return;
+    } catch (firstError) {
+      console.warn('Initial order insert failed, checking for a completed insert before retrying.', firstError);
+
+      try {
+        const existingOrder = await findExistingOrder(orderData.order_number);
+        if (existingOrder) {
+          console.log('Order already exists after initial insert failure, continuing with success flow.');
+          return;
+        }
+      } catch (lookupError) {
+        console.warn('Unable to verify order existence after first insert failure.', lookupError);
+      }
+
+      await new Promise((resolve) => window.setTimeout(resolve, 700));
+
+      try {
+        await insertOrder();
+        return;
+      } catch (retryError) {
+        console.warn('Retry insert failed, checking once more whether the order was created.', retryError);
+
+        try {
+          const existingOrder = await findExistingOrder(orderData.order_number);
+          if (existingOrder) {
+            console.log('Order exists after retry failure, continuing with success flow.');
+            return;
+          }
+        } catch (lookupError) {
+          console.warn('Unable to verify order existence after retry failure.', lookupError);
+        }
+
+        throw retryError;
+      }
+    }
+  };
+
   const requestStripeCheckoutUrl = async (payload: {
     price_id: string;
     mode: 'payment' | 'subscription';
@@ -173,13 +259,7 @@ const CartPage = () => {
         notes: notes || null
       };
 
-      const { error } = await withTimeout(
-        supabase.from('orders').insert([orderData]),
-        12000,
-        'Order creation timed out. Please try again.'
-      );
-      
-      if (error) throw error;
+      await createOrderWithRecovery(orderData);
       setOrderNumber(orderNum);
       clearCart();
       sendOrderEmailsInBackground(orderNum);
