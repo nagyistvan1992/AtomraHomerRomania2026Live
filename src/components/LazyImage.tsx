@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { getPlaceholderImage, normalizeImageSource } from '../utils/imageSources';
 
 interface LazyImageProps {
   src: string;
@@ -19,23 +20,30 @@ const LazyImage: React.FC<LazyImageProps> = ({
   src,
   alt,
   className = '',
-  placeholder,
   width,
   height,
-  loading = 'lazy',
   onLoad,
   onError,
   aspectRatio = 'square',
   objectFit = 'cover',
   priority = false
 }) => {
+  const fallbackSrc = getPlaceholderImage();
+  const resolvedSrc = normalizeImageSource(src) || fallbackSrc;
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [isInView, setIsInView] = useState(priority || window.innerWidth < 768); // Load immediately on mobile
+  const [currentSrc, setCurrentSrc] = useState(resolvedSrc);
   const imgRef = useRef<HTMLImageElement>(null);
 
   // Extract keywords from alt text for SEO
   const enhancedAlt = alt.includes('ceară naturală') ? alt : `${alt} - Lumânare din ceară naturală`;
+
+  useEffect(() => {
+    setCurrentSrc(resolvedSrc);
+    setIsLoaded(false);
+    setHasError(false);
+  }, [resolvedSrc]);
 
   useEffect(() => {
     if (priority) return;
@@ -63,6 +71,11 @@ const LazyImage: React.FC<LazyImageProps> = ({
   };
 
   const handleError = () => {
+    if (currentSrc !== fallbackSrc) {
+      setCurrentSrc(fallbackSrc);
+      return;
+    }
+
     setHasError(true);
     onError?.();
   };
@@ -98,7 +111,7 @@ const LazyImage: React.FC<LazyImageProps> = ({
       {/* Main Image */}
       {isInView && !hasError && (
         <img
-          src={src}
+          src={currentSrc}
           alt={enhancedAlt}
           loading={priority ? 'eager' : 'lazy'}
           decoding="async"

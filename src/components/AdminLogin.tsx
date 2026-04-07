@@ -5,8 +5,8 @@ import { useAdmin } from '../context/AdminContext';
 import AdminSetupInstructions from './AdminSetupInstructions';
 
 const AdminLogin: React.FC = () => {
-  const [email, setEmail] = useState('atomrahomeromania@gmail.com');
-  const [password, setPassword] = useState('Istvan1992');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showInstructions, setShowInstructions] = useState(false);
   const { loginAdmin, adminLoading, adminError, isAdmin } = useAdmin();
@@ -89,6 +89,7 @@ const AdminLogin: React.FC = () => {
                   name="email"
                   type="email"
                   autoComplete="email"
+                  autoFocus
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}

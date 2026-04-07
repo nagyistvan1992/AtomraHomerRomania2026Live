@@ -27,11 +27,11 @@ const AdminSetupInstructions: React.FC = () => {
       title: "Create Admin User",
       description: "Click 'Add user' and create a new user",
       details: [
-        "Email: atomrahomeromania@gmail.com",
-        "Password: Istvan1992",
+        "Email: ",
+        "Password: ",
         "Email confirmed: Yes (check the box)"
       ],
-      action: "atomrahomeromania@gmail.com",
+      action: "",
       icon: User
     },
     {

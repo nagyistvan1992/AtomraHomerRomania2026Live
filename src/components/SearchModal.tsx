@@ -2,22 +2,13 @@ import React, { useState, useEffect, useRef } from 'react';
 import { X, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
-import { supabase } from '../lib/supabase';
-import { getAssetPath } from '../utils/assetPath';
+import { getPlaceholderImage, getPreferredImage } from '../utils/imageSources';
+import { searchCatalogProducts } from '../lib/catalog';
+import type { CatalogProduct as Product } from '../data/catalog';
 
 interface SearchModalProps {
   isOpen: boolean;
   onClose: () => void;
-}
-
-interface Product {
-  id: string;
-  name: string;
-  price: number;
-  slug: string;
-  description: string;
-  category: string;
-  images: string[];
 }
 
 const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
@@ -52,19 +43,9 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
       setIsLoading(true);
       
       try {
-        const { data, error } = await supabase
-          .from('products')
-          .select('id, name, price, slug, description, category, images')
-          .or(`name.ilike.%${searchQuery}%,description.ilike.%${searchQuery}%,category.ilike.%${searchQuery}%`)
-          .order('created_at', { ascending: false });
-          
-        if (error) {
-          throw error;
-        }
-        
-        setSearchResults(data || []);
+        setSearchResults(searchCatalogProducts(searchQuery));
       } catch (err) {
-        console.error('Error searching products:', err);
+        console.error('Error searching catalog products:', err);
         setSearchResults([]);
       } finally {
         setIsLoading(false);
@@ -162,12 +143,12 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
                   >
                     <div className="aspect-square bg-gray-100 overflow-hidden">
                       <img
-                        src={product.images[0] || getAssetPath('/placeholder-image.jpg')}
+                        src={getPreferredImage(product.images, getPlaceholderImage())}
                         alt={product.name}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                         onError={(e) => {
                           const target = e.target as HTMLImageElement;
-                          target.src = getAssetPath('/placeholder-image.jpg');
+                          target.src = getPlaceholderImage();
                         }}
                       />
                     </div>

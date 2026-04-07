@@ -1,29 +1,31 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Trash2, Plus, Image, Save, X, Upload, FileImage } from 'lucide-react';
+﻿import React, { useState, useRef } from 'react';
+import { Trash2, Save, Upload, FileImage } from 'lucide-react';
 import AdminImageUploader from './AdminImageUploader';
 import slugify from 'slugify';
 import { motion, AnimatePresence } from 'framer-motion';
 
+interface ProductFormData {
+  id?: string;
+  name: string;
+  slug?: string;
+  category: string;
+  price: string | number;
+  description: string;
+  long_description: string;
+  features: string[];
+  images: string[];
+  tags: string[];
+  in_stock: boolean;
+  rating: number;
+  reviews: number;
+  meta_title?: string;
+  meta_description?: string;
+}
+
 interface ProductFormProps {
-  initialData?: {
-    id?: string;
-    name: string;
-    slug?: string;
-    category: string;
-    price: string | number;
-    description: string;
-    long_description: string;
-    features: string[];
-    images: string[];
-    tags: string[];
-    in_stock: boolean;
-    rating: number;
-    reviews: number;
-    meta_title?: string;
-    meta_description?: string;
-  };
+  initialData?: ProductFormData;
   categories: { id: string; name: string }[];
-  onSave: (productData: any) => void;
+  onSave: (productData: ProductFormData & { slug: string; price: number }) => void;
   onCancel: () => void;
   loading: boolean;
 }
@@ -145,7 +147,7 @@ const AdminProductForm: React.FC<ProductFormProps> = ({
     });
   };
   
-  const handleImageUploaded = (url: string, altText?: string) => {
+  const handleImageUploaded = (url: string) => {
     // Add the new image URL to the images array
     const updatedImages = [...formData.images];
     
@@ -197,8 +199,6 @@ const AdminProductForm: React.FC<ProductFormProps> = ({
           alert('In a real app, this would upload the file to your server or cloud storage');
           
           // Extract file name for alt text
-          const fileName = file.name.split('.')[0].replace(/[_-]/g, ' ');
-          
           // Add the new image
           const updatedImages = [...formData.images];
           
@@ -656,7 +656,7 @@ const AdminProductForm: React.FC<ProductFormProps> = ({
                   {formData.meta_title || formData.name || 'Product Title'}
                 </p>
                 <p className="text-green-600 text-sm">
-                  https://atomra-home-romania.com/product/{formData.slug || slugify(formData.name, { lower: true, strict: true }) || 'product-slug'}
+                  https://atomrahomeromania.ro/product/{formData.slug || slugify(formData.name, { lower: true, strict: true }) || 'product-slug'}
                 </p>
                 <p className="text-gray-600 text-sm line-clamp-2 mt-1">
                   {formData.meta_description || formData.description || 'Product description will appear here...'}
@@ -709,3 +709,4 @@ const AdminProductForm: React.FC<ProductFormProps> = ({
 };
 
 export default AdminProductForm;
+

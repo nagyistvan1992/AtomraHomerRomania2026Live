@@ -1,11 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import { supabase } from '../lib/supabase';
-import { Save, RefreshCw, Mail, Globe, DollarSign, Truck, ShoppingBag } from 'lucide-react';
+﻿import React, { useState, useEffect } from 'react';
+import { Save, RefreshCw, Mail, Globe, DollarSign, Truck } from 'lucide-react';
+
+interface SettingsState {
+  siteName: string;
+  siteUrl: string;
+  adminEmail: string;
+  currency: string;
+  freeShippingThreshold: number;
+  taxRate: number;
+  orderPrefix: string;
+  gmailUsername: string;
+  gmailAppPassword: string;
+  stripePublishableKey: string;
+  stripeSecretKey: string;
+}
 
 const AdminSettings = () => {
-  const [settings, setSettings] = useState({
+  const [settings, setSettings] = useState<SettingsState>({
     siteName: 'Atomra Home Romania',
-    siteUrl: 'https://atomra-home-romania.com',
+    siteUrl: 'https://atomrahomeromania.ro',
     adminEmail: 'atomrahomeromania@gmail.com',
     currency: 'Lei',
     freeShippingThreshold: 149,
@@ -19,7 +32,7 @@ const AdminSettings = () => {
   
   const [loading, setLoading] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState('general');
 
   useEffect(() => {
@@ -53,7 +66,7 @@ const AdminSettings = () => {
     fetchSettings();
   }, []);
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setSettings({
       ...settings,
@@ -61,7 +74,7 @@ const AdminSettings = () => {
     });
   };
 
-  const handleNumberChange = (e) => {
+  const handleNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setSettings({
       ...settings,
@@ -69,7 +82,7 @@ const AdminSettings = () => {
     });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     setSaveSuccess(false);
@@ -488,3 +501,4 @@ const AdminSettings = () => {
 };
 
 export default AdminSettings;
+

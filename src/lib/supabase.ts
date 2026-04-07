@@ -38,7 +38,7 @@ export { isSupabaseConfigured }
 // Test connection function
 export const testSupabaseConnection = async () => {
   try {
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from('products')
       .select('count')
       .limit(1);

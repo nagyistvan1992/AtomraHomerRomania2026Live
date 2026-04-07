@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useContext, useReducer, ReactNode, useEffect } from 'react';
 
 export interface CartItem {
@@ -59,11 +60,17 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
         };
       }
       
-      const newItem = { ...action.payload, quantity: quantity };
-      // Remove the extra quantity property that's not part of CartItem interface
-      delete (newItem as any).quantity;
-      // Add the quantity properly
-      newItem.quantity = quantity;
+      const cartItemData = {
+        id: action.payload.id,
+        name: action.payload.name,
+        price: action.payload.price,
+        image: action.payload.image,
+        category: action.payload.category
+      };
+      const newItem: CartItem = {
+        ...cartItemData,
+        quantity
+      };
       
       return {
         ...state,

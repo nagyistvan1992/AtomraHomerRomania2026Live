@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Bell, Settings, User, Search, Menu, RefreshCw, LogOut } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { Bell, User, Search, Menu, RefreshCw, LogOut } from 'lucide-react';
 import { useAdmin } from '../context/AdminContext';
 
 interface AdminHeaderProps {
@@ -12,12 +11,10 @@ interface AdminHeaderProps {
 const AdminHeader: React.FC<AdminHeaderProps> = ({ title, onToggleSidebar, username }) => {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const { logoutAdmin } = useAdmin();
-  const navigate = useNavigate();
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     if (window.confirm('Are you sure you want to log out?')) {
-      logoutAdmin();
-      navigate('/admin-login');
+      await logoutAdmin();
     }
   };
 

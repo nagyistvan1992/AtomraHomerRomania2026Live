@@ -1,28 +1,14 @@
-import React, { useEffect, useRef, useState, useMemo } from 'react';
+﻿import React, { useEffect, useRef, useState } from 'react';
 import { Star, ArrowLeft, ArrowRight, ShoppingCart, AlertCircle, RefreshCw } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { useCart } from '../context/CartContext';
 import { useLanguage } from '../context/LanguageContext';
-import { supabase, testSupabaseConnection } from '../lib/supabase';
+import { getCatalogProductsByCategory } from '../lib/catalog';
 import SEOHead from '../components/SEOHead';
 import LazyImage from '../components/LazyImage'; 
 import AddToCartButton from '../components/AddToCartButton';
 import { motion, AnimatePresence } from 'framer-motion';
-import { getAssetPath } from '../utils/assetPath';
-
-interface Product {
-  id: string;
-  name: string;
-  price: number;
-  rating: number;
-  reviews: number;
-  category: string;
-  slug: string;
-  description: string;
-  images: string[];
-  tags?: string[];
-  in_stock: boolean;
-}
+import { getPlaceholderImage, getPreferredImage } from '../utils/imageSources';
+import type { CatalogProduct as Product } from '../data/catalog';
 
 const EventsCollectionPage = () => {
   const [visibleProducts, setVisibleProducts] = useState<boolean[]>([]);
@@ -31,8 +17,7 @@ const EventsCollectionPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [hoveredProduct, setHoveredProduct] = useState<string | null>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
-  const { addItem } = useCart();
-  const { t } = useLanguage();
+  useLanguage();
 
   // Scroll to top when component mounts
   useEffect(() => {
@@ -41,57 +26,19 @@ const EventsCollectionPage = () => {
 
   useEffect(() => {
     const fetchEventProducts = async () => {
-      // Test connection first
-      const connectionOk = await testSupabaseConnection();
-      if (!connectionOk) {
-        setError('Unable to connect to database. Please check your internet connection and try again.');
-        setLoading(false);
-        return;
-      }
-      
       try {
-        // Start loading immediately
         setLoading(true);
         setError(null);
-        
-        // Use a more efficient query with fewer fields for faster loading
-        const { data, error } = await supabase
-          .from('products')
-          .select('id, name, price, rating, reviews, category, slug, description, images, tags, in_stock, created_at')
-          .eq('category', 'Events Collection')
-          .eq('in_stock', true)
-          .order('created_at', { ascending: false });
+        const uniqueProducts = getCatalogProductsByCategory('events-collection') as Product[];
 
-        if (error) {
-          throw error;
-        }
-        
-        // Check for duplicate products by slug and keep only the most recent one
-        const uniqueProducts: Product[] = [];
-        const slugs = new Set();
-        data?.forEach(product => {
-          if (!slugs.has(product.slug)) {
-            slugs.add(product.slug);
-            uniqueProducts.push(product);
-          }
-        });
-
-        // Reset the state before adding products to avoid accumulation
         setEventProducts([]);
-        
-        // Set the unique products as the state
         setTimeout(() => {
           setEventProducts(uniqueProducts);
-          // Initialize visibility array with the same length as uniqueProducts
           setVisibleProducts(new Array(uniqueProducts.length).fill(false));
         }, 10);
-        
-        console.log(`Found ${uniqueProducts.length} unique event collection products`);
       } catch (err) {
-        console.error('Error fetching products from Supabase:', err);
+        console.error('Error loading event collection:', err);
         setError('Failed to load products');
-        
-        // No fallback data - keep empty array
         setEventProducts([]);
       } finally {
         setLoading(false);
@@ -195,10 +142,10 @@ const EventsCollectionPage = () => {
   return (
     <>
       <SEOHead
-        title="Colecția pentru Evenimente | Lumânări din Ceară Naturală | Atomra Home Romania"
+        title="Colecția pentru evenimente | Lumânări din ceară naturală | Atomra Home Romania"
         description="Descoperă colecția noastră de lumânări din ceară naturală pentru evenimente speciale. Lumânări personalizate pentru nunți, botezuri și alte ocazii memorabile."
         keywords="lumânări pentru evenimente, ceară naturală, ceară de soia, lumânări pentru nunți, lumânări speciale, lumânări pentru ocazii"
-        url="https://atomra-home-romania.com/events-collection"
+        url="https://atomrahomeromania.ro/events-collection"
       />
       
       <div className="luxury-page-bg luxury-floating-elements min-h-screen">
@@ -221,7 +168,7 @@ const EventsCollectionPage = () => {
                   onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} 
                 > 
                   <ArrowLeft size={18} strokeWidth={1.5} className="group-hover:-translate-x-1 transition-transform duration-200" />
-                  <span className="font-light">Înapoi la Pagina Principală</span>
+                  <span className="font-light">Înapoi la pagina principală</span>
                 </Link> 
               </div>
             
@@ -287,7 +234,7 @@ const EventsCollectionPage = () => {
                           >
                             <div className="aspect-square relative">
                               <LazyImage
-                                src={product.images && product.images.length > 0 ? product.images[0] : getAssetPath('/placeholder-image.jpg')}
+                                src={getPreferredImage(product.images, getPlaceholderImage())}
                                 alt={product.name}
                                 className="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-105"
                                 aspectRatio="square"
@@ -388,3 +335,4 @@ const EventsCollectionPage = () => {
 };
 
 export default EventsCollectionPage;
+

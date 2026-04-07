@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Package, Tag, FileText, BarChart3, Settings, Users, ArrowLeft, Eye, ShoppingBag, User } from 'lucide-react';
+import { BarChart3, Settings, ArrowLeft, Eye, ShoppingBag, User } from 'lucide-react';
 
 interface AdminSidebarProps {
   activeTab: string;
@@ -59,32 +59,6 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
             >
               <BarChart3 size={18} strokeWidth={1.5} />
               <span className="font-light">Dashboard</span>
-            </button>
-          </li>
-          <li>
-            <button
-              onClick={() => onTabChange('products')}
-              className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors duration-200 ${
-                activeTab === 'products' 
-                  ? 'bg-gray-900 text-white' 
-                  : 'text-gray-700 hover:bg-gray-100'
-              }`}
-            >
-              <Package size={18} strokeWidth={1.5} />
-              <span className="font-light">Products</span>
-            </button>
-          </li>
-          <li>
-            <button
-              onClick={() => onTabChange('categories')}
-              className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors duration-200 ${
-                activeTab === 'categories' 
-                  ? 'bg-gray-900 text-white' 
-                  : 'text-gray-700 hover:bg-gray-100'
-              }`}
-            >
-              <Tag size={18} strokeWidth={1.5} />
-              <span className="font-light">Categories</span>
             </button>
           </li>
           <li>

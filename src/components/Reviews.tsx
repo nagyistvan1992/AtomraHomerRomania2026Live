@@ -61,7 +61,7 @@ const Reviews = () => {
     setCurrentReview((prev) => (prev - 1 + reviews.length) % reviews.length);
   };
 
-  const renderStars = (rating: number) => {
+  const renderStars = () => {
     return Array.from({ length: 5 }, (_, i) => (
       <Star
         key={i}
@@ -83,7 +83,7 @@ const Reviews = () => {
           </h2>
           <div className="w-16 h-px bg-slate-300 mx-auto mb-8"></div>
           <div className="flex items-center justify-center space-x-2 mb-4">
-            {renderStars(5)}
+            {renderStars()}
             <span className="text-xl font-light text-slate-900 ml-3">4.8</span>
           </div>
           <p className="text-base text-slate-600 font-light">
@@ -118,6 +118,8 @@ const Reviews = () => {
           <button
             onClick={prevReview}
             className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-6 w-10 h-10 bg-white/80 backdrop-blur-sm rounded-full shadow-sm flex items-center justify-center text-slate-600 hover:text-slate-900 transition-all duration-300 hover:shadow-md hover:scale-110 focus:outline-none border border-slate-200/50"
+            type="button"
+            aria-label="Previous review"
           >
             <ChevronLeft size={18} strokeWidth={1.5} />
           </button>
@@ -125,6 +127,8 @@ const Reviews = () => {
           <button
             onClick={nextReview}
             className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-6 w-10 h-10 bg-white/80 backdrop-blur-sm rounded-full shadow-sm flex items-center justify-center text-slate-600 hover:text-slate-900 transition-all duration-300 hover:shadow-md hover:scale-110 focus:outline-none border border-slate-200/50"
+            type="button"
+            aria-label="Next review"
           >
             <ChevronRight size={18} strokeWidth={1.5} />
           </button>
@@ -138,6 +142,8 @@ const Reviews = () => {
                 className={`w-2 h-2 rounded-full transition-all duration-300 ${
                   index === currentReview ? 'bg-slate-800 scale-125' : 'bg-slate-300 hover:bg-slate-400'
                 }`}
+                type="button"
+                aria-label={`Go to review ${index + 1}`}
               />
             ))}
           </div>

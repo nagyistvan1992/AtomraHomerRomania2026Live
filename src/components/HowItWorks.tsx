@@ -34,13 +34,14 @@ const HowItWorks = () => {
       image: null // No image for the refresh step
     }
   ];
+  const stepsCount = steps.length;
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            steps.forEach((_, index) => {
+            Array.from({ length: stepsCount }).forEach((_, index) => {
               setTimeout(() => {
                 setVisibleSteps(prev => {
                   const newVisible = [...prev];
@@ -60,7 +61,7 @@ const HowItWorks = () => {
     }
 
     return () => observer.disconnect();
-  }, []);
+  }, [stepsCount]);
 
   return (
     <section className="py-32 sm:py-40 lg:py-48" ref={sectionRef}>

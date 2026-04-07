@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
-import { Trash2, Save } from 'lucide-react';
+import { Save } from 'lucide-react';
+
+interface CategoryFormData {
+  id?: string;
+  name: string;
+  slug?: string;
+  description: string;
+  image: string;
+  sort_order: number;
+}
 
 interface CategoryFormProps {
-  initialData?: {
-    id?: string;
-    name: string;
-    slug?: string;
-    description: string;
-    image: string;
-    sort_order: number;
-  };
-  onSave: (categoryData: any) => void;
+  initialData?: CategoryFormData;
+  onSave: (categoryData: CategoryFormData) => void;
   onCancel: () => void;
   loading: boolean;
 }
@@ -52,7 +54,7 @@ const AdminCategoryForm: React.FC<CategoryFormProps> = ({
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value
+      [name]: name === 'sort_order' ? Number(value) : value
     });
     
     // Clear error when user types

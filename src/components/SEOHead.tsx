@@ -1,6 +1,6 @@
-import React from 'react';
-import { Helmet } from 'react-helmet-async';
+import React, { useEffect } from 'react';
 import { getAbsoluteAssetUrl, getAssetPath } from '../utils/assetPath';
+import { SITE_NAME, SITE_URL } from '../utils/siteConfig';
 
 interface SEOHeadProps {
   title?: string;
@@ -15,12 +15,49 @@ interface SEOHeadProps {
   preloadImages?: string[];
 }
 
+const DEFAULT_TITLE = 'Atomra Home Romania | LumÃ¢nÄƒri din CearÄƒ NaturalÄƒ ReÃ®ncÄƒrcabile';
+const DEFAULT_DESCRIPTION = 'DescoperÄƒ lumÃ¢nÄƒrile reÃ®ncÄƒrcabile din cearÄƒ naturalÄƒ Atomra. LumÃ¢nÄƒri personalizate, ecologice È™i sustenabile din cearÄƒ de soia. Umple. Aprinde. ReÃ®mprospÄƒteazÄƒ.';
+const DEFAULT_KEYWORDS = 'lumanare ceara naturala, ceara de soia, lumanari ceara naturala, lumanare personalizata, lumanari din ceara naturala, lumÃ¢nÄƒri reÃ®ncÄƒrcabile, lumÃ¢nÄƒri sustenabile, RomÃ¢nia';
+const HEAD_MARKER = 'data-atomra-seo';
+
+const buildDefaultStructuredData = (description: string, url: string, image: string) => JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: SITE_NAME,
+  description,
+  url,
+  logo: `${SITE_URL}/AtomraICON%20WHITE%20TRANSP.png`,
+  image,
+  address: {
+    '@type': 'PostalAddress',
+    addressCountry: 'RO'
+  },
+  sameAs: [
+    'https://instagram.com/atomra-home-romania',
+    'https://tiktok.com/@atomra-home-romania'
+  ],
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'LumÃ¢nÄƒri ReÃ®ncÄƒrcabile',
+    itemListElement: [
+      {
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Product',
+          name: 'LumÃ¢nÄƒri Perlate ReÃ®ncÄƒrcabile',
+          description: 'LumÃ¢nÄƒri ecologice reÃ®ncÄƒrcabile din cearÄƒ naturalÄƒ de soia'
+        }
+      }
+    ]
+  }
+});
+
 const SEOHead: React.FC<SEOHeadProps> = ({
-  title = 'Atomra Home Romania | Lumânări din Ceară Naturală Reîncărcabile',
-  description = 'Descoperă lumânările reîncărcabile din ceară naturală Atomra. Lumânări personalizate, ecologice și sustenabile din ceară de soia. Umple. Aprinde. Reîmprospătează.',
-  keywords = 'lumanare ceara naturala, ceara de soia, lumanari ceara naturala, lumanare personalizata, lumanari din ceara naturala, lumânări reîncărcabile, lumânări sustenabile, România',
-  image = 'https://atomra-home-romania.com/photoshoot-image%20(11).webp',
-  url = 'https://atomra-home-romania.com',
+  title = DEFAULT_TITLE,
+  description = DEFAULT_DESCRIPTION,
+  keywords = DEFAULT_KEYWORDS,
+  image = `${SITE_URL}/photoshoot-image%20(11).webp`,
+  url = SITE_URL,
   type = 'website',
   structuredData,
   canonical,
@@ -28,120 +65,93 @@ const SEOHead: React.FC<SEOHeadProps> = ({
   preloadImages = []
 }) => {
   const resolvedImage = getAbsoluteAssetUrl(image);
+  const resolvedCanonical = canonical || url;
 
-  return (
-    <Helmet>
-      {/* Basic Meta Tags */}
-      <title>{title}</title>
-      <meta name="description" content={description} />
-      <meta name="keywords" content={keywords} />
-      <meta name="author" content="Atomra Home Romania" />
-      <meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'} />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-      
-      {/* Performance hints */}
-      <meta httpEquiv="x-dns-prefetch-control" content="on" />
-      <link rel="dns-prefetch" href="//images.pexels.com" />
-      <link rel="dns-prefetch" href="//fonts.googleapis.com" />
-      <link rel="dns-prefetch" href="//api.stripe.com" />
-      <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
-      <link rel="preconnect" href="https://images.pexels.com" crossOrigin="anonymous" />
-      
-      {/* Critical resource preloads */}
-      <link rel="preload" href={getAssetPath('/AtomraICON WHITE TRANSP.png')} as="image" type="image/png" />
-      <link rel="preload" href={getAssetPath('/81vj9gjxRBL._AC_SL1500_.jpg')} as="image" type="image/jpeg" />
-      
-      {/* Additional image preloads */}
-      {preloadImages.map((imgSrc, index) => (
-        <link key={index} rel="preload" href={getAssetPath(imgSrc)} as="image" />
-      ))}
-      
-      {/* Language and locale */}
-      <meta httpEquiv="content-language" content="ro" />
-      <meta name="language" content="Romanian" />
-      
-      {/* Open Graph Meta Tags */}
-      <meta property="og:title" content={title} />
-      <meta property="og:description" content={description} />
-      <meta property="og:image" content={resolvedImage} />
-      <meta property="og:image:width" content="1200" />
-      <meta property="og:image:height" content="630" />
-      <meta property="og:image:alt" content={title} />
-      <meta property="og:url" content={url} />
-      <meta property="og:type" content={type} />
-      <meta property="og:site_name" content="Atomra Home Romania" />
-      <meta property="og:locale" content="ro_RO" />
-      
-      {/* Twitter Card Meta Tags */}
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content={title} />
-      <meta name="twitter:description" content={description} />
-      <meta name="twitter:image" content={resolvedImage} />
-      <meta name="twitter:image:alt" content={title} />
-      <meta name="twitter:site" content="@atomra_romania" />
-      <meta name="twitter:creator" content="@atomra_romania" />
-      
-      {/* Additional SEO Meta Tags */}
-      <meta name="theme-color" content="#1f2937" />
-      <meta name="msapplication-TileColor" content="#1f2937" />
-      <meta name="apple-mobile-web-app-capable" content="yes" />
-      <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-      <meta name="apple-mobile-web-app-title" content="Atomra" />
-      
-      {/* Canonical URL */}
-      <link rel="canonical" href={canonical || url} />
-      
-      {/* Alternate language versions */}
-      <link rel="alternate" hrefLang="ro" href={url} />
-      <link rel="alternate" hrefLang="hu" href={url.replace('atomra-home-romania.com', 'atomra-home-romania.com/hu')} />
-      <link rel="alternate" hrefLang="en" href={url.replace('atomra-home-romania.com', 'atomra-home-romania.com/en')} />
-      <link rel="alternate" hrefLang="x-default" href={url} />
-      
-      {/* Structured Data */}
-      {structuredData && (
-        <script type="application/ld+json">
-          {structuredData}
-        </script>
-      )}
-      
-      {/* Default Organization Structured Data */}
-      {!structuredData && (
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Organization",
-            "name": "Atomra Home Romania",
-            "description": description,
-            "url": url,
-            "logo": "https://atomra-home-romania.com/AtomraICON%20WHITE%20TRANSP.png",
-            "image": resolvedImage,
-            "address": {
-              "@type": "PostalAddress",
-              "addressCountry": "RO"
-            },
-            "sameAs": [
-              "https://instagram.com/atomra-home-romania",
-              "https://tiktok.com/@atomra-home-romania"
-            ],
-            "hasOfferCatalog": {
-              "@type": "OfferCatalog",
-              "name": "Lumânări Reîncărcabile",
-              "itemListElement": [
-                {
-                  "@type": "Offer",
-                  "itemOffered": {
-                    "@type": "Product",
-                    "name": "Lumânări Perlate Reîncărcabile",
-                    "description": "Lumânări ecologice reîncărcabile din ceară naturală de soia"
-                  }
-                }
-              ]
-            }
-          })}
-        </script>
-      )}
-    </Helmet>
-  );
+  useEffect(() => {
+    const previousTitle = document.title;
+    document.title = title;
+
+    const createdNodes: HTMLElement[] = [];
+
+    const createManagedElement = <T extends HTMLElement>(tagName: string) => {
+      const element = document.createElement(tagName) as T;
+      element.setAttribute(HEAD_MARKER, 'true');
+      document.head.appendChild(element);
+      createdNodes.push(element);
+      return element;
+    };
+
+    const addMeta = (attribute: 'name' | 'property' | 'http-equiv', key: string, content: string) => {
+      const meta = createManagedElement<HTMLMetaElement>('meta');
+      meta.setAttribute(attribute, key);
+      meta.content = content;
+    };
+
+    const addLink = (rel: string, href: string, extraAttributes?: Record<string, string>) => {
+      const link = createManagedElement<HTMLLinkElement>('link');
+      link.rel = rel;
+      link.href = href;
+
+      if (extraAttributes) {
+        Object.entries(extraAttributes).forEach(([key, value]) => {
+          link.setAttribute(key, value);
+        });
+      }
+    };
+
+    addMeta('name', 'description', description);
+    addMeta('name', 'keywords', keywords);
+    addMeta('name', 'author', SITE_NAME);
+    addMeta('name', 'robots', noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1');
+    addMeta('name', 'viewport', 'width=device-width, initial-scale=1.0, viewport-fit=cover');
+    addMeta('http-equiv', 'x-dns-prefetch-control', 'on');
+    addMeta('http-equiv', 'content-language', 'ro');
+    addMeta('name', 'language', 'Romanian');
+    addMeta('name', 'theme-color', '#1f2937');
+    addMeta('name', 'msapplication-TileColor', '#1f2937');
+    addMeta('name', 'apple-mobile-web-app-capable', 'yes');
+    addMeta('name', 'apple-mobile-web-app-status-bar-style', 'default');
+    addMeta('name', 'apple-mobile-web-app-title', 'Atomra');
+
+    addMeta('property', 'og:title', title);
+    addMeta('property', 'og:description', description);
+    addMeta('property', 'og:image', resolvedImage);
+    addMeta('property', 'og:image:width', '1200');
+    addMeta('property', 'og:image:height', '630');
+    addMeta('property', 'og:image:alt', title);
+    addMeta('property', 'og:url', url);
+    addMeta('property', 'og:type', type);
+    addMeta('property', 'og:site_name', SITE_NAME);
+    addMeta('property', 'og:locale', 'ro_RO');
+
+    addMeta('name', 'twitter:card', 'summary_large_image');
+    addMeta('name', 'twitter:title', title);
+    addMeta('name', 'twitter:description', description);
+    addMeta('name', 'twitter:image', resolvedImage);
+    addMeta('name', 'twitter:image:alt', title);
+    addMeta('name', 'twitter:site', '@atomra_romania');
+    addMeta('name', 'twitter:creator', '@atomra_romania');
+
+    addLink('dns-prefetch', '//api.stripe.com');
+    addLink('canonical', resolvedCanonical);
+    addLink('alternate', url, { hreflang: 'ro' });
+    addLink('alternate', url, { hreflang: 'x-default' });
+
+    preloadImages.forEach((imgSrc) => {
+      addLink('preload', getAssetPath(imgSrc), { as: 'image' });
+    });
+
+    const script = createManagedElement<HTMLScriptElement>('script');
+    script.type = 'application/ld+json';
+    script.text = structuredData || buildDefaultStructuredData(description, url, resolvedImage);
+
+    return () => {
+      createdNodes.forEach((node) => node.remove());
+      document.title = previousTitle;
+    };
+  }, [canonical, description, keywords, noindex, preloadImages, resolvedCanonical, resolvedImage, structuredData, title, type, url]);
+
+  return null;
 };
 
 export default SEOHead;

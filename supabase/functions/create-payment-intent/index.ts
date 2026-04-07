@@ -31,6 +31,12 @@ interface PaymentIntentRequest {
   }>;
 }
 
+interface PaymentIntentError {
+  message?: string;
+  type?: string;
+  code?: string;
+}
+
 Deno.serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
@@ -221,37 +227,38 @@ Deno.serve(async (req) => {
       },
     )
 
-  } catch (error: any) {
-    console.error('Error creating payment intent:', error);
+  } catch (error) {
+    const paymentError = (error ?? {}) as PaymentIntentError;
+    console.error('Error creating payment intent:', paymentError);
     
     // Determine appropriate error message and status code
-    let errorMessage = error.message || 'Payment processing failed';
+    let errorMessage = paymentError.message || 'Payment processing failed';
     let statusCode = 400;
 
     // Handle specific Stripe errors
-    if (error.type === 'StripeCardError') {
-      errorMessage = `Card error: ${error.message}`;
-    } else if (error.type === 'StripeInvalidRequestError') {
-      errorMessage = `Invalid request: ${error.message}`;
-    } else if (error.type === 'StripeAPIError') {
+    if (paymentError.type === 'StripeCardError') {
+      errorMessage = `Card error: ${paymentError.message}`;
+    } else if (paymentError.type === 'StripeInvalidRequestError') {
+      errorMessage = `Invalid request: ${paymentError.message}`;
+    } else if (paymentError.type === 'StripeAPIError') {
       errorMessage = 'Our payment system is currently unavailable. Please try again later.';
       statusCode = 503;
-    } else if (error.code === 'card_declined') {
+    } else if (paymentError.code === 'card_declined') {
       errorMessage = 'Your card was declined. Please try another payment method.';
     }
 
     console.error('Payment processing error details:', {
       message: errorMessage,
-      code: error.code || 'unknown_error',
-      type: error.type || 'unknown_type'
+      code: paymentError.code || 'unknown_error',
+      type: paymentError.type || 'unknown_type'
     });
 
     return new Response(
       JSON.stringify({ 
         success: false, 
         error: errorMessage,
-        code: error.code || 'unknown_error',
-        type: error.type || 'unknown_type'
+        code: paymentError.code || 'unknown_error',
+        type: paymentError.type || 'unknown_type'
       }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },

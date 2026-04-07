@@ -1,12 +1,9 @@
-import React, { useEffect } from 'react';
+﻿import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { XCircle, ArrowLeft, ShoppingBag } from 'lucide-react';
-import { useLanguage } from '../context/LanguageContext';
 import SEOHead from '../components/SEOHead';
 
 const CancelPage = () => {
-  const { t } = useLanguage();
-
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
@@ -16,7 +13,7 @@ const CancelPage = () => {
       <SEOHead
         title="Payment Cancelled | Atomra Home Romania"
         description="Your payment was cancelled. You can try again or continue shopping."
-        url="https://atomra-home-romania.com/cancel"
+        url="https://atomrahomeromania.ro/cancel"
         noindex={true}
       />
       
@@ -80,3 +77,4 @@ const CancelPage = () => {
 };
 
 export default CancelPage;
+

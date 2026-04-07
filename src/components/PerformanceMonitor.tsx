@@ -1,11 +1,28 @@
 import { useEffect } from 'react';
 
+interface AnalyticsEventConfig {
+  [key: string]: string | number | boolean | undefined;
+}
+
+interface PerformanceEventTiming extends PerformanceEntry {
+  processingStart: number;
+}
+
+interface LayoutShiftEntry extends PerformanceEntry {
+  hadRecentInput: boolean;
+  value: number;
+}
+
+interface ResourceEntry extends PerformanceEntry {
+  transferSize: number;
+}
+
 declare global {
   interface Window {
     gtag?: (
       command: 'config' | 'event' | 'js' | 'set',
       targetId: string | Date,
-      config?: Record<string, any>
+      config?: AnalyticsEventConfig
     ) => void;
   }
 }
@@ -40,15 +57,16 @@ const PerformanceMonitor = () => {
         
         try {
           lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
-        } catch (e) {
+        } catch {
           console.warn('LCP observer not supported');
         }
 
         // First Input Delay (FID)
         const fidObserver = new PerformanceObserver((list) => {
           const entries = list.getEntries();
-          entries.forEach((entry: any) => {
-            const fidValue = entry.processingStart - entry.startTime;
+          entries.forEach((entry) => {
+            const performanceEntry = entry as PerformanceEventTiming;
+            const fidValue = performanceEntry.processingStart - performanceEntry.startTime;
             console.log('FID:', fidValue);
             
             if (window.gtag) {
@@ -67,7 +85,7 @@ const PerformanceMonitor = () => {
         
         try {
           fidObserver.observe({ entryTypes: ['first-input'] });
-        } catch (e) {
+        } catch {
           console.warn('FID observer not supported');
         }
 
@@ -75,9 +93,10 @@ const PerformanceMonitor = () => {
         let clsValue = 0;
         const clsObserver = new PerformanceObserver((list) => {
           const entries = list.getEntries();
-          entries.forEach((entry: any) => {
-            if (!entry.hadRecentInput) {
-              clsValue += entry.value;
+          entries.forEach((entry) => {
+            const layoutShiftEntry = entry as LayoutShiftEntry;
+            if (!layoutShiftEntry.hadRecentInput) {
+              clsValue += layoutShiftEntry.value;
             }
           });
           
@@ -98,14 +117,14 @@ const PerformanceMonitor = () => {
         
         try {
           clsObserver.observe({ entryTypes: ['layout-shift'] });
-        } catch (e) {
+        } catch {
           console.warn('CLS observer not supported');
         }
 
         // First Contentful Paint (FCP)
         const fcpObserver = new PerformanceObserver((list) => {
           const entries = list.getEntries();
-          entries.forEach((entry: any) => {
+          entries.forEach((entry) => {
             const fcpValue = entry.startTime;
             console.log('FCP:', fcpValue);
             
@@ -125,7 +144,7 @@ const PerformanceMonitor = () => {
         
         try {
           fcpObserver.observe({ entryTypes: ['paint'] });
-        } catch (e) {
+        } catch {
           console.warn('FCP observer not supported');
         }
       }
@@ -169,16 +188,17 @@ const PerformanceMonitor = () => {
       // Monitor resource loading
       const resourceObserver = new PerformanceObserver((list) => {
         const entries = list.getEntries();
-        entries.forEach((entry: any) => {
-          if (entry.transferSize > 1000000) { // 1MB
-            console.warn(`Large resource detected: ${entry.name} (${Math.round(entry.transferSize / 1024)}KB)`);
+        entries.forEach((entry) => {
+          const resourceEntry = entry as ResourceEntry;
+          if (resourceEntry.transferSize > 1000000) { // 1MB
+            console.warn(`Large resource detected: ${resourceEntry.name} (${Math.round(resourceEntry.transferSize / 1024)}KB)`);
           }
         });
       });
       
       try {
         resourceObserver.observe({ entryTypes: ['resource'] });
-      } catch (e) {
+      } catch {
         console.warn('Resource observer not supported');
       }
     };

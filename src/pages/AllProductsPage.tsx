@@ -1,28 +1,14 @@
-import React, { useEffect, useRef, useState, useMemo } from 'react';
+﻿import React, { useEffect, useRef, useState } from 'react';
 import { Star, ArrowLeft, ShoppingBag, Search, Filter, Grid, List, AlertCircle, RefreshCw, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { useCart } from '../context/CartContext';
 import { useLanguage } from '../context/LanguageContext';
-import { supabase, testSupabaseConnection } from '../lib/supabase';
 import SEOHead from '../components/SEOHead';
 import LazyImage from '../components/LazyImage'; 
 import AddToCartButton from '../components/AddToCartButton';
 import { motion, AnimatePresence } from 'framer-motion';
-import { getAssetPath } from '../utils/assetPath';
-
-interface Product {
-  id: string;
-  name: string;
-  price: number;
-  rating: number;
-  reviews: number;
-  category: string;
-  slug: string;
-  description: string;
-  images: string[];
-  tags?: string[];
-  in_stock: boolean;
-}
+import { getPlaceholderImage, getPreferredImage } from '../utils/imageSources';
+import { getCatalogCategories, getCatalogProducts } from '../lib/catalog';
+import type { CatalogProduct as Product } from '../data/catalog';
 
 const AllProductsPage = () => {
   const [visibleProducts, setVisibleProducts] = useState<boolean[]>([]);
@@ -36,7 +22,7 @@ const AllProductsPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const sectionRef = useRef<HTMLDivElement>(null);
-  const { t } = useLanguage();
+  useLanguage();
 
   // Scroll to top when component mounts
   useEffect(() => {
@@ -109,47 +95,13 @@ const AllProductsPage = () => {
     try {
       setLoading(true);
       setError(null);
-      
-      // Test connection first
-      const isConnected = await testSupabaseConnection();
-      if (!isConnected) {
-        setError('Unable to connect to database');
-        setLoading(false);
-        return;
-      }
+      const uniqueProducts = getCatalogProducts();
+      const categoriesData = getCatalogCategories().map((category) => ({
+        id: category.id,
+        name: category.name
+      }));
 
-      const { data, error } = await supabase
-        .from('products')
-        .select('*')
-        .eq('in_stock', true)
-        .order('name');
-
-      if (error) {
-        console.error('Error fetching products:', error);
-        setError('Failed to load products');
-        return;
-      }
-
-      // Also fetch categories for the filter
-      const { data: categoriesData } = await supabase
-        .from('product_categories')
-        .select('id, name')
-        .order('sort_order', { ascending: true });
-        
-      if (categoriesData) {
-        setCategories(categoriesData);
-      }
-
-      // Check for duplicate products by slug and keep only the most recent one
-      const uniqueProducts = [];
-      const slugs = new Set();
-
-      data?.forEach(product => {
-        if (!slugs.has(product.slug)) {
-          slugs.add(product.slug);
-          uniqueProducts.push(product);
-        }
-      });
+      setCategories(categoriesData);
 
       setProducts(uniqueProducts);
       setFilteredProducts(uniqueProducts);
@@ -172,10 +124,8 @@ const AllProductsPage = () => {
       }, 300);
       
     } catch (err) {
-      console.error('Error fetching products from Supabase:', err);
+      console.error('Error loading catalog products:', err);
       setError('Failed to load products');
-      
-      // No fallback data - keep empty array
       setProducts([]);
     } finally {
       setLoading(false);
@@ -269,10 +219,10 @@ const AllProductsPage = () => {
   return (
     <>
       <SEOHead
-        title="Toate Produsele | Lumânări din Ceară Naturală | Atomra Home Romania"
-        description="Descoperă întreaga noastră colecție de lumânări din ceară naturală și accesorii premium. Lumânări personalizate, ecologice și sustenabile pentru orice ocazie."
-        keywords="lumânări, ceară naturală, ceară de soia, lumânări reîncărcabile, lumânări ecologice, lumânări personalizate, accesorii lumânări"
-        url="https://atomra-home-romania.com/toate-produsele"
+        title="Toate produsele | Lumânări din ceară naturală | Atomra Home Romania"
+        description="Descoperă întreaga noastră colecție de lumânări din ceară naturală și accesorii premium. Produse personalizabile, elegante și sustenabile pentru orice ocazie."
+        keywords="lumânări, ceară naturală, ceară de soia, lumânări reîncărcabile, lumânări ecologice, lumânări personalizabile, accesorii lumânări"
+        url="https://atomrahomeromania.ro/toate-produsele"
       />
       
       <div className="luxury-page-bg luxury-floating-elements min-h-screen">
@@ -292,7 +242,7 @@ const AllProductsPage = () => {
                 className="flex items-center space-x-2 text-slate-600 hover:text-slate-900 transition-colors duration-200 group mb-6"
               >
                 <ArrowLeft size={18} strokeWidth={1.5} className="group-hover:-translate-x-1 transition-transform duration-200" />
-                <span className="font-light">Înapoi la Pagina Principală</span>
+                <span className="font-light">Înapoi la pagina principală</span>
               </Link>
               
               <motion.div
@@ -475,7 +425,7 @@ const AllProductsPage = () => {
                               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                             >
                               <LazyImage
-                                src={product.images && product.images.length > 0 ? product.images[0] : getAssetPath('/placeholder-image.jpg')}
+                                src={getPreferredImage(product.images, getPlaceholderImage())}
                                 alt={product.name}
                                 className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
                                 aspectRatio="square"
@@ -565,7 +515,7 @@ const AllProductsPage = () => {
                               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                             >
                               <LazyImage
-                                src={product.images && product.images.length > 0 ? product.images[0] : getAssetPath('/placeholder-image.jpg')}
+                                src={getPreferredImage(product.images, getPlaceholderImage())}
                                 alt={product.name}
                                 className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
                                 aspectRatio="square"
@@ -638,3 +588,4 @@ const AllProductsPage = () => {
 };
 
 export default AllProductsPage;
+

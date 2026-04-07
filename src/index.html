@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="ro">
   <head>
     <meta charset="UTF-8" />
@@ -25,28 +25,6 @@
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
       }
-      
-      .loading-screen { 
-        position: fixed; 
-        inset: 0; 
-        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); 
-        display: flex; 
-        align-items: center; 
-        justify-content: center; 
-        z-index: 9999;
-        transition: opacity 0.3s ease;
-      }
-      .loading-screen.hidden { opacity: 0; pointer-events: none; }
-      
-      .spinner { 
-        width: 40px; 
-        height: 40px; 
-        border: 3px solid #e2e8f0; 
-        border-top: 3px solid #1e293b; 
-        border-radius: 50%; 
-        animation: spin 1s linear infinite; 
-      }
-      @keyframes spin { to { transform: rotate(360deg); } }
       
       /* Critical layout styles */
       .hero-section {
@@ -82,15 +60,15 @@
     <!-- Open Graph -->
     <meta property="og:title" content="Atomra Home Romania | Refillable Pearled Candles" />
     <meta property="og:description" content="Discover refillable candles powered by wax pearls. Clean, eco-friendly, customizable. Pour. Light. Refresh." />
-    <meta property="og:image" content="https://atomra-home-romania.com/photoshoot-image%20(11).webp" />
-    <meta property="og:url" content="https://atomra-home-romania.com" />
+    <meta property="og:image" content="https://atomrahomeromania.ro/photoshoot-image%20(11).webp" />
+    <meta property="og:url" content="https://atomrahomeromania.ro" />
     <meta property="og:type" content="website" />
     
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Atomra Home Romania | Refillable Pearled Candles" />
     <meta name="twitter:description" content="Discover refillable candles powered by wax pearls. Clean, eco-friendly, customizable. Pour. Light. Refresh." />
-    <meta name="twitter:image" content="https://atomra-home-romania.com/photoshoot-image%20(11).webp" />
+    <meta name="twitter:image" content="https://atomrahomeromania.ro/photoshoot-image%20(11).webp" />
     
     <!-- Structured Data -->
     <script type="application/ld+json">
@@ -99,9 +77,9 @@
       "@type": "Store",
       "name": "Atomra Home Romania",
       "description": "Refillable candles powered by wax pearls. Clean, eco-friendly, customizable.",
-      "url": "https://atomra-home-romania.com",
-      "logo": "https://atomra-home-romania.com/AtomraICON%20WHITE%20TRANSP.png",
-      "image": "https://atomra-home-romania.com/photoshoot-image%20(11).webp",
+      "url": "https://atomrahomeromania.ro",
+      "logo": "https://atomrahomeromania.ro/AtomraICON%20WHITE%20TRANSP.png",
+      "image": "https://atomrahomeromania.ro/photoshoot-image%20(11).webp",
       "address": {
         "@type": "PostalAddress",
         "addressCountry": "RO"
@@ -124,53 +102,12 @@
     </script>
     
     <!-- Only preload resources that are immediately needed -->
-    <link rel="preload" href="%BASE_URL%photoshoot-image (11).webp" as="image" type="image/webp" fetchpriority="high">
-    <link rel="preload" href="%BASE_URL%AtomraICON WHITE TRANSP.png" as="image" type="image/png">
+    <link rel="preload" href="%BASE_URL%hero-desktop.webp" as="image" type="image/webp" fetchpriority="high">
     
   </head>
   <body>
-    <!-- Loading screen -->
-    <div id="loading-screen" class="loading-screen">
-      <div class="spinner"></div>
-    </div>
-    
     <div id="root"></div>
-    
-    <script>
-      // Performance optimizations
-      const startTime = performance.now();
-      
-      // Remove loading screen when page loads
-      window.addEventListener('load', () => {
-        const loadingScreen = document.getElementById('loading-screen');
-        if (loadingScreen) {
-          loadingScreen.classList.add('hidden');
-          setTimeout(() => loadingScreen.remove(), 300);
-        }
-        
-        // Log performance metrics
-        const loadTime = performance.now() - startTime;
-        console.log(`Page loaded in ${Math.round(loadTime)}ms`);
-      });
-      
-      // Handle session recovery
-      const handleSessionRecovery = () => {
-        // Check if we're returning from admin panel
-        if (document.referrer.includes('/admin')) {
-          // Clear any problematic session data
-          localStorage.removeItem('supabase.auth.token');
-          
-          // Force reload after a short delay
-          setTimeout(() => {
-            window.location.reload();
-          }, 100);
-        }
-      };
-      
-      // Run session recovery on page load
-      window.addEventListener('DOMContentLoaded', handleSessionRecovery);
-    </script>
-    
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
+

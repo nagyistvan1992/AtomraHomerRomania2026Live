@@ -17,7 +17,6 @@
       rgba(241, 245, 249, 0.92) 75%, 
       rgba(248, 250, 252, 0.95) 100%
     );
-    background-attachment: fixed;
     min-height: 100vh;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -167,31 +166,15 @@
     }
   }
   
-  /* Hide scrollbar for Chrome, Safari and Opera */
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
-
-  /* Hide scrollbar for IE, Edge and Firefox */
-  .scrollbar-hide {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
-  }
 }
 
 @layer utilities {
-  .animate-scroll {
-    animation: scroll 20s linear infinite;
+  .deferred-visibility {
+    content-visibility: auto;
+    contain: layout paint style;
+    contain-intrinsic-size: 900px;
   }
-  
-  .animate-scroll-slow {
-    animation: scrollSlow 120s linear infinite;
-  }
-  
-  .animate-scroll-readable {
-    animation: scrollReadable 60s linear infinite;
-  }
-  
+
   .animate-scroll-banner {
     animation: scrollBanner 30s linear infinite;
   }
@@ -204,14 +187,6 @@
     animation: slideUp 0.8s ease-out forwards;
   }
   
-  .animate-slide-in-left {
-    animation: slideInLeft 0.8s ease-out forwards;
-  }
-  
-  .animate-slide-in-right {
-    animation: slideInRight 0.8s ease-out forwards;
-  }
-  
   .animate-scale-in {
     animation: scaleIn 0.6s ease-out forwards;
   }
@@ -220,47 +195,8 @@
     animation: float 3s ease-in-out infinite;
   }
   
-  .animate-pulse-slow {
-    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  }
-  
-  .animate-shimmer {
-    animation: shimmer 2s linear infinite;
-  }
-  
-  .animate-scroll-banner {
-    animation: scrollBanner 30s linear infinite;
-  }
-  
-  .animate-luxury-glow {
-    animation: luxuryGlow 4s ease-in-out infinite;
-  }
-  
   .animate-luxury-float {
     animation: luxuryFloat 6s ease-in-out infinite;
-  }
-  
-  .animate-slide-down {
-    animation: slideDown 0.5s ease-out forwards;
-  }
-  
-  .animate-bounce-gentle {
-    animation: bounceGentle 2s ease-in-out infinite;
-  }
-  
-  /* Performance optimizations */
-  .will-change-transform {
-    will-change: transform;
-  }
-  
-  .will-change-opacity {
-    will-change: opacity;
-  }
-  
-  .gpu-accelerated {
-    transform: translateZ(0);
-    backface-visibility: hidden;
-    perspective: 1000px;
   }
   
   /* Mobile optimizations */
@@ -272,15 +208,6 @@
     .sm\:space-y-8 {
       margin-bottom: 1rem;
     }
-  }
-}
-
-@keyframes shimmer {
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(100%);
   }
 }
 
@@ -304,41 +231,6 @@
   }
 }
 
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-    max-height: 0;
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-    max-height: 200px;
-  }
-}
-
-@keyframes slideInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes slideInRight {
-  from {
-    opacity: 0;
-    transform: translateX(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
 @keyframes scaleIn {
   from {
     opacity: 0;
@@ -356,26 +248,6 @@
   }
   50% {
     transform: translateY(-10px);
-  }
-}
-
-@keyframes bounceGentle {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-5px);
-  }
-}
-
-@keyframes luxuryGlow {
-  0%, 100% {
-    opacity: 0.3;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.6;
-    transform: scale(1.1);
   }
 }
 
@@ -398,33 +270,6 @@
   }
 }
 
-@keyframes scroll {
-  0% {
-    transform: translateX(100%);
-  }
-  100% {
-    transform: translateX(-100%);
-  }
-}
-
-@keyframes scrollSlow {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-100%);
-  }
-}
-
-@keyframes scrollReadable {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-100%);
-  }
-}
-
 @keyframes scrollBanner {
   0% {
     transform: translateX(0%);
@@ -432,11 +277,6 @@
   100% {
     transform: translateX(-100%);
   }
-}
-
-/* Smooth transitions for all interactive elements */
-* {
-  transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
 /* Custom scrollbar with luxury styling */
@@ -481,23 +321,29 @@
   }
 }
 
-/* Critical loading states */
-.loading-skeleton {
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-  background-size: 200% 100%;
-  animation: loading 1.5s infinite;
-}
-
-@keyframes loading {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
-}
-
 /* Mobile optimizations */
+@media (max-width: 768px) {
+  .luxury-page-bg,
+  .luxury-section-light,
+  .luxury-section-dark,
+  .luxury-card {
+    backdrop-filter: none;
+  }
+
+  .luxury-section-light,
+  .luxury-section-dark,
+  .luxury-card {
+    box-shadow:
+      0 6px 18px rgba(71, 85, 105, 0.08),
+      0 2px 8px rgba(100, 116, 139, 0.05);
+  }
+
+  .luxury-floating-elements::before,
+  .luxury-floating-elements::after {
+    display: none;
+  }
+}
+
 @media (max-width: 640px) {
   .prose {
     font-size: 0.95rem;

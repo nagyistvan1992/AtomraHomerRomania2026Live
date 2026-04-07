@@ -1,4 +1,4 @@
-export async function getEntriLinks(id?: string) {
+export async function getEntriLinks() {
   try {
     // Check if we're in a Netlify environment
     const isNetlify = window.location.hostname.includes('netlify.app') || 
@@ -18,7 +18,7 @@ export async function getEntriLinks(id?: string) {
         if (parsedInfo.timestamp && (Date.now() - parsedInfo.timestamp < 3600000)) {
           return parsedInfo;
         }
-      } catch (e) {
+      } catch {
         // Invalid cache, continue to fetch
         localStorage.removeItem('netlify_deploy_info');
       }

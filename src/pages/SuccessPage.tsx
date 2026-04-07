@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { useSearchParams, Link, useNavigate } from 'react-router-dom';
 import { CheckCircle, ArrowLeft, ShoppingBag } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
@@ -8,17 +8,29 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { getEntriLinks } from '../utils/getEntriLinks';
 import { supabase } from '../lib/supabase';
 
+interface DomainInfo {
+  claim_url?: string;
+}
+
+interface OrderDetails {
+  order_number?: string;
+  amount_total?: number;
+  customer_email?: string;
+  created_at?: string;
+  payment_method?: string;
+}
+
 const SuccessPage = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { t } = useLanguage();
+  useLanguage();
   const { clearCart, getTotalItems } = useCart();
   const [countdown, setCountdown] = useState(5);
   const sessionId = searchParams.get('session_id');
   const orderNumberParam = searchParams.get('order_number');
   const paymentMethodParam = searchParams.get('payment_method');
-  const [domainInfo, setDomainInfo] = useState<any>(null);
-  const [orderDetails, setOrderDetails] = useState<any>(null);
+  const [domainInfo, setDomainInfo] = useState<DomainInfo | null>(null);
+  const [orderDetails, setOrderDetails] = useState<OrderDetails | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -99,7 +111,7 @@ const SuccessPage = () => {
       <SEOHead
         title="Payment Successful | Atomra Home Romania"
         description="Your payment has been processed successfully. Thank you for your purchase!"
-        url="https://atomra-home-romania.com/success"
+        url="https://atomrahomeromania.ro/success"
         noindex={true}
       />
       
@@ -255,12 +267,12 @@ const SuccessPage = () => {
                   </Link>
                   
                   <Link
-                    to="/member"
+                    to="/toate-produsele"
                     className="border border-slate-300 text-slate-700 px-8 py-3 font-light tracking-wide uppercase hover:bg-slate-50 transition-colors duration-300 rounded flex items-center justify-center space-x-2"
                     onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                   >
                     <ShoppingBag size={18} strokeWidth={1.5} />
-                    <span>View Orders</span>
+                    <span>Explore Products</span>
                   </Link>
                 </motion.div>
               )}
@@ -295,3 +307,4 @@ const SuccessPage = () => {
 };
 
 export default SuccessPage;
+

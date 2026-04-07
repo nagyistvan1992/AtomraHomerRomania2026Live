@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Package, User, MapPin, Phone, Mail, Calendar, DollarSign, Truck, CheckCircle, Clock, AlertCircle } from 'lucide-react';
+import { Package, User, MapPin, Phone, Mail, Calendar, Truck, CheckCircle, Clock, AlertCircle } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { getAssetPath } from '../utils/assetPath';
 
 interface OrderItem {
-  id: number;
+  id: string | number;
   name: string;
   price: string;
   quantity: number;
@@ -147,7 +147,7 @@ const AdminOrderDetails: React.FC<OrderDetailsProps> = ({
       console.error('Error sending status email:', error);
       setEmailStatus({ 
         success: false, 
-        message: error.message || 'Failed to send status notification email' 
+        message: error instanceof Error ? error.message : 'Failed to send status notification email'
       });
     } finally {
       setIsSendingEmail(false);

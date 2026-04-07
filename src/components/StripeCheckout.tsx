@@ -6,7 +6,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { supabase } from '../lib/supabase';
 
 interface OrderItem {
-  id: number;
+  id: string | number;
   name: string;
   price: string;
   quantity: number;
@@ -39,6 +39,10 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSuccess, customerInfo }) 
   const subtotal = getTotalPrice();
   const shipping = subtotal >= 149 ? 0 : 25;
   const finalTotal = subtotal + shipping;
+
+  const getErrorMessage = (error: unknown, fallback: string) => {
+    return error instanceof Error ? error.message : fallback;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -133,23 +137,23 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSuccess, customerInfo }) 
         // Payment successful
         clearCart();
         onSuccess();
-      } catch (err: any) {
+      } catch (err) {
         console.error('Payment error:', err);
         
         // Format user-friendly error message
         let errorMessage = 'An unexpected error occurred. Please try again.';
         
-        if (err.type === 'card_error' || err.type === 'validation_error') {
-          errorMessage = err.message;
-        } else if (err.message) {
+        if (err && typeof err === 'object' && 'type' in err && (err.type === 'card_error' || err.type === 'validation_error')) {
+          errorMessage = getErrorMessage(err, errorMessage);
+        } else if (err instanceof Error) {
           errorMessage = err.message;
         }
         
         setError(errorMessage);
       }
-    } catch (err: any) {
+    } catch (err) {
       console.error('Unexpected error:', err);
-      setError(err.message || 'An unexpected error occurred. Please try again.');
+      setError(getErrorMessage(err, 'An unexpected error occurred. Please try again.'));
     } finally {
       setIsProcessing(false);
     }

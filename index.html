@@ -7,20 +7,14 @@
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     
-    <!-- Preconnect to external domains -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://images.pexels.com" crossorigin>
     <link rel="dns-prefetch" href="//api.stripe.com">
-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <!-- Critical CSS inline -->
     <style>
       /* Critical above-the-fold styles */
       body { 
         margin: 0; 
-        font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         line-height: 1.6;
         color: #1e293b;
         background: #ffffff;
@@ -28,28 +22,6 @@
         -moz-osx-font-smoothing: grayscale;
         text-rendering: optimizeLegibility;
       }
-      
-      .loading-screen { 
-        position: fixed; 
-        inset: 0; 
-        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); 
-        display: flex; 
-        align-items: center; 
-        justify-content: center; 
-        z-index: 9999;
-        transition: opacity 0.3s ease;
-      }
-      .loading-screen.hidden { opacity: 0; pointer-events: none; }
-      
-      .spinner { 
-        width: 40px; 
-        height: 40px; 
-        border: 3px solid #e2e8f0; 
-        border-top: 3px solid #1e293b; 
-        border-radius: 50%; 
-        animation: spin 1s linear infinite; 
-      }
-      @keyframes spin { to { transform: rotate(360deg); } }
       
       /* Critical layout styles */
       .hero-section {
@@ -126,9 +98,8 @@
     }
     </script>
     
-    <!-- Only preload resources that are immediately needed -->
-    <link rel="preload" href="%BASE_URL%photoshoot-image (11).webp" as="image" type="image/webp" fetchpriority="high">
-    <link rel="preload" href="%BASE_URL%AtomraICON WHITE TRANSP.png" as="image" type="image/png">
+    <!-- Only preload the likely homepage LCP image -->
+    <link rel="preload" href="%BASE_URL%hero-desktop.webp" as="image" type="image/webp" fetchpriority="high">
     <!-- Canonical URL -->
     <link rel="canonical" href="https://atomrahomeromania.ro" />
     
@@ -139,48 +110,7 @@
     <link rel="alternate" hrefLang="x-default" href="https://atomrahomeromania.ro" />
   </head>
   <body>
-    <!-- Loading screen -->
-    <div id="loading-screen" class="loading-screen">
-      <div class="spinner"></div>
-    </div>
-    
     <div id="root"></div>
-    
-    <script>
-      // Performance optimizations
-      const startTime = performance.now();
-      
-      // Remove loading screen when page loads
-      window.addEventListener('load', () => {
-        const loadingScreen = document.getElementById('loading-screen');
-        if (loadingScreen) {
-          loadingScreen.classList.add('hidden');
-          setTimeout(() => loadingScreen.remove(), 300);
-        }
-        
-        // Log performance metrics
-        const loadTime = performance.now() - startTime;
-        console.log(`Page loaded in ${Math.round(loadTime)}ms`);
-      });
-      
-      // Handle session recovery
-      const handleSessionRecovery = () => {
-        // Check if we're returning from admin panel
-        if (document.referrer.includes('/admin')) {
-          // Clear any problematic session data
-          localStorage.removeItem('supabase.auth.token');
-          
-          // Force reload after a short delay
-          setTimeout(() => {
-            window.location.reload();
-          }, 100);
-        }
-      };
-      
-      // Run session recovery on page load
-      window.addEventListener('DOMContentLoaded', handleSessionRecovery);
-    </script>
-    
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

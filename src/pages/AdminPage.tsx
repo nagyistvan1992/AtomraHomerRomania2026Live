@@ -4,8 +4,6 @@ import { useAdmin } from '../context/AdminContext';
 import AdminSidebar from '../components/AdminSidebar';
 import AdminHeader from '../components/AdminHeader';
 import AdminDashboard from '../components/AdminDashboard';
-import AdminProducts from '../components/AdminProducts';
-import AdminCategories from '../components/AdminCategories';
 import AdminOrders from '../components/AdminOrders';
 import AdminCustomers from '../components/AdminCustomers';
 import AdminSettings from '../components/AdminSettings';
@@ -14,14 +12,14 @@ import SEOHead from '../components/SEOHead';
 const AdminPage = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const { isAdmin, adminLoading } = useAdmin();
+  const { isAdmin, adminLoading, logoutAdmin } = useAdmin();
   const navigate = useNavigate();
   const [username, setUsername] = useState('Admin');
 
   useEffect(() => {
     // Check if user is admin
     if (!adminLoading && !isAdmin) {
-      navigate('/admin-login');
+      navigate('/');
     }
     
     // Get admin name from localStorage if available
@@ -42,8 +40,8 @@ const AdminPage = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  const handleLogout = () => {
-    // Implement logout functionality
+  const handleLogout = async () => {
+    await logoutAdmin();
   };
 
   // Get title based on active tab
@@ -51,10 +49,6 @@ const AdminPage = () => {
     switch (activeTab) {
       case 'dashboard':
         return 'Dashboard';
-      case 'products':
-        return 'Products Management';
-      case 'categories':
-        return 'Categories Management';
       case 'orders':
         return 'Orders Management';
       case 'customers':
@@ -113,8 +107,6 @@ const AdminPage = () => {
           {/* Content */}
           <main className="pt-24 pb-16 px-4 sm:px-6 lg:px-8">
             {activeTab === 'dashboard' && <AdminDashboard />}
-            {activeTab === 'products' && <AdminProducts />}
-            {activeTab === 'categories' && <AdminCategories />}
             {activeTab === 'orders' && <AdminOrders />}
             {activeTab === 'customers' && <AdminCustomers />}
             {activeTab === 'settings' && <AdminSettings />}

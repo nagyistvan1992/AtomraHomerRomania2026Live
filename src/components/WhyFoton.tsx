@@ -24,13 +24,14 @@ const WhyFoton = () => {
       description: t('whyAtomra.customize.description')
     }
   ];
+  const featuresCount = features.length;
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            features.forEach((_, index) => {
+            Array.from({ length: featuresCount }).forEach((_, index) => {
               setTimeout(() => {
                 setVisibleFeatures(prev => {
                   const newVisible = [...prev];
@@ -50,7 +51,7 @@ const WhyFoton = () => {
     }
 
     return () => observer.disconnect();
-  }, []);
+  }, [featuresCount]);
 
   return (
     <section className="py-20 sm:py-24 lg:py-32" ref={sectionRef}>

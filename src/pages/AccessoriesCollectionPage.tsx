@@ -1,28 +1,15 @@
-import React, { useEffect, useRef, useState, useMemo } from 'react';
+﻿import React, { useEffect, useRef, useState } from 'react';
 import { Star, ArrowLeft, ArrowRight, ShoppingCart, AlertCircle, RefreshCw } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { useCart } from '../context/CartContext';
 import { useLanguage } from '../context/LanguageContext';
-import { supabase, testSupabaseConnection } from '../lib/supabase';
+import { getCatalogProductsByCategory } from '../lib/catalog';
 import SEOHead from '../components/SEOHead';
 import LazyImage from '../components/LazyImage'; 
 import AddToCartButton from '../components/AddToCartButton';
 import { motion, AnimatePresence } from 'framer-motion';
-import { getAssetPath } from '../utils/assetPath';
-
-interface Product {
-  id: string;
-  name: string;
-  price: number;
-  rating: number;
-  reviews: number;
-  category: string;
-  slug: string;
-  description: string;
-  images: string[];
-  tags?: string[];
-  in_stock: boolean;
-}
+import { getPlaceholderImage, getPreferredImage } from '../utils/imageSources';
+import { getSiteUrl } from '../utils/siteConfig';
+import type { CatalogProduct as Product } from '../data/catalog';
 
 const AccessoriesCollectionPage = () => {
   const [visibleProducts, setVisibleProducts] = useState<boolean[]>([]);
@@ -31,8 +18,7 @@ const AccessoriesCollectionPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [hoveredProduct, setHoveredProduct] = useState<string | null>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
-  const { addItem } = useCart();
-  const { t } = useLanguage();
+  useLanguage();
 
   // Scroll to top when component mounts
   useEffect(() => {
@@ -41,57 +27,19 @@ const AccessoriesCollectionPage = () => {
 
   useEffect(() => {
     const fetchAccessories = async () => {
-      // Test connection first
-      const connectionOk = await testSupabaseConnection();
-      if (!connectionOk) {
-        setError('Unable to connect to database. Please check your internet connection and try again.');
-        setLoading(false);
-        return;
-      }
-      
       try {
-        // Start loading immediately
         setLoading(true);
         setError(null);
-        
-        // Use a more efficient query with fewer fields for faster loading
-        const { data, error } = await supabase
-          .from('products')
-          .select('id, name, price, rating, reviews, category, slug, description, images, tags, in_stock, created_at')
-          .eq('category', 'Accessories')
-          .eq('in_stock', true)
-          .order('created_at', { ascending: false });
+        const uniqueProducts = getCatalogProductsByCategory('accessories') as Product[];
 
-        if (error) {
-          throw error;
-        }
-        
-        // Check for duplicate products by slug and keep only the most recent one
-        const uniqueProducts: Product[] = [];
-        const slugs = new Set();
-        data?.forEach(product => {
-          if (!slugs.has(product.slug)) {
-            slugs.add(product.slug);
-            uniqueProducts.push(product);
-          }
-        });
-
-        // Reset the state before adding products to avoid accumulation
         setAccessories([]);
-        
-        // Set the unique products as the state
         setTimeout(() => {
           setAccessories(uniqueProducts);
-          // Initialize visibility array with the same length as uniqueProducts
           setVisibleProducts(new Array(uniqueProducts.length).fill(false));
         }, 10);
-        
-        console.log(`Found ${uniqueProducts.length} unique accessories products`);
       } catch (err) {
-        console.error('Error fetching products from Supabase:', err);
+        console.error('Error loading accessories collection:', err);
         setError('Failed to load products');
-        
-        // No fallback data - keep empty array
         setAccessories([]);
       } finally {
         setLoading(false);
@@ -195,10 +143,10 @@ const AccessoriesCollectionPage = () => {
   return (
     <>
       <SEOHead
-        title="Accesorii pentru Lumânări | Atomra Home Romania"
-        description="Descoperă accesoriile noastre premium pentru lumânări din ceară naturală. Tot ce ai nevoie pentru a întreține și a te bucura de lumânările Atomra."
-        keywords="accesorii lumânări, fitile, recipiente, ustensile lumânări, întreținere lumânări, instrumente pentru lumânări"
-        url="https://atomra-home-romania.com/accesorii"
+        title="Accesorii pentru lumânări | Atomra Home Romania"
+        description="Descoperă accesoriile noastre premium pentru lumânări din ceară naturală. Tot ce ai nevoie pentru a întreține și a completa experiența Atomra."
+        keywords="accesorii lumânări, fitile, recipiente, ustensile lumânări, întreținere lumânări"
+        url={getSiteUrl('/accesorii')}
       />
       
       <div className="luxury-page-bg luxury-floating-elements min-h-screen">
@@ -221,7 +169,7 @@ const AccessoriesCollectionPage = () => {
                   onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} 
                 > 
                   <ArrowLeft size={18} strokeWidth={1.5} className="group-hover:-translate-x-1 transition-transform duration-200" />
-                  <span className="font-light">Înapoi la Pagina Principală</span>
+                  <span className="font-light">Înapoi la pagina principală</span>
                 </Link> 
               </div>
             
@@ -238,8 +186,8 @@ const AccessoriesCollectionPage = () => {
                 </motion.h1>
                 <div className="w-16 h-px bg-slate-300 mx-auto mb-4"></div>
                 <p className="text-lg text-slate-600 max-w-2xl mx-auto font-light leading-relaxed">
-                  Unelte și recipiente esențiale pentru a-ți îmbunătăți experiența cu lumânările. 
-                  Tot ce ai nevoie pentru a întreține și a te bucura de lumânările Atomra.
+                  Unelte și recipiente esențiale pentru a-ți completa experiența cu lumânările.
+                  Tot ce ai nevoie pentru a întreține și a pune frumos în valoare produsele Atomra.
                 </p>
               </motion.div>
             </div>
@@ -290,7 +238,7 @@ const AccessoriesCollectionPage = () => {
                               >
                                 <div className="aspect-square relative">
                                   <LazyImage
-                                    src={accessory.images && accessory.images.length > 0 ? accessory.images[0] : getAssetPath('/placeholder-image.jpg')}
+                                    src={getPreferredImage(accessory.images, getPlaceholderImage())}
                                     alt={accessory.name}
                                     className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
                                     aspectRatio="square"
@@ -389,3 +337,4 @@ const AccessoriesCollectionPage = () => {
 };
 
 export default AccessoriesCollectionPage;
+

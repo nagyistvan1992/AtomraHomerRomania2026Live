@@ -3,7 +3,7 @@ import { ShoppingCart, Check } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
-import { getAssetPath } from '../utils/assetPath';
+import { getPlaceholderImage, getPreferredImage } from '../utils/imageSources';
 
 interface AddToCartButtonProps {
   product: {
@@ -68,8 +68,7 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
         id: productId,
         name: product.name,
         price: formattedPrice,
-        image: product.image || 
-               (product.images && product.images.length > 0 ? product.images[0] : getAssetPath('/placeholder-image.jpg')),
+        image: getPreferredImage(product.image || product.images, getPlaceholderImage()),
         category: product.category
       });
       

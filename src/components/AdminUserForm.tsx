@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
 import { Save, User, Mail, Phone, MapPin } from 'lucide-react';
 
+interface UserFormData {
+  id?: string;
+  email: string;
+  first_name?: string;
+  last_name?: string;
+  phone?: string;
+  address?: string;
+  city?: string;
+  postal_code?: string;
+}
+
 interface UserFormProps {
-  initialData?: {
-    id?: string;
-    email: string;
-    first_name?: string;
-    last_name?: string;
-    phone?: string;
-    address?: string;
-    city?: string;
-    postal_code?: string;
-  };
-  onSave: (userData: any) => void;
+  initialData?: UserFormData;
+  onSave: (userData: UserFormData) => void;
   onCancel: () => void;
   loading: boolean;
 }
@@ -46,7 +48,7 @@ const AdminUserForm: React.FC<UserFormProps> = ({
     }
     
     // Phone validation (basic)
-    const phoneRegex = /^[\+]?[0-9\s\-\(\)]{10,}$/;
+    const phoneRegex = /^[+]?[0-9\s\-()]{10,}$/;
     if (formData.phone && !phoneRegex.test(formData.phone)) {
       newErrors.phone = 'Please enter a valid phone number';
     }

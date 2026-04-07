@@ -14,39 +14,40 @@ const CategoryGallery = () => {
     {
       id: 'home',
       name: t('categories.home.title'),
-      image: getAssetPath('/Candlera-14_88c60123-27a0-4574-9601-425b95bacadf.jpg'),
+      image: getAssetPath('/home-category-home.webp'),
       description: t('categories.home.description'),
       route: '/home-collection'
     },
     {
       id: 'events',
       name: t('categories.events.title'),
-      image: getAssetPath('/Chameleon-Sand-Candles-wedding-ceremony_photo-by-red-eclectic-1170x780.jpg'),
+      image: getAssetPath('/home-category-events.webp'),
       description: t('categories.events.description'),
       route: '/events-collection'
     },
     {
       id: 'accessories',
       name: t('categories.accessories.title'),
-      image: getAssetPath('/Screenshot 2024-07-07 111108.png'),
+      image: getAssetPath('/accessories-category.webp'),
       description: t('categories.accessories.description'),
       route: '/accessories-collection'
     },
     {
       id: 'coming',
       name: t('categories.coming.title'),
-      image: getAssetPath('/_9568abe9-155a-4ccb-8902-1411a636a383.jpg'),
+      image: getAssetPath('/home-category-coming.jpg'),
       description: t('categories.coming.description'),
       route: '/coming-soon'
     }
   ];
+  const categoryCount = categories.length;
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            categories.forEach((_, index) => {
+            Array.from({ length: categoryCount }).forEach((_, index) => {
               setTimeout(() => {
                 setVisibleBlocks(prev => {
                   const newVisible = [...prev];
@@ -66,7 +67,7 @@ const CategoryGallery = () => {
     }
 
     return () => observer.disconnect();
-  }, []);
+  }, [categoryCount]);
 
   const handleCategoryClick = (route: string) => {
     navigate(route);

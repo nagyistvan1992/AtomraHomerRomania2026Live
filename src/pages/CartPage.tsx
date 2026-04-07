@@ -1,20 +1,19 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useLanguage } from '../context/LanguageContext'; 
-import { useAuth } from '../context/AuthContext';
 import { useStripe } from '../context/StripeContext';
 import { isSupabaseConfigured, supabase } from '../lib/supabase';
 import SEOHead from '../components/SEOHead';
-import { ShoppingCart, Plus, Minus, X, CreditCard, Truck, ArrowLeft, ArrowRight, Check, ShieldCheck, User, Trash2, Lock, AlertCircle } from 'lucide-react';
+import { ShoppingCart, Plus, Minus, CreditCard, Truck, ArrowLeft, ArrowRight, Check, ShieldCheck, User, Trash2, Lock, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getAssetPath } from '../utils/assetPath';
+import { getPlaceholderImage, normalizeImageSource } from '../utils/imageSources';
 
 const CartPage = () => {
-  const { state, removeItem, updateQuantity, clearCart, closeCart, getTotalItems, getTotalPrice } = useCart();
-  const { t, language } = useLanguage();
-  const { state: authState, addOrder } = useAuth();
-  const { stripePromise, isStripeEnabled } = useStripe();
+  const { state, removeItem, updateQuantity, clearCart, closeCart, getTotalPrice } = useCart();
+  const { t } = useLanguage();
+  const { isStripeEnabled } = useStripe();
   const navigate = useNavigate();
   
   const [step, setStep] = useState<'cart' | 'details' | 'payment' | 'confirmation'>('cart');
@@ -31,6 +30,8 @@ const CartPage = () => {
   const [loading, setLoading] = useState(false);
   const [orderNumber, setOrderNumber] = useState('');
   const supabaseFunctionsBaseUrl = isSupabaseConfigured ? `${import.meta.env.VITE_SUPABASE_URL}/functions/v1` : '';
+  const stripeSuccessUrl = `${window.location.origin}/#/success?session_id={CHECKOUT_SESSION_ID}`;
+  const stripeCancelUrl = `${window.location.origin}/#/cancel`;
 
   const shippingCost = getTotalPrice() >= 149 ? 0 : 25;
   const totalAmount = getTotalPrice() + shippingCost;
@@ -46,16 +47,89 @@ const CartPage = () => {
     return `ORD-${timestamp}-${random}`;
   };
 
+  const withTimeout = async <T,>(promise: Promise<T>, timeoutMs: number, message: string): Promise<T> => {
+    return Promise.race([
+      promise,
+      new Promise<T>((_, reject) => {
+        window.setTimeout(() => reject(new Error(message)), timeoutMs);
+      }),
+    ]);
+  };
+
+  const sanitizeCustomerDetails = () => ({
+    name: customerDetails.name.trim(),
+    email: customerDetails.email.trim(),
+    phone: customerDetails.phone.trim(),
+    address: customerDetails.address.trim(),
+    city: customerDetails.city.trim(),
+    postalCode: customerDetails.postalCode.trim(),
+  });
+
+  const sanitizeOrderItems = () =>
+    state.items.map((item) => ({
+      id: String(item.id),
+      name: item.name,
+      price: item.price,
+      image: item.image,
+      quantity: item.quantity,
+      category: item.category,
+    }));
+
+  const requestStripeCheckoutUrl = async (payload: {
+    price_id: string;
+    mode: 'payment' | 'subscription';
+    success_url: string;
+    cancel_url: string;
+    customer_email: string;
+  }) => {
+    const controller = new AbortController();
+    const timeoutId = window.setTimeout(() => controller.abort(), 12000);
+
+    try {
+      const response = await fetch(`${supabaseFunctionsBaseUrl}/stripe-checkout`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+        },
+        body: JSON.stringify(payload),
+        signal: controller.signal,
+      });
+
+      const rawBody = await response.text();
+      const parsedBody = rawBody ? JSON.parse(rawBody) : null;
+
+      if (!response.ok) {
+        throw new Error(parsedBody?.error || parsedBody?.message || 'Failed to create checkout session');
+      }
+
+      if (!parsedBody?.url) {
+        throw new Error('No checkout URL returned from Stripe');
+      }
+
+      return parsedBody.url as string;
+    } catch (error) {
+      if (error instanceof DOMException && error.name === 'AbortError') {
+        throw new Error('Stripe checkout request timed out. Please try again.');
+      }
+
+      throw error;
+    } finally {
+      window.clearTimeout(timeoutId);
+    }
+  };
+
   const sendOrderEmailsInBackground = (orderNum: string) => {
+    const details = sanitizeCustomerDetails();
     const emailPayload = {
       orderData: {
         orderId: orderNum,
         orderNumber: orderNum,
-        customerName: customerDetails.name,
-        customerEmail: customerDetails.email,
-        customerPhone: customerDetails.phone,
-        customerAddress: `${customerDetails.address}, ${customerDetails.city}, ${customerDetails.postalCode}`,
-        items: state.items.map(item => ({
+        customerName: details.name,
+        customerEmail: details.email,
+        customerPhone: details.phone,
+        customerAddress: `${details.address}, ${details.city}, ${details.postalCode}`,
+        items: sanitizeOrderItems().map(item => ({
           name: item.name,
           quantity: item.quantity,
           price: item.price
@@ -104,16 +178,21 @@ const CartPage = () => {
   const processOrder = async () => {
     setLoading(true);
     try {
+      if (!isSupabaseConfigured) {
+        throw new Error('Supabase is not configured for order processing.');
+      }
+
+      const details = sanitizeCustomerDetails();
       const orderNum = generateOrderNumber();
       const orderData = {
         order_number: orderNum,
-        customer_name: customerDetails.name,
-        customer_email: customerDetails.email,
-        customer_phone: customerDetails.phone,
-        customer_address: customerDetails.address,
-        customer_city: customerDetails.city,
-        customer_postal_code: customerDetails.postalCode,
-        items: state.items,
+        customer_name: details.name,
+        customer_email: details.email,
+        customer_phone: details.phone,
+        customer_address: details.address,
+        customer_city: details.city,
+        customer_postal_code: details.postalCode,
+        items: sanitizeOrderItems(),
         subtotal: getTotalPrice(),
         shipping_cost: shippingCost,
         total_amount: totalAmount,
@@ -123,11 +202,14 @@ const CartPage = () => {
         notes: notes || null
       };
 
-      const { error } = await supabase.from('orders').insert([orderData]);
+      const { error } = await withTimeout(
+        supabase.from('orders').insert([orderData]),
+        12000,
+        'Order creation timed out. Please try again.'
+      );
       
       if (error) throw error;
       setOrderNumber(orderNum);
-      addOrder(orderData);
       clearCart();
       sendOrderEmailsInBackground(orderNum);
       navigate(`/success?order_number=${encodeURIComponent(orderNum)}&payment_method=${encodeURIComponent(paymentMethod)}`);
@@ -146,9 +228,7 @@ const CartPage = () => {
       if (!isSupabaseConfigured || !supabaseFunctionsBaseUrl || !import.meta.env.VITE_SUPABASE_ANON_KEY) {
         throw new Error('Stripe checkout is not configured. Add the GitHub Actions Supabase and Stripe secrets first.');
       }
-
-      const stripe = await stripePromise; 
-      if (!stripe) throw new Error('Stripe failed to initialize');
+      const details = sanitizeCustomerDetails();
 
       // Import the stripe config to get product price IDs 
       const { stripeProducts, getProductById } = await import('../stripe-config');
@@ -185,36 +265,16 @@ const CartPage = () => {
         }
 
         console.log('Using fallback product for checkout:', fallbackProduct.name);
-        
-        // Call Stripe checkout with the fallback product
-        const response = await fetch(`${supabaseFunctionsBaseUrl}/stripe-checkout`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`
-          },
-          body: JSON.stringify({
-            price_id: fallbackProduct.priceId,
-            mode: 'payment',
-            success_url: `${window.location.origin}/success`,
-            cancel_url: `${window.location.origin}/cancel`,
-            customer_email: customerDetails.email
-          })
+
+        const checkoutUrl = await requestStripeCheckoutUrl({
+          price_id: fallbackProduct.priceId,
+          mode: 'payment',
+          success_url: stripeSuccessUrl,
+          cancel_url: stripeCancelUrl,
+          customer_email: details.email,
         });
 
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.error || 'Failed to create checkout session');
-        }
-        
-        const data = await response.json();
-        
-        if (!data.url) {
-          throw new Error('No checkout URL returned from Stripe');
-        }
-        
-        // Redirect to Stripe Checkout
-        window.location.href = data.url;
+        window.location.href = checkoutUrl;
         return;
       }
       
@@ -223,42 +283,22 @@ const CartPage = () => {
       
       if (firstMatchingItem) {
         const { stripeProduct } = firstMatchingItem;
-        
-        // Call Stripe checkout with the matching product's price_id
-        const response = await fetch(`${supabaseFunctionsBaseUrl}/stripe-checkout`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`
-          },
-          body: JSON.stringify({
-            price_id: stripeProduct.priceId,
-            mode: stripeProduct.mode || 'payment',
-            success_url: `${window.location.origin}/success`,
-            cancel_url: `${window.location.origin}/cancel`,
-            customer_email: customerDetails.email
-          })
+
+        const checkoutUrl = await requestStripeCheckoutUrl({
+          price_id: stripeProduct.priceId,
+          mode: stripeProduct.mode || 'payment',
+          success_url: stripeSuccessUrl,
+          cancel_url: stripeCancelUrl,
+          customer_email: details.email,
         });
 
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.error || 'Failed to create checkout session');
-        }
-        
-        const data = await response.json();
-        
-        if (!data.url) {
-          throw new Error('No checkout URL returned from Stripe');
-        }
-        
-        // Redirect to Stripe Checkout
-        window.location.href = data.url;
+        window.location.href = checkoutUrl;
       } else {
         throw new Error('No matching Stripe products found for items in cart');
       }
     } catch (error) {
       console.error('Error processing payment:', error);
-      alert(`Error processing payment: ${error.message || 'Unknown error'}`);
+      alert(`Error processing payment: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setLoading(false);
     }
@@ -314,12 +354,12 @@ const CartPage = () => {
                 <div className="flex items-center space-x-4 flex-1">
                   <div className="relative w-16 h-16 flex-shrink-0">
                     <img
-                      src={item.image || getAssetPath('/placeholder-image.jpg')}
+                      src={normalizeImageSource(item.image) || getPlaceholderImage()}
                       alt={item.name}
                       className="w-full h-full object-cover rounded-md shadow-sm"
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
-                        target.src = getAssetPath('/placeholder-image.jpg');
+                        target.src = getPlaceholderImage();
                       }}
                     />
                   </div>
@@ -726,7 +766,7 @@ const CartPage = () => {
                   </div>
                   <div className="px-2 py-1 bg-white rounded border border-slate-200 shadow-sm flex items-center">
                     <Check size={12} className="text-slate-500 mr-1" strokeWidth={1.5} />
-                    <span className="text-xs text-slate-600">Plată Verificată</span>
+                    <span className="text-xs text-slate-600">Plată verificată</span>
                   </div>
                 </div>
               </div>
@@ -835,15 +875,6 @@ const CartPage = () => {
               Înapoi la pagina principală
             </Link>
             
-            {authState.isAuthenticated && (
-              <Link
-                to="/member"
-                className="w-full text-center py-2 text-slate-600 hover:text-slate-900 font-light transition-colors"
-                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              >
-                Vezi toate comenzile tale
-              </Link>
-            )}
           </motion.div>
         </div>
       </div>
@@ -860,7 +891,7 @@ const CartPage = () => {
         <SEOHead
           title="Coșul meu | Atomra Home Romania"
           description="Finalizează comanda ta de lumânări din ceară naturală Atomra. Livrare rapidă și transport gratuit peste 149 Lei."
-          url="https://atomra-home-romania.com/cart"
+          url="https://atomrahomeromania.ro/cart"
           noindex={true}
         />
       
@@ -920,3 +951,4 @@ const CartPage = () => {
 };
 
 export default CartPage;
+

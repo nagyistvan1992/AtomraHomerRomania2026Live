@@ -1,7 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
-import { BarChartBig, ShoppingBag, Users, DollarSign, TrendingUp, ArrowUpRight, ArrowDownRight, Package, Clock } from 'lucide-react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } from 'recharts';
+import { ShoppingBag, Users, DollarSign, ArrowUpRight, ArrowDownRight, Clock } from 'lucide-react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+
+interface DashboardOrderSummary {
+  id: string;
+  total_amount: number | string;
+}
+
+interface DashboardCustomer {
+  customer_email: string;
+}
+
+interface RecentOrder {
+  id: string;
+  order_number: string;
+  customer_name: string;
+  created_at: string;
+  order_status: string;
+  total_amount: number;
+}
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState({
@@ -11,9 +29,9 @@ const AdminDashboard = () => {
     pendingOrders: 0
   });
   
-  const [recentOrders, setRecentOrders] = useState([]);
+  const [recentOrders, setRecentOrders] = useState<RecentOrder[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [timeRange, setTimeRange] = useState('week'); // 'week', 'month', 'year'
 
   useEffect(() => {
@@ -55,10 +73,13 @@ const AdminDashboard = () => {
         if (recentOrdersError) throw recentOrdersError;
         
         // Calculate total revenue
-        const totalRevenue = ordersData.reduce((sum, order) => sum + Number(order.total_amount), 0);
+        const totalRevenue = (ordersData as DashboardOrderSummary[]).reduce(
+          (sum, order) => sum + Number(order.total_amount),
+          0
+        );
         
         // Get unique customers
-        const uniqueCustomers = new Set(customersData.map(c => c.customer_email));
+        const uniqueCustomers = new Set((customersData as DashboardCustomer[]).map((customer) => customer.customer_email));
         
         setStats({
           totalOrders: ordersData.length,
@@ -67,10 +88,10 @@ const AdminDashboard = () => {
           pendingOrders: pendingOrdersData.length
         });
         
-        setRecentOrders(recentOrdersData);
+        setRecentOrders((recentOrdersData ?? []) as RecentOrder[]);
       } catch (err) {
         console.error('Error fetching dashboard data:', err);
-        setError(err.message);
+        setError(err instanceof Error ? err.message : 'Failed to fetch dashboard data.');
       } finally {
         setLoading(false);
       }
@@ -98,11 +119,11 @@ const AdminDashboard = () => {
   
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28'];
   
-  const formatCurrency = (value) => {
+  const formatCurrency = (value: number) => {
     return `${value.toFixed(0)} Lei`;
   };
   
-  const getStatusColor = (status) => {
+  const getStatusColor = (status: string) => {
     switch (status) {
       case 'pending': return 'bg-yellow-100 text-yellow-800';
       case 'confirmed': return 'bg-blue-100 text-blue-800';
@@ -114,7 +135,7 @@ const AdminDashboard = () => {
     }
   };
   
-  const formatDate = (dateString) => {
+  const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('ro-RO', {
       year: 'numeric',
       month: 'short',
@@ -268,7 +289,7 @@ const AdminDashboard = () => {
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="name" />
                 <YAxis />
-                <Tooltip formatter={(value) => [`${value} Lei`, 'Sales']} />
+                <Tooltip formatter={(value: number | string) => [`${value} Lei`, 'Sales']} />
                 <Bar dataKey="sales" fill="#3b82f6" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
@@ -296,7 +317,7 @@ const AdminDashboard = () => {
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip formatter={(value) => [`${value} Lei`, 'Sales']} />
+                <Tooltip formatter={(value: number | string) => [`${value} Lei`, 'Sales']} />
               </PieChart>
             </ResponsiveContainer>
           </div>

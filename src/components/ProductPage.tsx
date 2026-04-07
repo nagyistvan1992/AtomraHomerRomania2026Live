@@ -1,34 +1,27 @@
-import React, { useState, useEffect, useRef } from 'react';
+﻿import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { ArrowLeft, Star, ShoppingCart, Plus, Minus, Heart, Share2, Check, ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useLanguage } from '../context/LanguageContext';
-import { supabase } from '../lib/supabase';
 import SEOHead from './SEOHead';
 import LazyImage from './LazyImage';
-import AddToCartButton from './AddToCartButton';
 import { StripeCheckoutButton } from './StripeCheckoutButton';
 import { generateProductStructuredData, generateBreadcrumbStructuredData } from '../utils/seoUtils';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getProductById } from '../stripe-config';
-import { getAssetPath } from '../utils/assetPath';
+import { getSiteUrl } from '../utils/siteConfig';
+import { getPlaceholderImage, getPreferredImage, getResolvedImageList } from '../utils/imageSources';
+import { getCatalogProductBySlug } from '../lib/catalog';
+import type { CatalogProduct as Product } from '../data/catalog';
 
-interface Product {
-  id: string;
-  name: string;
-  price: number;
-  rating: number;
-  reviews: number;
-  category: string;
-  slug: string;
-  description: string;
-  long_description: string;
-  features: string[];
-  images: string[];
-  tags?: string[];
-  in_stock: boolean;
-  image_alt_texts?: string[];
-}
+const normalizeProductData = (product: Product): Product => ({
+  ...product,
+  images: getResolvedImageList(product.images),
+  features: Array.isArray(product.features) ? product.features.filter(Boolean) : [],
+  tags: Array.isArray(product.tags) ? product.tags.filter(Boolean) : [],
+  image_alt_texts: Array.isArray(product.image_alt_texts) ? product.image_alt_texts.filter(Boolean) : [],
+  long_description: typeof product.long_description === 'string' ? product.long_description : ''
+});
 
 const ProductPage = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -40,7 +33,7 @@ const ProductPage = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [isAdded, setIsAdded] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const pageRef = useRef<HTMLDivElement>(null);
@@ -65,28 +58,18 @@ const ProductPage = () => {
 
       try {
         setLoading(true);
-        setError(null);
-
-        const { data, error } = await supabase
-          .from('products')
-          .select('*')
-          .eq('slug', slug)
-          .maybeSingle();
-
-        if (error) {
-          throw error;
-        }
+        setLoadError(null);
+        const data = getCatalogProductBySlug(slug);
 
         if (data) {
-          setProduct(data);
+          setProduct(normalizeProductData(data));
           setIsVisible(true);
         } else {
-          navigate('/', { replace: true });
+          setLoadError('Product not found.');
         }
       } catch (err) {
-        console.error('Error fetching product from Supabase:', err);
-        setError('Product not found');
-        navigate('/', { replace: true });
+        console.error('Error loading catalog product:', err);
+        setLoadError('Product could not be loaded right now.');
       } finally {
         setLoading(false);
       }
@@ -100,10 +83,10 @@ const ProductPage = () => {
     
     for (let i = 0; i < quantity; i++) {
       addItem({
-        id: parseInt(product.id),
+        id: product.slug,
         name: product.name,
         price: `${product.price.toFixed(0)} Lei`,
-        image: product.images && product.images.length > 0 ? product.images[0] : getAssetPath('/placeholder-image.jpg'),
+        image: getPreferredImage(product.images, getPlaceholderImage()),
         category: product.category
       });
     }
@@ -218,24 +201,24 @@ const ProductPage = () => {
   // Get SEO title based on language
   const getSeoTitle = () => {
     if (language === 'ro') {
-      return `${product?.name} | Lumânare din Ceară Naturală | Atomra Home Romania`;
+      return `${product?.name} | Lumânare din ceară naturală | Atomra Home Romania`;
     } else if (language === 'hu') {
-      return `${product?.name} | Természetes Viaszgyertya | Atomra Home Romania`;
+      return `${product?.name} | Természetes viaszgyertya | Atomra Home Romania`;
     } else {
       return `${product?.name} | Natural Wax Candle | Atomra Home Romania`;
     }
   };
 
   // Navigate through images
-  const nextImage = () => {
+  const nextImage = useCallback(() => {
     if (!product || !product.images) return;
     setSelectedImage((prev) => (prev + 1) % product.images.length);
-  };
+  }, [product]);
 
-  const prevImage = () => {
+  const prevImage = useCallback(() => {
     if (!product || !product.images) return;
     setSelectedImage((prev) => (prev - 1 + product.images.length) % product.images.length);
-  };
+  }, [product]);
 
   // Handle fullscreen toggle
   const toggleFullscreen = () => {
@@ -258,7 +241,7 @@ const ProductPage = () => {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isFullscreen]);
+  }, [isFullscreen, nextImage, prevImage]);
 
   // Get alt text for images
   const getImageAltText = (index: number) => {
@@ -297,15 +280,39 @@ const ProductPage = () => {
   }
 
   if (!product) {
-    return null;
+    return (
+      <div className="pt-32 sm:pt-36 md:pt-40 lg:pt-44 min-h-screen bg-white">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center">
+          <h1 className="text-2xl sm:text-3xl font-light text-gray-900 mb-4">Product unavailable</h1>
+          <p className="text-gray-600 font-light mb-8">
+            {loadError || 'We could not load this product. Please try again from the collection page.'}
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <button
+              type="button"
+              onClick={() => window.location.reload()}
+              className="rounded bg-gray-900 px-6 py-3 text-sm font-light uppercase tracking-wide text-white transition-colors duration-300 hover:bg-gray-800"
+            >
+              Retry
+            </button>
+            <Link
+              to="/toate-produsele"
+              className="rounded border border-gray-200 px-6 py-3 text-sm font-light uppercase tracking-wide text-gray-700 transition-colors duration-300 hover:bg-gray-50"
+            >
+              Back to products
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   // Generate structured data
   const productStructuredData = generateProductStructuredData(product);
   const breadcrumbStructuredData = generateBreadcrumbStructuredData([
-    { name: 'Home', url: 'https://atomra-home-romania.com' },
-    { name: product.category, url: `https://atomra-home-romania.com${getCategoryRoute(product.category)}` },
-    { name: product.name, url: `https://atomra-home-romania.com/product/${product.slug}` }
+    { name: 'Home', url: getSiteUrl('/') },
+    { name: product.category, url: getSiteUrl(getCategoryRoute(product.category)) },
+    { name: product.name, url: getSiteUrl(`/product/${product.slug}`) }
   ]);
 
   return (
@@ -314,11 +321,11 @@ const ProductPage = () => {
         title={getSeoTitle()}
         description={`${product.description} Lumânare din ceară naturală de soia, personalizabilă și reîncărcabilă.`}
         keywords={`lumanare ceara naturala, ceara de soia, lumanari ceara naturala, lumanare personalizata, lumanari din ceara naturala, ${product.name}, ${product.category}, ${product.tags?.join(', ')}`}
-        image={product.images && product.images.length > 0 ? product.images[0] : getAssetPath('/placeholder-image.jpg')}
-        url={`https://atomra-home-romania.com/product/${product.slug}`}
+        image={getPreferredImage(product.images, getPlaceholderImage())}
+        url={getSiteUrl(`/product/${product.slug}`)}
         type="product"
         structuredData={`[${productStructuredData}, ${breadcrumbStructuredData}]`}
-        preloadImages={product.images && product.images.length > 0 ? product.images.slice(0, 3) : []}
+        preloadImages={product.images.length > 0 ? product.images.slice(0, 3) : []}
       />
       
       {/* Fullscreen Image Gallery */}
@@ -340,7 +347,7 @@ const ProductPage = () => {
           </button>
           
           <img 
-            src={product.images[selectedImage]} 
+            src={product.images[selectedImage] || getPlaceholderImage()} 
             alt={getImageAltText(selectedImage)}
             className="max-h-[90vh] max-w-[90vw] object-contain"
           />
@@ -422,7 +429,7 @@ const ProductPage = () => {
                   onClick={toggleFullscreen}
                 >
                   <LazyImage
-                    src={product.images && product.images.length > 0 ? product.images[selectedImage] : getAssetPath('/placeholder-image.jpg')}
+                    src={product.images.length > 0 ? product.images[selectedImage] : getPlaceholderImage()}
                     alt={getImageAltText(selectedImage)}
                     className="w-full"
                     aspectRatio="square"
@@ -494,7 +501,7 @@ const ProductPage = () => {
                       aria-label={`View image ${index + 1} of ${product.name}`}
                     >
                       <LazyImage
-                        src={image || getAssetPath('/placeholder-image.jpg')}
+                        src={image || getPlaceholderImage()}
                         alt={getImageAltText(index)}
                         aspectRatio="square"
                         objectFit="cover"
@@ -620,7 +627,7 @@ const ProductPage = () => {
                           className="flex items-center space-x-2"
                         >
                           <Check size={18} strokeWidth={1.5} className="text-green-400" />
-                          <span>{language === 'ro' ? 'Adăugat în Coș' : language === 'hu' ? 'Kosárba Téve' : 'Added to Cart'}</span>
+                          <span>{language === 'ro' ? 'Adăugat în coș' : language === 'hu' ? 'Kosárba téve' : 'Added to Cart'}</span>
                         </motion.div>
                       ) : (
                         <motion.div
@@ -647,8 +654,8 @@ const ProductPage = () => {
                         productName={product.name}
                         className="w-full bg-indigo-600 text-white py-3 px-4 sm:py-4 sm:px-8 font-light tracking-wide uppercase hover:bg-indigo-700 transition-all duration-300 rounded"
                       >
-                        {language === 'ro' ? 'Cumpără Acum' : 
-                         language === 'hu' ? 'Vásárolj Most' : 
+                        {language === 'ro' ? 'Cumpără acum' : 
+                         language === 'hu' ? 'Vásárolj most' : 
                          'Buy Now'} - {product.price.toFixed(0)} Lei
                       </StripeCheckoutButton>
                     </div>
@@ -724,48 +731,48 @@ const ProductPage = () => {
           {/* SEO Content Section */}
           <section className="mt-16 pt-8 border-t border-gray-100">
             <div className="max-w-4xl mx-auto">
-              <h2 className="text-2xl font-light text-gray-900 mb-6">Despre Lumânările din Ceară Naturală</h2>
+              <h2 className="text-2xl font-light text-gray-900 mb-6">Despre lumânările din ceară naturală</h2>
               
               <div className="prose prose-slate max-w-none">
                 <p>
-                  <strong>Lumânările din ceară naturală</strong> reprezintă o alternativă superioară față de lumânările convenționale din parafină. La Atomra Home Romania, ne mândrim cu produsele noastre din <strong>ceară naturală</strong>, create cu pasiune și dedicare pentru a oferi o experiență senzorială completă.
+                  <strong>Lumânările din ceară naturală</strong> reprezintă o alternativă mai curată și mai atent construită față de lumânările convenționale din parafină. La Atomra Home Romania, lucrăm cu produse din <strong>ceară naturală</strong> create pentru o experiență plăcută, elegantă și ușor de integrat în decorul de zi cu zi.
                 </p>
                 
                 <p>
-                  Produsul nostru, <strong>{product.name}</strong>, face parte din colecția {product.category} și este realizat din <strong>ceară de soia</strong> 100% naturală. Această <strong>lumânare personalizată</strong> este perfectă pentru {product.category === 'Home Collection' ? 'a crea o atmosferă caldă și primitoare în casa ta' : product.category === 'Events Collection' ? 'a adăuga eleganță și rafinament evenimentelor speciale' : 'a completa experiența ta cu lumânările Atomra'}.
+                  Produsul nostru, <strong>{product.name}</strong>, face parte din colecția {product.category} și este realizat din <strong>ceară de soia</strong> 100% naturală. Această <strong>lumânare personalizabilă</strong> este potrivită pentru {product.category === 'Home Collection' ? 'a crea o atmosferă caldă și primitoare în casa ta' : product.category === 'Events Collection' ? 'a adăuga eleganță și rafinament unor evenimente speciale' : 'a completa frumos experiența ta cu lumânările Atomra'}.
                 </p>
                 
-                <h3>Beneficiile Lumânărilor din Ceară Naturală</h3>
+                <h3>Beneficiile lumânărilor din ceară naturală</h3>
                 
                 <p>
                   Alegând <strong>lumânări din ceară naturală</strong> Atomra, beneficiezi de:
                 </p>
                 
                 <ul>
-                  <li>Ardere mai curată și mai lungă față de lumânările din parafină</li>
-                  <li>Absența toxinelor și a substanțelor chimice dăunătoare</li>
-                  <li>Parfum mai intens și mai natural</li>
-                  <li>Impact redus asupra mediului - <strong>ceara naturală</strong> este biodegradabilă</li>
-                  <li>Sistem inovator de reumplere care reduce deșeurile</li>
-                  <li>Personalizabile - Creează-ți propria <strong>lumânare personalizată</strong> cu granulele noastre de ceară</li>
+                  <li>Ardere mai curată și adesea mai uniformă față de lumânările din parafină</li>
+                  <li>Absența toxinelor și a substanțelor chimice nedorite</li>
+                  <li>O experiență mai rafinată pentru decor, cadouri sau seri liniștite</li>
+                  <li>Impact mai redus asupra mediului, deoarece <strong>ceara naturală</strong> este biodegradabilă</li>
+                  <li>Sistem de reumplere care reduce risipa și păstrează recipientele în folosire</li>
+                  <li>Flexibilitate în personalizare și în modul în care îți compui propriul aranjament</li>
                 </ul>
                 
-                <h3>Cum să Îngrijești Lumânarea Ta</h3>
+                <h3>Cum să îngrijești lumânarea ta</h3>
                 
                 <p>
-                  Pentru a te bucura la maximum de <strong>lumânarea ta personalizată</strong> din <strong>ceară naturală</strong>, urmează aceste sfaturi simple:
+                  Pentru a te bucura cât mai mult de <strong>lumânarea ta personalizabilă</strong> din <strong>ceară naturală</strong>, urmează aceste recomandări simple:
                 </p>
                 
                 <ul>
-                  <li>La prima aprindere, lasă lumânarea să ardă cel puțin 2 ore pentru a forma un bazin de ceară uniform</li>
-                  <li>Taie fitilul la 5-6 mm înainte de fiecare aprindere</li>
-                  <li>Ține lumânarea departe de curenți de aer pentru o ardere uniformă</li>
+                  <li>La prima aprindere, lasă lumânarea să ardă suficient pentru o topire uniformă la suprafață</li>
+                  <li>Taie fitilul la aproximativ 5-6 mm înainte de fiecare folosire</li>
+                  <li>Ține lumânarea departe de curenți de aer pentru o ardere mai stabilă</li>
                   <li>Nu lăsa niciodată o lumânare aprinsă nesupravegheată</li>
-                  <li>Reumple recipientul cu granule noi de ceară când nivelul scade</li>
+                  <li>Reumple recipientul cu granule noi de ceară atunci când nivelul scade</li>
                 </ul>
                 
                 <p>
-                  Descoperă întreaga noastră colecție de <strong>lumânări din ceară naturală</strong> și transformă-ți casa și evenimentele speciale cu produsele premium Atomra. Fiecare <strong>lumânare personalizată</strong> este creată cu pasiune și atenție la detalii, pentru a-ți oferi o experiență senzorială completă și memorabilă.
+                  Descoperă întreaga noastră colecție de <strong>lumânări din ceară naturală</strong> și transformă-ți casa sau evenimentele speciale cu produse Atomra create cu atenție la detalii. Fiecare piesă este gândită pentru o experiență memorabilă, calmă și ușor de personalizat.
                 </p>
               </div>
             </div>
@@ -777,3 +784,4 @@ const ProductPage = () => {
 };
 
 export default ProductPage;
+

@@ -1,28 +1,14 @@
-import React, { useEffect, useRef, useState, useMemo } from 'react';
-import { Star, ArrowLeft, ShoppingCart, ArrowRight, Heart, AlertCircle, RefreshCw } from 'lucide-react';
+﻿import React, { useEffect, useRef, useState } from 'react';
+import { Star, ArrowLeft, ShoppingCart, Heart, AlertCircle, RefreshCw } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { useCart } from '../context/CartContext';
 import { useLanguage } from '../context/LanguageContext';
-import { supabase, testSupabaseConnection } from '../lib/supabase';
+import { getCatalogProductsByCategory } from '../lib/catalog';
 import SEOHead from '../components/SEOHead';
 import LazyImage from '../components/LazyImage'; 
 import AddToCartButton from '../components/AddToCartButton';
-import { motion, AnimatePresence } from 'framer-motion';
-import { getAssetPath } from '../utils/assetPath';
-
-interface Product {
-  id: string;
-  name: string;
-  price: number;
-  rating: number;
-  reviews: number;
-  category: string;
-  slug: string;
-  description: string;
-  images: string[];
-  tags?: string[];
-  in_stock: boolean;
-}
+import { motion } from 'framer-motion';
+import { getPlaceholderImage, getPreferredImage, getResolvedImageList } from '../utils/imageSources';
+import type { CatalogProduct as Product } from '../data/catalog';
 
 const HomeCollectionPage = () => {
   const [visibleProducts, setVisibleProducts] = useState<boolean[]>([]);
@@ -31,8 +17,7 @@ const HomeCollectionPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [hoveredProduct, setHoveredProduct] = useState<string | null>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
-  const { addItem } = useCart();
-  const { t } = useLanguage();
+  useLanguage();
 
   // Scroll to top when component mounts
   useEffect(() => {
@@ -41,57 +26,19 @@ const HomeCollectionPage = () => {
 
   useEffect(() => {
     const fetchHomeProducts = async () => {
-      // Test connection first
-      const connectionOk = await testSupabaseConnection();
-      if (!connectionOk) {
-        setError('Nu s-a putut realiza conexiunea cu baza de date. Verificați conexiunea la internet și încercați din nou.');
-        setLoading(false);
-        return;
-      }
-      
       try {
-        // Start loading immediately
         setLoading(true);
         setError(null);
-        
-        // Use a more efficient query with fewer fields for faster loading
-        const { data, error } = await supabase
-          .from('products')
-          .select('id, name, price, rating, reviews, category, slug, description, images, tags, in_stock, created_at')
-          .eq('category', 'Home Collection')
-          .eq('in_stock', true)
-          .order('created_at', { ascending: false });
+        const uniqueProducts = getCatalogProductsByCategory('home-collection') as Product[];
 
-        if (error) {
-          throw error;
-        }
-        
-        // Check for duplicate products by slug and keep only the most recent one
-        const uniqueProducts: Product[] = [];
-        const slugs = new Set();
-        data?.forEach(product => {
-          if (!slugs.has(product.slug)) {
-            slugs.add(product.slug);
-            uniqueProducts.push(product);
-          }
-        });
-
-        // Reset the state before adding products to avoid accumulation
         setHomeProducts([]);
-        
-        // Set the unique products as the state
         setTimeout(() => {
           setHomeProducts(uniqueProducts);
-          // Initialize visibility array with the same length as uniqueProducts
           setVisibleProducts(new Array(uniqueProducts.length).fill(false));
         }, 10);
-        
-        console.log(`Found ${uniqueProducts.length} unique home collection products`);
       } catch (err) {
-        console.error('Error fetching products from Supabase:', err);
+        console.error('Error loading home collection:', err);
         setError('Failed to load products');
-        
-        // No fallback data - keep empty array
         setHomeProducts([]);
       } finally {
         setLoading(false);
@@ -195,10 +142,10 @@ const HomeCollectionPage = () => {
   return (
     <>
       <SEOHead
-        title="Colecția pentru Acasă | Lumânări din Ceară Naturală | Atomra Home Romania"
-        description="Descoperă colecția noastră de lumânări din ceară naturală pentru casă. Lumânări reîncărcabile, personalizabile și sustenabile care transformă atmosfera căminului tău."
+        title="Colecția pentru acasă | Lumânări din ceară naturală | Atomra Home Romania"
+        description="Descoperă colecția noastră de lumânări din ceară naturală pentru casă. Produse reîncărcabile, personalizabile și sustenabile care schimbă atmosfera căminului tău."
         keywords="lumânări pentru casă, ceară naturală, ceară de soia, lumânări reîncărcabile, lumânări pentru decor, atmosferă, lumânări ecologice"
-        url="https://atomra-home-romania.com/home-collection"
+        url="https://atomrahomeromania.ro/home-collection"
       />
     
       <div className="luxury-page-bg luxury-floating-elements min-h-screen">
@@ -220,7 +167,7 @@ const HomeCollectionPage = () => {
                   onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                 >
                   <ArrowLeft size={18} strokeWidth={1.5} className="group-hover:-translate-x-1 transition-transform duration-200" />
-                  <span className="font-light">Înapoi la Pagina Principală</span>
+                  <span className="font-light">Înapoi la pagina principală</span>
                 </Link>
               </div>
               
@@ -235,8 +182,8 @@ const HomeCollectionPage = () => {
                 </h1>
                 <div className="w-16 h-px bg-slate-300 mx-auto mb-4"></div>
                 <p className="text-lg text-slate-600 max-w-2xl mx-auto font-light leading-relaxed">
-                  Transformă-ți spațiul de locuit cu colecția noastră de lumânări emblematice. 
-                  Fiecare parfum este creat cu grijă pentru a crea atmosfera perfectă pentru casa ta.
+                  Transformă-ți spațiul de locuit cu colecția noastră de lumânări emblematice.
+                  Fiecare parfum este ales cu grijă pentru a crea atmosfera potrivită pentru casa ta.
                 </p>
               </motion.div>
             </div>
@@ -280,19 +227,19 @@ const HomeCollectionPage = () => {
                           className="block"
                         >
                           <LazyImage
-                            src={product.images[0] || getAssetPath('/placeholder-image.jpg')}
+                            src={getPreferredImage(product.images, getPlaceholderImage())}
                             alt={product.name}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                           />
                         </Link>
-                        {hoveredProduct === product.id && product.images[1] && (
+                        {hoveredProduct === product.id && getResolvedImageList(product.images)[1] && (
                           <Link 
                             to={`/product/${product.slug}`}
                             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                             className="block absolute inset-0"
                           >
                             <LazyImage
-                              src={product.images[1]}
+                              src={getResolvedImageList(product.images)[1]}
                               alt={product.name}
                               className="w-full h-full object-cover transition-opacity duration-300"
                             />
@@ -347,3 +294,4 @@ const HomeCollectionPage = () => {
 };
 
 export default HomeCollectionPage;
+

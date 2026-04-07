@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 
@@ -23,32 +24,75 @@ interface AdminProviderProps {
   children: ReactNode;
 }
 
+const withTimeout = async <T,>(promise: Promise<T>, timeoutMs: number, message: string): Promise<T> => {
+  let timeoutId: ReturnType<typeof setTimeout> | undefined;
+
+  const timeoutPromise = new Promise<never>((_, reject) => {
+    timeoutId = setTimeout(() => reject(new Error(message)), timeoutMs);
+  });
+
+  try {
+    return await Promise.race([promise, timeoutPromise]);
+  } finally {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+  }
+};
+
 export const AdminProvider: React.FC<AdminProviderProps> = ({ children }) => {
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
-  const [adminLoading, setAdminLoading] = useState<boolean>(false);
+  const [adminLoading, setAdminLoading] = useState<boolean>(true);
   const [adminError, setAdminError] = useState<string | null>(null);
+  const [authUserId, setAuthUserId] = useState<string | null>(null);
+  const [sessionResolved, setSessionResolved] = useState<boolean>(false);
+
+  const verifyAdminAccess = async (userId: string): Promise<boolean> => {
+    const { data: adminUser, error } = await withTimeout(
+      supabase
+        .from('admin_users')
+        .select('user_id')
+        .eq('user_id', userId)
+        .maybeSingle(),
+      8000,
+      'Admin verification timed out. Please try again.'
+    );
+
+    if (error) {
+      throw error;
+    }
+
+    return Boolean(adminUser);
+  };
 
   // Check if user is admin on mount
   useEffect(() => {
+    let isMounted = true;
+
     const checkAdminStatus = async () => {
       try {
-        const { data: { session } } = await supabase.auth.getSession();
-        if (session) {
-          const { data: userRoles, error } = await supabase
-            .from('admin_users')
-            .select('*')
-            .eq('user_id', session.user.id)
-            .single();
-          
-          if (error) {
-            console.error('Error checking admin status:', error);
-            return;
-          }
-          
-          setIsAdmin(!!userRoles);
+        const { data: { session } } = await withTimeout(
+          supabase.auth.getSession(),
+          8000,
+          'Session check timed out. Please refresh and try again.'
+        );
+
+        if (!isMounted) {
+          return;
         }
+
+        setAuthUserId(session?.user?.id ?? null);
       } catch (error) {
         console.error('Error checking admin status:', error);
+        if (isMounted) {
+          setAdminError(error instanceof Error ? error.message : 'Failed to initialize admin session');
+          setAuthUserId(null);
+          setIsAdmin(false);
+        }
+      } finally {
+        if (isMounted) {
+          setSessionResolved(true);
+        }
       }
     };
 
@@ -56,33 +100,76 @@ export const AdminProvider: React.FC<AdminProviderProps> = ({ children }) => {
     
     // Set up auth state change listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        if (event === 'SIGNED_IN' && session) {
-          // Check if the signed-in user is an admin
-          const { data: userRoles, error } = await supabase
-            .from('admin_users')
-            .select('*')
-            .eq('user_id', session.user.id)
-            .single();
-            
-          if (error) {
-            console.error('Error checking admin status on auth change:', error);
-            setIsAdmin(false);
-            return;
-          }
-          
-          setIsAdmin(!!userRoles);
-        } else if (event === 'SIGNED_OUT') {
+      (_event, session) => {
+        if (!isMounted) {
+          return;
+        }
+
+        setAdminError(null);
+        setSessionResolved(true);
+        setAuthUserId(session?.user?.id ?? null);
+
+        if (!session?.user) {
           setIsAdmin(false);
+          setAdminLoading(false);
         }
       }
     );
 
     // Cleanup subscription
     return () => {
+      isMounted = false;
       subscription.unsubscribe();
     };
   }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const syncAdminStatus = async () => {
+      if (!sessionResolved) {
+        return;
+      }
+
+      if (!authUserId) {
+        setIsAdmin(false);
+        setAdminLoading(false);
+        return;
+      }
+
+      setAdminLoading(true);
+
+      try {
+        const hasAdminAccess = await verifyAdminAccess(authUserId);
+
+        if (!isMounted) {
+          return;
+        }
+
+        setIsAdmin(hasAdminAccess);
+
+        if (!hasAdminAccess) {
+          setAdminError('Unauthorized access. This account does not have admin privileges.');
+        }
+      } catch (error) {
+        console.error('Error verifying admin access:', error);
+        if (isMounted) {
+          setIsAdmin(false);
+          setAdminError(error instanceof Error ? error.message : 'Failed to verify admin access');
+        }
+      } finally {
+        if (isMounted) {
+          setAdminLoading(false);
+        }
+      }
+    };
+
+    void syncAdminStatus();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [authUserId, sessionResolved]);
 
   const loginAdmin = async (email: string, password: string): Promise<boolean> => {
     setAdminLoading(true);
@@ -90,10 +177,14 @@ export const AdminProvider: React.FC<AdminProviderProps> = ({ children }) => {
     
     try {
       // Sign in with Supabase Auth
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password
-      });
+      const { data, error } = await withTimeout(
+        supabase.auth.signInWithPassword({
+          email: email.trim(),
+          password
+        }),
+        10000,
+        'Login request timed out. Please try again.'
+      );
 
       if (error) {
         throw error;
@@ -103,23 +194,20 @@ export const AdminProvider: React.FC<AdminProviderProps> = ({ children }) => {
         throw new Error('No user returned from login');
       }
 
-      // Check if user is in admin_users table
-      const { data: adminUser, error: adminError } = await supabase
-        .from('admin_users')
-        .select('*')
-        .eq('user_id', data.user.id)
-        .single();
+      const hasAdminAccess = await verifyAdminAccess(data.user.id);
 
-      if (adminError || !adminUser) {
-        // Sign out if not an admin
+      if (!hasAdminAccess) {
         await supabase.auth.signOut();
+        setAuthUserId(null);
+        setIsAdmin(false);
         throw new Error('Unauthorized access. This account does not have admin privileges.');
       }
 
+      setAuthUserId(data.user.id);
       setIsAdmin(true);
       return true;
-    } catch (error: any) {
-      setAdminError(error.message || 'Failed to login');
+    } catch (error) {
+      setAdminError(error instanceof Error ? error.message : 'Failed to login');
       return false;
     } finally {
       setAdminLoading(false);
@@ -130,15 +218,17 @@ export const AdminProvider: React.FC<AdminProviderProps> = ({ children }) => {
     setAdminLoading(true);
     try {
       await supabase.auth.signOut();
+      setAuthUserId(null);
       setIsAdmin(false);
+      setAdminError(null);
       
       // Clear any cached data
       localStorage.removeItem('supabase.auth.token');
       
       // Force reload to clear any state
       window.location.href = '/';
-    } catch (error: any) {
-      setAdminError(error.message || 'Failed to logout');
+    } catch (error) {
+      setAdminError(error instanceof Error ? error.message : 'Failed to logout');
     } finally {
       setAdminLoading(false);
     }

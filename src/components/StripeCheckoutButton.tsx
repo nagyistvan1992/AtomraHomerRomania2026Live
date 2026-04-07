@@ -1,7 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useStripeCheckout } from '../hooks/useStripeCheckout';
-import { useAuth } from '../context/AuthContext';
-import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
 interface StripeCheckoutButtonProps {
@@ -20,38 +18,14 @@ export const StripeCheckoutButton: React.FC<StripeCheckoutButtonProps> = ({
   children,
 }) => {
   const { createCheckoutSession, loading, error } = useStripeCheckout();
-  const { state: authState } = useAuth();
-  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
-  const navigate = useNavigate();
 
   const handleCheckout = () => {
-    if (!authState.isAuthenticated) {
-      setShowLoginPrompt(true);
-      console.log('User not authenticated, showing login prompt');
-      return;
-    }
-    
     console.log(`Initiating Stripe checkout for ${productName} with price ID: ${priceId}`);
     
     createCheckoutSession({
       priceId,
       mode,
     });
-  };
-
-  const handleLoginRedirect = () => {
-    // Store the product info in session storage to redirect back after login
-    sessionStorage.setItem('pendingCheckout', JSON.stringify({
-      priceId: priceId,
-      mode: mode,
-      productName: productName
-    }));
-    
-    console.log('Storing pending checkout in session storage:', priceId);
-    
-    // Navigate to member page
-    navigate('/member');
-    setShowLoginPrompt(false);
   };
 
   return (
@@ -78,31 +52,6 @@ export const StripeCheckoutButton: React.FC<StripeCheckoutButtonProps> = ({
       {error && (
         <div className="mt-2 text-sm text-red-600 bg-red-50 p-3 rounded border border-red-100">
           {error}
-        </div>
-      )}
-      
-      {showLoginPrompt && (
-        <div className="absolute top-full left-0 right-0 mt-2 p-4 bg-white rounded-md shadow-lg border border-gray-200 z-10 animate-fade-in">
-          <p className="text-sm text-gray-700 mb-3 font-light">
-            {authState.isAuthenticated 
-              ? 'Your session has expired. Please sign in again to complete your purchase.' 
-              : 'Please sign in to complete your purchase.'}
-          </p>
-          <div className="flex space-x-2">
-            <Link
-              onClick={handleLoginRedirect}
-              to="#"
-              className="flex-1 px-4 py-2 bg-gray-900 text-white text-center text-sm rounded-md hover:bg-gray-800 transition-colors"
-            >
-              Sign In
-            </Link>
-            <button
-              onClick={() => setShowLoginPrompt(false)}
-              className="px-4 py-2 bg-gray-100 text-gray-700 text-sm rounded-md hover:bg-gray-200 transition-colors"
-            >
-              Cancel
-            </button>
-          </div>
         </div>
       )}
     </div>

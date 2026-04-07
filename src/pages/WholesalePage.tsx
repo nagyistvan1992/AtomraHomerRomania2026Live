@@ -1,188 +1,271 @@
 import React, { useEffect } from 'react';
-import { useLanguage } from '../context/LanguageContext';
-import SEOHead from '../components/SEOHead';
 import { motion } from 'framer-motion';
 import { Mail, Phone, FileText, Package, Truck, DollarSign } from 'lucide-react';
+import SEOHead from '../components/SEOHead';
+import { useLanguage } from '../context/LanguageContext';
+import { CONTACT_EMAIL, getSiteUrl } from '../utils/siteConfig';
+
+type LanguageContent = {
+  title: string;
+  subtitle: string;
+  description: string;
+  benefitsTitle: string;
+  benefits: string[];
+  requirementsTitle: string;
+  requirements: string[];
+  contactTitle: string;
+  contactDescription: string;
+  formTitle: string;
+  cta: string;
+  labels: {
+    companyName: string;
+    taxId: string;
+    contactName: string;
+    position: string;
+    email: string;
+    phone: string;
+    businessType: string;
+    monthlyVolume: string;
+    message: string;
+    consent: string;
+    select: string;
+  };
+  options: {
+    retail: string;
+    online: string;
+    events: string;
+    designer: string;
+    other: string;
+  };
+  messagePlaceholder: string;
+  featureTitles: [string, string, string];
+  featureDescriptions: [string, string, string];
+  seoDescription: string;
+  seoKeywords: string;
+};
 
 const WholesalePage = () => {
   const { language } = useLanguage();
 
-  // Scroll to top when component mounts
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
-  // Get page title based on language
-  const getPageTitle = () => {
-    if (language === 'ro') {
-      return 'Vânzări Angro | Atomra Home Romania';
-    } else if (language === 'hu') {
-      return 'Nagykereskedelem | Atomra Home Romania';
-    } else {
-      return 'Wholesale | Atomra Home Romania';
+  const contentByLanguage: Record<'ro' | 'hu' | 'en', LanguageContent> = {
+    ro: {
+      title: 'Vânzări Angro',
+      subtitle: 'Devino partener Atomra și oferă clienților tăi produse premium din ceară naturală.',
+      description: 'Oferim soluții angro pentru magazine, designeri de interior, organizatori de evenimente și alte afaceri care vor produse curate, premium și memorabile.',
+      benefitsTitle: 'Beneficii pentru Parteneri',
+      benefits: [
+        'Prețuri competitive pentru comenzi în volum mare',
+        'Produse premium din ceară naturală',
+        'Opțiuni de personalizare pentru brandul tău',
+        'Suport dedicat pentru parteneri',
+        'Livrare rapidă și fiabilă',
+        'Materiale de marketing și suport comercial'
+      ],
+      requirementsTitle: 'Cerințe pentru Parteneri',
+      requirements: [
+        'Comandă minimă recomandată de 1000 Lei',
+        'Date complete de facturare',
+        'Interes pentru colaborare recurentă sau proiecte speciale',
+        'Respectarea standardelor de prezentare Atomra'
+      ],
+      contactTitle: 'Contactează-ne pentru Detalii',
+      contactDescription: 'Completează formularul de mai jos sau scrie-ne direct pentru a discuta despre volume, personalizare și prețuri.',
+      formTitle: 'Solicită Informații',
+      cta: 'Trimite Cererea',
+      labels: {
+        companyName: 'Nume Companie',
+        taxId: 'Cod Fiscal',
+        contactName: 'Nume Contact',
+        position: 'Poziție',
+        email: 'Email',
+        phone: 'Telefon',
+        businessType: 'Tipul Afacerii',
+        monthlyVolume: 'Volum Estimat Lunar (Lei)',
+        message: 'Mesaj',
+        consent: 'Sunt de acord cu prelucrarea datelor mele în conformitate cu Politica de Confidențialitate.',
+        select: 'Selectează'
+      },
+      options: {
+        retail: 'Magazin Retail',
+        online: 'Magazin Online',
+        events: 'Organizator Evenimente',
+        designer: 'Designer Interior',
+        other: 'Altele'
+      },
+      messagePlaceholder: 'Spune-ne mai multe despre afacerea ta și despre produsele care te interesează.',
+      featureTitles: ['Ambalare Personalizată', 'Livrare Rapidă', 'Prețuri Competitive'],
+      featureDescriptions: [
+        'Opțiuni de ambalare personalizată cu identitatea brandului tău.',
+        'Livrare rapidă și predictibilă pentru comenzile angro.',
+        'Structuri de preț adaptate volumului și tipului de colaborare.'
+      ],
+      seoDescription: 'Devino partener Atomra și oferă clienților tăi produse premium din ceară naturală. Contactează-ne pentru oportunități de vânzare angro.',
+      seoKeywords: 'wholesale, vânzări angro, parteneriat, ceară naturală, lumânări, volume mari, business'
+    },
+    hu: {
+      title: 'Nagykereskedelem',
+      subtitle: 'Válj Atomra partnerré és kínálj ügyfeleidnek prémium természetes viasztermékeket.',
+      description: 'Nagykereskedelmi megoldásokat kínálunk üzleteknek, belsőépítészeknek, rendezvényszervezőknek és más vállalkozásoknak.',
+      benefitsTitle: 'Partneri Előnyök',
+      benefits: [
+        'Versenyképes árak nagyobb rendelésekhez',
+        'Prémium természetes viasztermékek',
+        'Testreszabási lehetőségek a brandedhez',
+        'Dedikált partneri támogatás',
+        'Gyors és megbízható szállítás',
+        'Marketinganyagok és értékesítési segítség'
+      ],
+      requirementsTitle: 'Partneri Feltételek',
+      requirements: [
+        'Ajánlott minimum rendelés: 1000 Lei',
+        'Teljes számlázási adatok',
+        'Visszatérő együttműködési szándék vagy projektalapú igény',
+        'Az Atomra megjelenési standardjainak tiszteletben tartása'
+      ],
+      contactTitle: 'Lépj Velünk Kapcsolatba',
+      contactDescription: 'Töltsd ki az alábbi űrlapot, vagy írj közvetlenül a mennyiségek, testreszabás és árak megbeszéléséhez.',
+      formTitle: 'Információkérés',
+      cta: 'Küldés',
+      labels: {
+        companyName: 'Cégnév',
+        taxId: 'Adószám',
+        contactName: 'Kapcsolattartó Neve',
+        position: 'Pozíció',
+        email: 'Email',
+        phone: 'Telefon',
+        businessType: 'Üzlet Típusa',
+        monthlyVolume: 'Becsült Havi Volumen (Lei)',
+        message: 'Üzenet',
+        consent: 'Hozzájárulok adataim feldolgozásához az Adatvédelmi Szabályzatnak megfelelően.',
+        select: 'Válassz'
+      },
+      options: {
+        retail: 'Kiskereskedés',
+        online: 'Online Üzlet',
+        events: 'Rendezvényszervező',
+        designer: 'Belsőépítész',
+        other: 'Egyéb'
+      },
+      messagePlaceholder: 'Írj néhány részletet a vállalkozásodról és arról, milyen termékek érdekelnek.',
+      featureTitles: ['Egyedi Csomagolás', 'Gyors Szállítás', 'Versenyképes Árak'],
+      featureDescriptions: [
+        'Saját brandedhez igazítható csomagolási lehetőségek.',
+        'Gyors és kiszámítható szállítás nagykereskedelmi megrendelésekhez.',
+        'Az együttműködés típusához és a volumenhez igazított árstruktúra.'
+      ],
+      seoDescription: 'Lépj partnerségre az Atomrával és kínálj prémium természetes viasztermékeket ügyfeleidnek.',
+      seoKeywords: 'nagykereskedelem, partnerseg, termeszetes viasz, gyertyak, uzleti rendeles'
+    },
+    en: {
+      title: 'Wholesale',
+      subtitle: 'Become an Atomra partner and offer premium natural wax products to your customers.',
+      description: 'We provide wholesale solutions for stores, interior designers, event planners, and other businesses looking for clean, premium, memorable products.',
+      benefitsTitle: 'Partner Benefits',
+      benefits: [
+        'Competitive pricing for larger orders',
+        'Premium natural wax products',
+        'Customization options for your brand',
+        'Dedicated partner support',
+        'Fast and reliable shipping',
+        'Marketing materials and sales support'
+      ],
+      requirementsTitle: 'Partner Requirements',
+      requirements: [
+        'Recommended minimum order of 1000 Lei',
+        'Complete billing details',
+        'Interest in recurring collaboration or special projects',
+        'Respect for Atomra presentation standards'
+      ],
+      contactTitle: 'Contact Us for Details',
+      contactDescription: 'Fill out the form below or write to us directly to discuss volume, customization, and pricing.',
+      formTitle: 'Request Information',
+      cta: 'Send Request',
+      labels: {
+        companyName: 'Company Name',
+        taxId: 'Tax ID',
+        contactName: 'Contact Name',
+        position: 'Position',
+        email: 'Email',
+        phone: 'Phone',
+        businessType: 'Business Type',
+        monthlyVolume: 'Estimated Monthly Volume (Lei)',
+        message: 'Message',
+        consent: 'I agree to the processing of my data in accordance with the Privacy Policy.',
+        select: 'Select'
+      },
+      options: {
+        retail: 'Retail Store',
+        online: 'Online Store',
+        events: 'Event Planner',
+        designer: 'Interior Designer',
+        other: 'Other'
+      },
+      messagePlaceholder: 'Tell us more about your business and the products you are interested in.',
+      featureTitles: ['Custom Packaging', 'Fast Shipping', 'Competitive Pricing'],
+      featureDescriptions: [
+        'Packaging options tailored to your brand identity.',
+        'Fast and predictable delivery for wholesale orders.',
+        'Pricing structures adapted to volume and partnership type.'
+      ],
+      seoDescription: 'Become an Atomra partner and offer premium natural wax products to your customers.',
+      seoKeywords: 'wholesale, partnership, natural wax, candles, bulk orders, business'
     }
   };
 
-  // Get content based on language
-  const getContent = () => {
-    if (language === 'ro') {
-      return {
-        title: 'Vânzări Angro',
-        subtitle: 'Devino partener Atomra și oferă clienților tăi produse premium din ceară naturală',
-        description: 'Oferim soluții angro pentru magazine, designeri de interior, organizatori de evenimente și alte afaceri. Contactează-ne pentru a discuta despre oportunități de parteneriat și prețuri speciale pentru comenzi în volum mare.',
-        benefits: {
-          title: 'Beneficii pentru Parteneri',
-          items: [
-            'Prețuri competitive pentru comenzi în volum mare',
-            'Produse premium din ceară naturală',
-            'Opțiuni de personalizare pentru afacerea ta',
-            'Suport dedicat pentru parteneri',
-            'Livrare rapidă și fiabilă',
-            'Materiale de marketing și suport pentru vânzări'
-          ]
-        },
-        requirements: {
-          title: 'Cerințe pentru Parteneri',
-          items: [
-            'Comandă minimă de 1000 Lei',
-            'Dovada înregistrării afacerii',
-            'Angajament pentru standardele de calitate Atomra',
-            'Respectarea politicilor de preț recomandate'
-          ]
-        },
-        contact: {
-          title: 'Contactează-ne pentru Detalii',
-          description: 'Completează formularul de mai jos sau contactează-ne direct pentru a discuta despre oportunități de parteneriat.',
-          email: 'Email: wholesale@atomra-home-romania.com',
-          phone: 'Telefon: +40 123 456 789'
-        },
-        cta: 'Solicită Informații'
-      };
-    } else if (language === 'hu') {
-      return {
-        title: 'Nagykereskedelem',
-        subtitle: 'Válj Atomra partnerré és kínálj prémium természetes viaszgyertyákat ügyfeleidnek',
-        description: 'Nagykereskedelmi megoldásokat kínálunk üzletek, belsőépítészek, rendezvényszervezők és más vállalkozások számára. Vedd fel velünk a kapcsolatot, hogy megbeszéljük a partneri lehetőségeket és a speciális árakat nagy mennyiségű rendelésekre.',
-        benefits: {
-          title: 'Partneri Előnyök',
-          items: [
-            'Versenyképes árak nagy mennyiségű rendelésekre',
-            'Prémium természetes viasztermékek',
-            'Testreszabási lehetőségek vállalkozásod számára',
-            'Dedikált partneri támogatás',
-            'Gyors és megbízható szállítás',
-            'Marketing anyagok és értékesítési támogatás'
-          ]
-        },
-        requirements: {
-          title: 'Partneri Követelmények',
-          items: [
-            'Minimum 1000 Lei értékű rendelés',
-            'Üzleti regisztráció igazolása',
-            'Elkötelezettség az Atomra minőségi szabványai mellett',
-            'Az ajánlott árpolitika betartása'
-          ]
-        },
-        contact: {
-          title: 'Vedd fel velünk a kapcsolatot a részletekért',
-          description: 'Töltsd ki az alábbi űrlapot, vagy vedd fel velünk közvetlenül a kapcsolatot a partneri lehetőségek megbeszéléséhez.',
-          email: 'Email: wholesale@atomra-home-romania.com',
-          phone: 'Telefon: +40 123 456 789'
-        },
-        cta: 'Információkérés'
-      };
-    } else {
-      return {
-        title: 'Wholesale',
-        subtitle: 'Become an Atomra partner and offer premium natural wax products to your customers',
-        description: 'We offer wholesale solutions for stores, interior designers, event planners, and other businesses. Contact us to discuss partnership opportunities and special pricing for bulk orders.',
-        benefits: {
-          title: 'Partner Benefits',
-          items: [
-            'Competitive pricing for bulk orders',
-            'Premium natural wax products',
-            'Customization options for your business',
-            'Dedicated partner support',
-            'Fast and reliable shipping',
-            'Marketing materials and sales support'
-          ]
-        },
-        requirements: {
-          title: 'Partner Requirements',
-          items: [
-            'Minimum order of 1000 Lei',
-            'Proof of business registration',
-            'Commitment to Atomra quality standards',
-            'Adherence to recommended pricing policies'
-          ]
-        },
-        contact: {
-          title: 'Contact Us for Details',
-          description: 'Fill out the form below or contact us directly to discuss partnership opportunities.',
-          email: 'Email: wholesale@atomra-home-romania.com',
-          phone: 'Phone: +40 123 456 789'
-        },
-        cta: 'Request Information'
-      };
-    }
-  };
-
-  const content = getContent();
+  const content = contentByLanguage[language];
 
   return (
     <>
       <SEOHead
-        title={getPageTitle()}
-        description="Devino partener Atomra și oferă clienților tăi produse premium din ceară naturală. Contactează-ne pentru oportunități de vânzare angro."
-        keywords="wholesale, vânzări angro, parteneriat, ceară naturală, lumânări, volume mari, business"
-        url="https://atomra-home-romania.com/wholesale"
+        title={`${content.title} | ${CONTACT_EMAIL}`}
+        description={content.seoDescription}
+        keywords={content.seoKeywords}
+        url={getSiteUrl('/wholesale')}
       />
-      
+
       <div className="luxury-page-bg luxury-floating-elements min-h-screen">
-        {/* Luxury floating decorative elements */}
         <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
           <div className="absolute top-32 left-16 w-1 h-1 bg-slate-300/20 rounded-full animate-luxury-float"></div>
           <div className="absolute top-48 right-24 w-0.5 h-0.5 bg-slate-200/30 rounded-full animate-luxury-float" style={{ animationDelay: '2s' }}></div>
           <div className="absolute bottom-32 left-1/4 w-0.5 h-0.5 bg-slate-300/25 rounded-full animate-luxury-float" style={{ animationDelay: '4s' }}></div>
           <div className="absolute bottom-48 right-1/4 w-1 h-1 bg-slate-200/20 rounded-full animate-luxury-float" style={{ animationDelay: '1s' }}></div>
         </div>
-        
+
         <div className="pt-32 sm:pt-36 md:pt-40 lg:pt-44 relative z-10">
-          {/* Header Section */}
           <section className="py-6 sm:py-8 luxury-section-light">
-            <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-              <div className="text-center">
-                <motion.h1 
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5 }}
-                  className="text-4xl sm:text-5xl lg:text-6xl font-extralight text-slate-900 mb-6 tracking-tight"
-                >
-                  {content.title}
-                </motion.h1>
-                <motion.div 
-                  initial={{ opacity: 0, scale: 0 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5, delay: 0.2 }}
-                  className="w-16 h-px bg-slate-300 mx-auto mb-6"
-                ></motion.div>
-                <motion.p 
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.3 }}
-                  className="text-lg text-slate-600 max-w-4xl mx-auto font-light leading-relaxed"
-                >
-                  {content.subtitle}
-                </motion.p>
-              </div>
+            <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 text-center">
+              <motion.h1
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="text-4xl sm:text-5xl lg:text-6xl font-extralight text-slate-900 mb-6 tracking-tight"
+              >
+                {content.title}
+              </motion.h1>
+              <motion.div
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="w-16 h-px bg-slate-300 mx-auto mb-6"
+              />
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                className="text-lg text-slate-600 max-w-4xl mx-auto font-light leading-relaxed"
+              >
+                {content.subtitle}
+              </motion.p>
             </div>
           </section>
 
-          {/* Main Content */}
           <section className="py-16 sm:py-20 luxury-section-dark">
             <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
-                {/* Left Column - Information */}
                 <motion.div
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -192,12 +275,12 @@ const WholesalePage = () => {
                     <p className="text-lg text-slate-600 font-light mb-8 leading-relaxed">
                       {content.description}
                     </p>
-                    
+
                     <div className="mb-8">
-                      <h2 className="text-xl font-light text-slate-900 mb-4">{content.benefits.title}</h2>
+                      <h2 className="text-xl font-light text-slate-900 mb-4">{content.benefitsTitle}</h2>
                       <ul className="space-y-3">
-                        {content.benefits.items.map((item, index) => (
-                          <li key={index} className="flex items-start">
+                        {content.benefits.map((item) => (
+                          <li key={item} className="flex items-start">
                             <div className="flex-shrink-0 w-5 h-5 bg-slate-100 rounded-full flex items-center justify-center mt-0.5 mr-3">
                               <div className="w-2 h-2 bg-slate-600 rounded-full"></div>
                             </div>
@@ -206,12 +289,12 @@ const WholesalePage = () => {
                         ))}
                       </ul>
                     </div>
-                    
+
                     <div className="mb-8">
-                      <h2 className="text-xl font-light text-slate-900 mb-4">{content.requirements.title}</h2>
+                      <h2 className="text-xl font-light text-slate-900 mb-4">{content.requirementsTitle}</h2>
                       <ul className="space-y-3">
-                        {content.requirements.items.map((item, index) => (
-                          <li key={index} className="flex items-start">
+                        {content.requirements.map((item) => (
+                          <li key={item} className="flex items-start">
                             <div className="flex-shrink-0 w-5 h-5 bg-slate-100 rounded-full flex items-center justify-center mt-0.5 mr-3">
                               <div className="w-2 h-2 bg-slate-600 rounded-full"></div>
                             </div>
@@ -220,167 +303,102 @@ const WholesalePage = () => {
                         ))}
                       </ul>
                     </div>
-                    
+
                     <div className="bg-slate-50 p-6 rounded-lg">
-                      <h2 className="text-xl font-light text-slate-900 mb-4">{content.contact.title}</h2>
-                      <p className="text-slate-600 font-light mb-4">{content.contact.description}</p>
+                      <h2 className="text-xl font-light text-slate-900 mb-4">{content.contactTitle}</h2>
+                      <p className="text-slate-600 font-light mb-4">{content.contactDescription}</p>
                       <div className="space-y-2">
                         <div className="flex items-center">
                           <Mail size={18} className="text-slate-500 mr-2" />
-                          <span className="text-slate-600 font-light">Email: atomrahomeromania@gmail.com</span>
+                          <span className="text-slate-600 font-light">{CONTACT_EMAIL}</span>
                         </div>
                         <div className="flex items-center">
                           <Phone size={18} className="text-slate-500 mr-2" />
-                          <span className="text-slate-600 font-light">Telefon: +40751801025</span>
+                          <span className="text-slate-600 font-light">0751801025</span>
                         </div>
                       </div>
                     </div>
                   </div>
                 </motion.div>
-                
-                {/* Right Column - Form */}
+
                 <motion.div
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.5, delay: 0.4 }}
                 >
                   <div className="luxury-card p-8 rounded-lg">
-                    <h2 className="text-2xl font-light text-slate-900 mb-6">{content.cta}</h2>
-                    
+                    <h2 className="text-2xl font-light text-slate-900 mb-6">{content.formTitle}</h2>
+
                     <form className="space-y-6">
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <div>
-                          <label className="block text-sm font-light text-slate-700 mb-1">
-                            {language === 'ro' ? 'Nume Companie' : language === 'hu' ? 'Cégnév' : 'Company Name'} *
-                          </label>
-                          <input
-                            type="text"
-                            required
-                            className="w-full px-4 py-3 border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 text-sm font-light"
-                          />
+                          <label className="block text-sm font-light text-slate-700 mb-1">{content.labels.companyName} *</label>
+                          <input type="text" required className="w-full px-4 py-3 border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 text-sm font-light" />
                         </div>
                         <div>
-                          <label className="block text-sm font-light text-slate-700 mb-1">
-                            {language === 'ro' ? 'Cod Fiscal' : language === 'hu' ? 'Adószám' : 'Tax ID'} *
-                          </label>
-                          <input
-                            type="text"
-                            required
-                            className="w-full px-4 py-3 border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 text-sm font-light"
-                          />
+                          <label className="block text-sm font-light text-slate-700 mb-1">{content.labels.taxId} *</label>
+                          <input type="text" required className="w-full px-4 py-3 border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 text-sm font-light" />
                         </div>
                       </div>
-                      
+
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <div>
-                          <label className="block text-sm font-light text-slate-700 mb-1">
-                            {language === 'ro' ? 'Nume Contact' : language === 'hu' ? 'Kapcsolattartó Neve' : 'Contact Name'} *
-                          </label>
-                          <input
-                            type="text"
-                            required
-                            className="w-full px-4 py-3 border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 text-sm font-light"
-                          />
+                          <label className="block text-sm font-light text-slate-700 mb-1">{content.labels.contactName} *</label>
+                          <input type="text" required className="w-full px-4 py-3 border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 text-sm font-light" />
                         </div>
                         <div>
-                          <label className="block text-sm font-light text-slate-700 mb-1">
-                            {language === 'ro' ? 'Poziție' : language === 'hu' ? 'Pozíció' : 'Position'} *
-                          </label>
-                          <input
-                            type="text"
-                            required
-                            className="w-full px-4 py-3 border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 text-sm font-light"
-                          />
+                          <label className="block text-sm font-light text-slate-700 mb-1">{content.labels.position} *</label>
+                          <input type="text" required className="w-full px-4 py-3 border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 text-sm font-light" />
                         </div>
                       </div>
-                      
+
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <div>
-                          <label className="block text-sm font-light text-slate-700 mb-1">
-                            {language === 'ro' ? 'Email' : language === 'hu' ? 'Email' : 'Email'} *
-                          </label>
-                          <input
-                            type="email"
-                            required
-                            className="w-full px-4 py-3 border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 text-sm font-light"
-                          />
+                          <label className="block text-sm font-light text-slate-700 mb-1">{content.labels.email} *</label>
+                          <input type="email" required className="w-full px-4 py-3 border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 text-sm font-light" />
                         </div>
                         <div>
-                          <label className="block text-sm font-light text-slate-700 mb-1">
-                            {language === 'ro' ? 'Telefon' : language === 'hu' ? 'Telefon' : 'Phone'} *
-                          </label>
-                          <input
-                            type="tel"
-                            required
-                            className="w-full px-4 py-3 border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 text-sm font-light"
-                          />
+                          <label className="block text-sm font-light text-slate-700 mb-1">{content.labels.phone} *</label>
+                          <input type="tel" required className="w-full px-4 py-3 border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 text-sm font-light" />
                         </div>
                       </div>
-                      
+
                       <div>
-                        <label className="block text-sm font-light text-slate-700 mb-1">
-                          {language === 'ro' ? 'Tipul Afacerii' : language === 'hu' ? 'Üzlet Típusa' : 'Business Type'} *
-                        </label>
-                        <select
-                          required
-                          className="w-full px-4 py-3 border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 text-sm font-light"
-                        >
-                          <option value="">{language === 'ro' ? 'Selectează' : language === 'hu' ? 'Válassz' : 'Select'}</option>
-                          <option value="retail">{language === 'ro' ? 'Magazin Retail' : language === 'hu' ? 'Kiskereskedés' : 'Retail Store'}</option>
-                          <option value="online">{language === 'ro' ? 'Magazin Online' : language === 'hu' ? 'Online Üzlet' : 'Online Store'}</option>
-                          <option value="events">{language === 'ro' ? 'Organizator Evenimente' : language === 'hu' ? 'Rendezvényszervező' : 'Event Planner'}</option>
-                          <option value="designer">{language === 'ro' ? 'Designer Interior' : language === 'hu' ? 'Belsőépítész' : 'Interior Designer'}</option>
-                          <option value="other">{language === 'ro' ? 'Altele' : language === 'hu' ? 'Egyéb' : 'Other'}</option>
+                        <label className="block text-sm font-light text-slate-700 mb-1">{content.labels.businessType} *</label>
+                        <select required className="w-full px-4 py-3 border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 text-sm font-light">
+                          <option value="">{content.labels.select}</option>
+                          <option value="retail">{content.options.retail}</option>
+                          <option value="online">{content.options.online}</option>
+                          <option value="events">{content.options.events}</option>
+                          <option value="designer">{content.options.designer}</option>
+                          <option value="other">{content.options.other}</option>
                         </select>
                       </div>
-                      
+
                       <div>
-                        <label className="block text-sm font-light text-slate-700 mb-1">
-                          {language === 'ro' ? 'Volum Estimat Lunar (Lei)' : language === 'hu' ? 'Becsült Havi Mennyiség (Lei)' : 'Estimated Monthly Volume (Lei)'} *
-                        </label>
-                        <select
-                          required
-                          className="w-full px-4 py-3 border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 text-sm font-light"
-                        >
-                          <option value="">{language === 'ro' ? 'Selectează' : language === 'hu' ? 'Válassz' : 'Select'}</option>
+                        <label className="block text-sm font-light text-slate-700 mb-1">{content.labels.monthlyVolume} *</label>
+                        <select required className="w-full px-4 py-3 border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 text-sm font-light">
+                          <option value="">{content.labels.select}</option>
                           <option value="1000-3000">1,000 - 3,000 Lei</option>
                           <option value="3000-5000">3,000 - 5,000 Lei</option>
                           <option value="5000-10000">5,000 - 10,000 Lei</option>
                           <option value="10000+">10,000+ Lei</option>
                         </select>
                       </div>
-                      
+
                       <div>
-                        <label className="block text-sm font-light text-slate-700 mb-1">
-                          {language === 'ro' ? 'Mesaj' : language === 'hu' ? 'Üzenet' : 'Message'}
-                        </label>
-                        <textarea
-                          rows={4}
-                          className="w-full px-4 py-3 border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 text-sm font-light"
-                          placeholder={language === 'ro' ? 'Detalii suplimentare despre afacerea ta și interesele tale...' : 
-                                      language === 'hu' ? 'További részletek a vállalkozásodról és érdeklődési körödről...' : 
-                                      'Additional details about your business and interests...'}
-                        ></textarea>
+                        <label className="block text-sm font-light text-slate-700 mb-1">{content.labels.message}</label>
+                        <textarea rows={4} className="w-full px-4 py-3 border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 text-sm font-light" placeholder={content.messagePlaceholder}></textarea>
                       </div>
-                      
+
                       <div className="flex items-start">
-                        <input
-                          type="checkbox"
-                          id="terms"
-                          required
-                          className="mt-1 mr-2"
-                        />
+                        <input type="checkbox" id="terms" required className="mt-1 mr-2" />
                         <label htmlFor="terms" className="text-sm text-slate-600 font-light">
-                          {language === 'ro' ? 'Sunt de acord cu prelucrarea datelor mele în conformitate cu Politica de Confidențialitate' : 
-                           language === 'hu' ? 'Hozzájárulok adataim feldolgozásához az Adatvédelmi Szabályzatnak megfelelően' : 
-                           'I agree to the processing of my data in accordance with the Privacy Policy'}
+                          {content.labels.consent}
                         </label>
                       </div>
-                      
-                      <button
-                        type="submit"
-                        className="bg-slate-900 text-white px-8 py-3 font-light tracking-wide uppercase hover:bg-slate-800 transition-colors duration-300 rounded flex items-center justify-center space-x-2"
-                      >
+
+                      <button type="submit" className="bg-slate-900 text-white px-8 py-3 font-light tracking-wide uppercase hover:bg-slate-800 transition-colors duration-300 rounded flex items-center justify-center space-x-2">
                         <FileText size={18} strokeWidth={1.5} />
                         <span>{content.cta}</span>
                       </button>
@@ -388,70 +406,30 @@ const WholesalePage = () => {
                   </div>
                 </motion.div>
               </div>
-              
-              {/* Features Section */}
+
               <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.5 }}
-                  className="luxury-card p-6 rounded-lg text-center"
-                >
+                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.5 }} className="luxury-card p-6 rounded-lg text-center">
                   <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Package size={24} className="text-slate-600" />
                   </div>
-                  <h3 className="text-lg font-light text-slate-900 mb-2">
-                    {language === 'ro' ? 'Ambalare Personalizată' : 
-                     language === 'hu' ? 'Egyedi Csomagolás' : 
-                     'Custom Packaging'}
-                  </h3>
-                  <p className="text-slate-600 font-light">
-                    {language === 'ro' ? 'Opțiuni de ambalare personalizată cu logo-ul și brandul tău.' : 
-                     language === 'hu' ? 'Egyedi csomagolási lehetőségek a logóddal és márkáddal.' : 
-                     'Custom packaging options with your logo and branding.'}
-                  </p>
+                  <h3 className="text-lg font-light text-slate-900 mb-2">{content.featureTitles[0]}</h3>
+                  <p className="text-slate-600 font-light">{content.featureDescriptions[0]}</p>
                 </motion.div>
-                
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.6 }}
-                  className="luxury-card p-6 rounded-lg text-center"
-                >
+
+                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.6 }} className="luxury-card p-6 rounded-lg text-center">
                   <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Truck size={24} className="text-slate-600" />
                   </div>
-                  <h3 className="text-lg font-light text-slate-900 mb-2">
-                    {language === 'ro' ? 'Livrare Rapidă' : 
-                     language === 'hu' ? 'Gyors Szállítás' : 
-                     'Fast Shipping'}
-                  </h3>
-                  <p className="text-slate-600 font-light">
-                    {language === 'ro' ? 'Livrare rapidă și fiabilă pentru toate comenzile angro.' : 
-                     language === 'hu' ? 'Gyors és megbízható szállítás minden nagykereskedelmi rendeléshez.' : 
-                     'Fast and reliable shipping for all wholesale orders.'}
-                  </p>
+                  <h3 className="text-lg font-light text-slate-900 mb-2">{content.featureTitles[1]}</h3>
+                  <p className="text-slate-600 font-light">{content.featureDescriptions[1]}</p>
                 </motion.div>
-                
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.7 }}
-                  className="luxury-card p-6 rounded-lg text-center"
-                >
+
+                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.7 }} className="luxury-card p-6 rounded-lg text-center">
                   <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
                     <DollarSign size={24} className="text-slate-600" />
                   </div>
-                  <h3 className="text-lg font-light text-slate-900 mb-2">
-                    {language === 'ro' ? 'Prețuri Competitive' : 
-                     language === 'hu' ? 'Versenyképes Árak' : 
-                     'Competitive Pricing'}
-                  </h3>
-                  <p className="text-slate-600 font-light">
-                    {language === 'ro' ? 'Prețuri speciale pentru parteneri și comenzi în volum mare.' : 
-                     language === 'hu' ? 'Speciális árak partnereknek és nagy mennyiségű rendelésekre.' : 
-                     'Special pricing for partners and bulk orders.'}
-                  </p>
+                  <h3 className="text-lg font-light text-slate-900 mb-2">{content.featureTitles[2]}</h3>
+                  <p className="text-slate-600 font-light">{content.featureDescriptions[2]}</p>
                 </motion.div>
               </div>
             </div>

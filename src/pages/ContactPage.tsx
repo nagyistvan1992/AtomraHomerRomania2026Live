@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { Mail, Phone, MapPin, Send, Clock } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import SEOHead from '../components/SEOHead';
@@ -51,7 +51,7 @@ const ContactPage = () => {
       setTimeout(() => {
         setSubmitSuccess(false);
       }, 5000);
-    } catch (error) {
+    } catch {
       setSubmitError(
         language === 'ro' ? 'A apărut o eroare. Vă rugăm să încercați din nou.' :
         language === 'hu' ? 'Hiba történt. Kérjük, próbálja újra.' :
@@ -141,9 +141,9 @@ const ContactPage = () => {
     <>
       <SEOHead
         title={getPageTitle()}
-        description="Contactează echipa Atomra Home Romania pentru întrebări despre produse, comenzi sau colaborări. Suntem aici să te ajutăm!"
+        description="Contactează echipa Atomra Home Romania pentru întrebări despre produse, comenzi sau colaborări. Suntem aici să te ajutăm."
         keywords="contact, atomra, lumânări, ceară naturală, asistență clienți, întrebări"
-        url="https://atomra-home-romania.com/contact"
+        url="https://atomrahomeromania.ro/contact"
       />
       
       <div className="luxury-page-bg luxury-floating-elements min-h-screen">
@@ -198,8 +198,8 @@ const ContactPage = () => {
                 >
                   <div className="luxury-card p-8 rounded-lg h-full">
                     <h2 className="text-2xl font-light text-slate-900 mb-8">
-                      {language === 'ro' ? 'Informații de Contact' : 
-                       language === 'hu' ? 'Kapcsolati Információk' : 
+                      {language === 'ro' ? 'Informații de contact' : 
+                       language === 'hu' ? 'Kapcsolati információk' : 
                        'Contact Information'}
                     </h2>
                     
@@ -392,3 +392,4 @@ const ContactPage = () => {
 };
 
 export default ContactPage;
+

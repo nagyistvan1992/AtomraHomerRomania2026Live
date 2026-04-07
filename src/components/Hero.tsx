@@ -1,27 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { getAssetPath } from '../utils/assetPath';
 
 const Hero = () => {
-  const [isVisible, setIsVisible] = useState(false);
   const { t } = useLanguage();
-
-  useEffect(() => {
-    setIsVisible(true);
-  }, []);
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-32 sm:pt-36 md:pt-40 lg:pt-44 pb-16 sm:pb-20 lg:pb-24">
       {/* Beautiful Candle Background */}
       <div className="absolute inset-0 z-0">
-        {/* Main background image */}
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{
-            backgroundImage: `url('${getAssetPath('/81vj9gjxRBL._AC_SL1500_.jpg')}')`
-          }}
-        ></div>
+        <img
+          src={getAssetPath('/hero-desktop.webp')}
+          srcSet={`${getAssetPath('/hero-mobile.webp')} 768w, ${getAssetPath('/hero-desktop.webp')} 1280w`}
+          sizes="100vw"
+          alt=""
+          aria-hidden="true"
+          fetchPriority="high"
+          decoding="async"
+          width={1280}
+          height={1280}
+          className="absolute inset-0 h-full w-full object-cover object-center"
+        />
         
         {/* Elegant overlay for text readability */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-black/40"></div>
@@ -41,9 +41,7 @@ const Hero = () => {
       </div>
 
       {/* Content - properly positioned for desktop visibility */}
-      <div className={`relative z-10 text-center px-4 sm:px-6 lg:px-8 xl:px-12 w-full max-w-4xl lg:max-w-5xl xl:max-w-6xl transition-all duration-1000 ${
-        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-      }`}>
+      <div className="relative z-10 w-full max-w-4xl px-4 text-center lg:max-w-5xl lg:px-8 xl:max-w-6xl xl:px-12">
         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl text-white leading-[0.8] tracking-[-0.02em] drop-shadow-2xl">
           {/* Mobile: Add generous spacing between lines, Desktop: Keep tight spacing */}
           <span className="block opacity-95 mb-4 sm:mb-2 md:mb-1 lg:mb-0" style={{ 
@@ -127,9 +125,7 @@ const Hero = () => {
 
       {/* Scroll indicator - positioned to be visible on all screen sizes */}
       <div className="absolute bottom-6 sm:bottom-8 lg:bottom-12 xl:bottom-16 left-1/2 transform -translate-x-1/2 z-30">
-        <div className={`flex flex-col items-center space-y-2 animate-float transition-all duration-1000 ${
-          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-        }`} style={{ animationDelay: '1s' }}>
+        <div className="flex flex-col items-center space-y-2 animate-float" style={{ animationDelay: '1s' }}>
           <div className="text-xs tracking-[0.15em] uppercase text-white/80 opacity-90 drop-shadow-sm"
                style={{ 
                  fontFamily: '"Inter", system-ui, sans-serif',

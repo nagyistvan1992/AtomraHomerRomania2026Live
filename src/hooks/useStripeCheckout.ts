@@ -17,30 +17,22 @@ export const useStripeCheckout = () => {
     setError(null);
 
     try {
-      // Get current session
-      const { data, error: sessionError } = await supabase.auth.getSession();
-      
-      if (sessionError) {
-        console.error('Authentication error:', sessionError);
-        throw new Error('Authentication error. Please try logging in again.');
-      }
-      
-      const session = data?.session;
-      
-      if (!session?.access_token) {
-        throw new Error('You must be logged in to make a purchase');
-      }
-
       const { priceId, mode = 'payment', successUrl, cancelUrl } = options;
       
       if (!priceId) {
         throw new Error('Product price ID is required');
       }
       
-      const defaultSuccessUrl = `${window.location.origin}/success?session_id={CHECKOUT_SESSION_ID}`;
-      const defaultCancelUrl = `${window.location.origin}/cancel`;
+      const defaultSuccessUrl = `${window.location.origin}/#/success?session_id={CHECKOUT_SESSION_ID}`;
+      const defaultCancelUrl = `${window.location.origin}/#/cancel`;
 
       console.log('Creating checkout session for price ID:', priceId);
+
+      const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+      if (sessionError) {
+        console.warn('Unable to read Supabase session, continuing as guest checkout:', sessionError.message);
+      }
+      const accessToken = sessionData?.session?.access_token;
       
       const { data: checkoutData, error: checkoutError } = await supabase.functions.invoke('stripe-checkout', {
         body: {
@@ -49,9 +41,13 @@ export const useStripeCheckout = () => {
           success_url: successUrl || defaultSuccessUrl,
           cancel_url: cancelUrl || defaultCancelUrl,
         },
-        headers: {
-          Authorization: `Bearer ${session.access_token}`,
-        },
+        ...(accessToken
+          ? {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          : {}),
       });
 
       if (checkoutError) {
@@ -65,7 +61,7 @@ export const useStripeCheckout = () => {
       } else {
         throw new Error('No checkout URL received from Stripe');
       }
-    } catch (error: any) {
+    } catch (error) {
       console.error('Checkout error:', error);
       
       // Format error message for better user experience
@@ -76,7 +72,7 @@ export const useStripeCheckout = () => {
         
         // Clean up common Stripe error messages
         if (errorMessage.includes('authentication')) {
-          errorMessage = 'Please log in to complete your purchase';
+          errorMessage = 'Authentication failed while preparing checkout.';
         } else if (errorMessage.includes('price_id')) {
           errorMessage = 'Invalid product selected. Please try again.';
         }
