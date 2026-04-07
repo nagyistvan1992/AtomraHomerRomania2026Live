@@ -3,7 +3,7 @@ import { CardElement, useStripe as useStripeElements, useElements } from '@strip
 import { CreditCard, Lock, Shield, CheckCircle, AlertCircle } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useLanguage } from '../context/LanguageContext';
-import { supabase } from '../lib/supabase';
+import { invokeSupabaseFunction } from '../lib/supabaseFunctions';
 
 interface OrderItem {
   id: string | number;
@@ -102,7 +102,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSuccess, customerInfo }) 
         console.log('Payment method created successfully:', paymentMethod.id);
 
         // Create payment intent via Supabase Edge Function
-        const { data, error: functionError } = await supabase.functions.invoke('create-payment-intent', {
+        const data = await invokeSupabaseFunction<{ client_secret?: string; error?: string }>('create-payment-intent', {
           body: {
             amount: Math.round(finalTotal * 100), // Convert to cents
             currency: 'ron',
@@ -111,11 +111,6 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSuccess, customerInfo }) 
             items: formattedItems,
           },
         });
-
-        if (functionError) {
-          console.error('Payment intent function error:', functionError);
-          throw new Error(`Payment processing failed: ${functionError.message || 'Please try again'}`);
-        }
 
         if (data.error) {
           console.error('Payment intent data error:', data.error);

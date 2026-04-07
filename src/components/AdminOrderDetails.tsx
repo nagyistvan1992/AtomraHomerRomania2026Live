@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Package, User, MapPin, Phone, Mail, Calendar, Truck, CheckCircle, Clock, AlertCircle } from 'lucide-react';
 import { supabase } from '../lib/supabase';
+import { invokeSupabaseFunction } from '../lib/supabaseFunctions';
 import { getAssetPath } from '../utils/assetPath';
 
 interface OrderItem {
@@ -129,12 +130,11 @@ const AdminOrderDetails: React.FC<OrderDetailsProps> = ({
       };
       
       // Call Supabase Edge Function to send email
-      const { data, error } = await supabase.functions.invoke('send-order-status-email', {
-        body: { orderData }
+      const data = await invokeSupabaseFunction<{ success?: boolean; message?: string }>('send-order-status-email', {
+        body: { orderData },
+        requireSession: true,
       });
-      
-      if (error) throw error;
-      
+
       if (data.success) {
         setEmailStatus({ 
           success: true, 

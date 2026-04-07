@@ -7,6 +7,7 @@ import SEOHead from '../components/SEOHead';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getEntriLinks } from '../utils/getEntriLinks';
 import { supabase } from '../lib/supabase';
+import { invokeSupabaseFunction } from '../lib/supabaseFunctions';
 
 interface DomainInfo {
   claim_url?: string;
@@ -48,11 +49,12 @@ const SuccessPage = () => {
         // Try to fetch order details if we have a session ID
         if (sessionId) {
           try {
-            const { data, error } = await supabase.functions.invoke('get-session-details', {
-              body: { session_id: sessionId }
+            const data = await invokeSupabaseFunction<OrderDetails>('get-session-details', {
+              body: { session_id: sessionId },
+              timeoutMs: 12000,
             });
-            
-            if (!error && data) {
+
+            if (data) {
               setOrderDetails(data);
               console.log('Order details retrieved:', data);
             }

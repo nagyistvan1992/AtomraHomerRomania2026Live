@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { supabase } from '../lib/supabase';
+import { invokeSupabaseFunction } from '../lib/supabaseFunctions';
 
 interface CheckoutOptions {
   priceId: string;
@@ -28,38 +28,21 @@ export const useStripeCheckout = () => {
 
       console.log('Creating checkout session for price ID:', priceId);
 
-      const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
-      if (sessionError) {
-        console.warn('Unable to read Supabase session, continuing as guest checkout:', sessionError.message);
-      }
-      const accessToken = sessionData?.session?.access_token;
-      
-      const { data: checkoutData, error: checkoutError } = await supabase.functions.invoke('stripe-checkout', {
+      const checkoutData = await invokeSupabaseFunction<{ url?: string; error?: string }>('stripe-checkout', {
         body: {
           price_id: priceId,
           mode,
           success_url: successUrl || defaultSuccessUrl,
           cancel_url: cancelUrl || defaultCancelUrl,
         },
-        ...(accessToken
-          ? {
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-              },
-            }
-          : {}),
+        timeoutMs: 12000,
       });
-
-      if (checkoutError) {
-        console.error('Checkout function error:', checkoutError.message || checkoutError);
-        throw new Error(`Payment processing error: ${checkoutError.message || 'Unknown error'}`);
-      }
 
       if (checkoutData?.url) {
         console.log('Redirecting to checkout URL:', checkoutData.url);
         window.location.href = checkoutData.url;
       } else {
-        throw new Error('No checkout URL received from Stripe');
+        throw new Error(checkoutData?.error || 'No checkout URL received from Stripe');
       }
     } catch (error) {
       console.error('Checkout error:', error);

@@ -4,6 +4,7 @@ import { useCart } from '../context/CartContext';
 import { useLanguage } from '../context/LanguageContext'; 
 import { useStripe } from '../context/StripeContext';
 import { isSupabaseConfigured, supabase } from '../lib/supabase';
+import { invokeSupabaseFunction } from '../lib/supabaseFunctions';
 import SEOHead from '../components/SEOHead';
 import { ShoppingCart, Plus, Minus, CreditCard, Truck, ArrowLeft, ArrowRight, Check, ShieldCheck, User, Trash2, Lock, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -29,7 +30,6 @@ const CartPage = () => {
   const [notes, setNotes] = useState('');
   const [loading, setLoading] = useState(false);
   const [orderNumber, setOrderNumber] = useState('');
-  const supabaseFunctionsBaseUrl = isSupabaseConfigured ? `${import.meta.env.VITE_SUPABASE_URL}/functions/v1` : '';
   const stripeSuccessUrl = `${window.location.origin}/success?session_id={CHECKOUT_SESSION_ID}`;
   const stripeCancelUrl = `${window.location.origin}/cancel`;
 
@@ -82,41 +82,19 @@ const CartPage = () => {
     cancel_url: string;
     customer_email: string;
   }) => {
-    const controller = new AbortController();
-    const timeoutId = window.setTimeout(() => controller.abort(), 12000);
+    const parsedBody = await invokeSupabaseFunction<{ url?: string; error?: string; message?: string }>(
+      'stripe-checkout',
+      {
+        body: payload,
+        timeoutMs: 12000,
+      },
+    );
 
-    try {
-      const response = await fetch(`${supabaseFunctionsBaseUrl}/stripe-checkout`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
-        },
-        body: JSON.stringify(payload),
-        signal: controller.signal,
-      });
-
-      const rawBody = await response.text();
-      const parsedBody = rawBody ? JSON.parse(rawBody) : null;
-
-      if (!response.ok) {
-        throw new Error(parsedBody?.error || parsedBody?.message || 'Failed to create checkout session');
-      }
-
-      if (!parsedBody?.url) {
-        throw new Error('No checkout URL returned from Stripe');
-      }
-
-      return parsedBody.url as string;
-    } catch (error) {
-      if (error instanceof DOMException && error.name === 'AbortError') {
-        throw new Error('Stripe checkout request timed out. Please try again.');
-      }
-
-      throw error;
-    } finally {
-      window.clearTimeout(timeoutId);
+    if (!parsedBody?.url) {
+      throw new Error(parsedBody?.error || parsedBody?.message || 'No checkout URL returned from Stripe');
     }
+
+    return parsedBody.url;
   };
 
   const sendOrderEmailsInBackground = (orderNum: string) => {
@@ -140,21 +118,14 @@ const CartPage = () => {
       }
     };
 
-    const emailRequest = supabase.functions.invoke('send-order-emails', {
-      body: emailPayload
-    });
-
-    const timeoutRequest = new Promise<never>((_, reject) => {
-      window.setTimeout(() => reject(new Error('Email request timed out')), 8000);
-    });
-
-    void Promise.race([emailRequest, timeoutRequest])
-      .then(({ data: emailData, error: emailError }) => {
-        if (emailError) {
-          console.error('Error invoking send-order-emails function:', emailError);
-          return;
-        }
-
+    void invokeSupabaseFunction<{ success?: boolean; error?: string; message?: string }>(
+      'send-order-emails',
+      {
+        body: emailPayload,
+        timeoutMs: 8000,
+      },
+    )
+      .then((emailData) => {
         if (emailData && !emailData.success) {
           console.warn('Email function reported non-success:', emailData.error || emailData.message);
           return;
@@ -225,8 +196,8 @@ const CartPage = () => {
   const processStripePayment = async () => {
     setLoading(true);
     try {
-      if (!isSupabaseConfigured || !supabaseFunctionsBaseUrl || !import.meta.env.VITE_SUPABASE_ANON_KEY) {
-        throw new Error('Stripe checkout is not configured. Add the GitHub Actions Supabase and Stripe secrets first.');
+      if (!isSupabaseConfigured) {
+        throw new Error('Stripe checkout is not configured. Add the Vercel Supabase and Stripe environment variables first.');
       }
       const details = sanitizeCustomerDetails();
 

@@ -30,6 +30,14 @@ interface EmailResult {
 
 const ADMIN_EMAIL = 'atomrahomeromania@gmail.com';
 
+async function safeAdminSideEffect(label: string, operation: () => Promise<void>) {
+  try {
+    await operation();
+  } catch (error) {
+    console.error(`[send-order-emails] ${label} failed`, error);
+  }
+}
+
 function escapeHtml(value: string) {
   return value
     .replaceAll('&', '&amp;')
@@ -323,10 +331,20 @@ Deno.serve(async (req) => {
       );
 
       customerEmailSuccess = true;
-      await recordEmailAttempt(orderData.customerEmail, customerSubject, 'success', undefined, JSON.stringify(customerResult));
+      await safeAdminSideEffect('record customer email success', async () => {
+        await recordEmailAttempt(
+          orderData.customerEmail,
+          customerSubject,
+          'success',
+          undefined,
+          JSON.stringify(customerResult),
+        );
+      });
     } catch (error) {
       overallEmailError = error instanceof Error ? error.message : 'Unknown customer email error';
-      await recordEmailAttempt(orderData.customerEmail, customerSubject, 'error', overallEmailError);
+      await safeAdminSideEffect('record customer email error', async () => {
+        await recordEmailAttempt(orderData.customerEmail, customerSubject, 'error', overallEmailError);
+      });
     }
 
     try {
@@ -340,14 +358,26 @@ Deno.serve(async (req) => {
       );
 
       adminEmailSuccess = true;
-      await recordEmailAttempt(ADMIN_EMAIL, adminSubject, 'success', undefined, JSON.stringify(adminResult));
+      await safeAdminSideEffect('record admin email success', async () => {
+        await recordEmailAttempt(
+          ADMIN_EMAIL,
+          adminSubject,
+          'success',
+          undefined,
+          JSON.stringify(adminResult),
+        );
+      });
     } catch (error) {
       const adminError = error instanceof Error ? error.message : 'Unknown admin email error';
       overallEmailError = overallEmailError ?? adminError;
-      await recordEmailAttempt(ADMIN_EMAIL, adminSubject, 'error', adminError);
+      await safeAdminSideEffect('record admin email error', async () => {
+        await recordEmailAttempt(ADMIN_EMAIL, adminSubject, 'error', adminError);
+      });
     }
 
-    await updateOrderEmailStatus(customerEmailSuccess && adminEmailSuccess, overallEmailError);
+    await safeAdminSideEffect('update order email status', async () => {
+      await updateOrderEmailStatus(customerEmailSuccess && adminEmailSuccess, overallEmailError);
+    });
 
     return new Response(
       JSON.stringify({
