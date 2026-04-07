@@ -1,0 +1,41 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    {
+      "source": "/product-page/ceara-de-nisip-4-5-kg-60-fitile-lumanare-perlata-idei-decor-eveniment",
+      "destination": "/product/ceara-nisip-4-5kg-evenimente",
+      "permanent": true
+    },
+    {
+      "source": "/product-page/ceara-de-nisip-4-5kg-60fitile-cadou-lumanare-perlata-idei-decor-eveniment",
+      "destination": "/product/ceara-nisip-4-5kg-evenimente",
+      "permanent": true
+    },
+    {
+      "source": "/product-page/lumanare-perlata-pachet-essenza-150g-3fitile-pahar-decorativ-lumanare",
+      "destination": "/product/pachet-essenza-150g",
+      "permanent": true
+    },
+    {
+      "source": "/product-page/lumanare-perlata-pachet-splendore-250g-5fitile-pahar-decorativ-lumanare",
+      "destination": "/product/pachet-splendore-250g",
+      "permanent": true
+    },
+    {
+      "source": "/product-page/ceara-de-nisip-granule-box-750g-10-fitile-lumanare-perlata-cadou-decor",
+      "destination": "/product/granule-box-750g",
+      "permanent": true
+    },
+    {
+      "source": "/product-page/:legacySlug",
+      "destination": "/toate-produsele",
+      "permanent": true
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/((?!.*\\.[^/]+$).*)",
+      "destination": "/index.html"
+    }
+  ]
+}

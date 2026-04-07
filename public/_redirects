@@ -15,6 +15,12 @@ https://www.atomrahomeromania.ro/*  https://atomrahomeromania.ro/:splat  301!
 /accessories-collection  /accesorii  301
 /products/*  /toate-produsele  301
 /shop/*  /toate-produsele  301
+/product-page/ceara-de-nisip-4-5-kg-60-fitile-lumanare-perlata-idei-decor-eveniment  /product/ceara-nisip-4-5kg-evenimente  301
+/product-page/ceara-de-nisip-4-5kg-60fitile-cadou-lumanare-perlata-idei-decor-eveniment  /product/ceara-nisip-4-5kg-evenimente  301
+/product-page/lumanare-perlata-pachet-essenza-150g-3fitile-pahar-decorativ-lumanare  /product/pachet-essenza-150g  301
+/product-page/lumanare-perlata-pachet-splendore-250g-5fitile-pahar-decorativ-lumanare  /product/pachet-splendore-250g  301
+/product-page/ceara-de-nisip-granule-box-750g-10-fitile-lumanare-perlata-cadou-decor  /product/granule-box-750g  301
+/product-page/*  /toate-produsele  301
 
 # SPA routing - serve index.html for all application routes
 /*  /index.html  200

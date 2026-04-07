@@ -40,6 +40,7 @@ const RefillableGuidePage = lazy(() => import('./pages/RefillableGuidePage'));
 const RefillableVsClassicPage = lazy(() => import('./pages/RefillableVsClassicPage'));
 const SoyVsSandWaxPage = lazy(() => import('./pages/SoyVsSandWaxPage'));
 const EventDecorComparisonPage = lazy(() => import('./pages/EventDecorComparisonPage'));
+const LegacyProductRoute = lazy(() => import('./routes/LegacyProductRoute'));
 
 // Loading component
 const PageLoader = () => {
@@ -94,6 +95,7 @@ function App() {
                 <Route path="/coming-soon" element={<ComingSoonPage />} />
                 <Route path="/cart" element={<CartRoute />} />
                 <Route path="/product/:slug" element={<ProductPage />} />
+                <Route path="/product-page/:legacySlug" element={<LegacyProductRoute />} />
                 <Route path="/success" element={<SuccessPage />} />
                 <Route path="/cancel" element={<CancelPage />} />
                 <Route path="/ideas" element={<IdeasPage />} />
