@@ -1,6 +1,7 @@
 import React, { Suspense, lazy, useEffect } from 'react';
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
+import { Analytics } from '@vercel/analytics/react';
 import { LanguageProvider } from './context/LanguageContext';
 import { CartProvider } from './context/CartContext';
 import { StripeProvider } from './context/StripeContext';
@@ -86,6 +87,7 @@ function App() {
                   <div className="min-h-screen bg-white">
                     <PerformanceMonitor />
                     <ScrollToTop />
+                    <Analytics />
                     <Routes>
                       {/* Admin Routes */}
                       <Route path="/admin-login" element={
