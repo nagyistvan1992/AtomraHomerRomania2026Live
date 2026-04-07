@@ -1,5 +1,5 @@
 ﻿import React, { useEffect, useRef, useState } from 'react';
-import { Star, ArrowLeft, ShoppingBag, Search, Filter, Grid, List, AlertCircle, RefreshCw, X } from 'lucide-react';
+import { Star, ArrowLeft, ShoppingBag, Filter, Grid, List, AlertCircle, RefreshCw, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import SEOHead from '../components/SEOHead';
@@ -20,7 +20,6 @@ const AllProductsPage = () => {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid'); 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
   const sectionRef = useRef<HTMLDivElement>(null);
   useLanguage();
 
@@ -42,16 +41,6 @@ const AllProductsPage = () => {
     // Apply category filter
     if (selectedCategory !== 'all') {
       filtered = filtered.filter(product => product.category === selectedCategory);
-    }
-    
-    // Apply search filter
-    if (searchQuery.trim() !== '') {
-      const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(product => 
-        product.name.toLowerCase().includes(query) || 
-        product.description.toLowerCase().includes(query) ||
-        product.category.toLowerCase().includes(query)
-      );
     }
     
     // Apply sorting
@@ -89,7 +78,7 @@ const AllProductsPage = () => {
       });
     }, 100);
     
-  }, [products, selectedCategory, sortBy, searchQuery]);
+  }, [products, selectedCategory, sortBy]);
 
   const fetchProducts = async () => {
     try {
@@ -130,10 +119,6 @@ const AllProductsPage = () => {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => { 
-    setSearchQuery(e.target.value);
   };
 
   useEffect(() => {
@@ -265,20 +250,6 @@ const AllProductsPage = () => {
             <div className="bg-white rounded-lg shadow-sm p-6 mb-8 border border-slate-100">
               <div className="flex flex-col sm:flex-row justify-between gap-4">
                 <div className="flex flex-col sm:flex-row gap-4 flex-1 md:flex-initial md:w-2/3">
-                  {/* Search */}
-                  <div className="relative flex-1">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <Search size={16} className="text-slate-400" /> 
-                    </div>
-                    <input
-                      type="text"
-                      placeholder="Caută produse..."
-                      value={searchQuery}
-                      onChange={handleSearch}
-                      className="pl-10 pr-4 py-2.5 w-full border border-slate-200 rounded-md focus:ring-2 focus:ring-slate-400 focus:border-transparent text-sm font-light bg-white"
-                    />
-                  </div>
-                  
                   {/* Category Filter */}
                   <div className="relative flex-1 sm:max-w-xs">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -347,17 +318,6 @@ const AllProductsPage = () => {
                     </button>
                   </div>
                 )}
-                {searchQuery && (
-                  <div className="inline-flex items-center py-1 px-3 rounded-full text-xs font-light bg-slate-100 text-slate-800">
-                    "{searchQuery}"
-                    <button 
-                      onClick={() => setSearchQuery('')} 
-                      className="ml-2 hover:text-slate-500"
-                    >
-                      <X size={12} />
-                    </button>
-                  </div>
-                )}
                 <div className="ml-auto text-xs text-slate-500 font-light">
                   {filteredProducts.length} {filteredProducts.length === 1 ? 'produs' : 'produse'} găsite
                 </div>
@@ -380,16 +340,13 @@ const AllProductsPage = () => {
                     Nu am găsit produse
                   </h2>
                   <p className="text-slate-500 max-w-md mx-auto mb-6 font-light">
-                    {searchQuery 
-                      ? `Nu s-au găsit rezultate pentru "${searchQuery}"` 
-                      : selectedCategory !== 'all'
-                        ? `Nu am găsit produse în categoria "${selectedCategory}"`
-                        : 'Niciun produs disponibil în acest moment'}
+                    {selectedCategory !== 'all'
+                      ? `Nu am găsit produse în categoria "${selectedCategory}"`
+                      : 'Niciun produs disponibil în acest moment'}
                   </p>
-                  {(searchQuery || selectedCategory !== 'all') && (
+                  {selectedCategory !== 'all' && (
                     <button
                       onClick={() => {
-                        setSearchQuery('');
                         setSelectedCategory('all');
                       }}
                       className="inline-flex items-center px-6 py-3 border border-slate-300 text-slate-700 bg-white hover:bg-slate-50 rounded-md shadow-sm transition-colors duration-300 font-light"

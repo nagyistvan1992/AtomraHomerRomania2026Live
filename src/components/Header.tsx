@@ -1,11 +1,9 @@
-import React, { Suspense, lazy, useEffect, useRef, useState } from 'react';
-import { ShoppingCart, Search, ChevronDown, Menu, X } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+import { ShoppingCart, ChevronDown, Menu, X } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useLanguage, type Language } from '../context/LanguageContext';
 import { SECRET_ADMIN_ROUTE, SECRET_ADMIN_TAP_COUNT, SECRET_ADMIN_TAP_WINDOW_MS } from '../constants/adminAccess';
-
-const SearchModal = lazy(() => import('./SearchModal'));
 
 type NavItem = {
   id: string;
@@ -19,7 +17,6 @@ const HEADER_CONTENT: Record<
   {
     navItems: NavItem[];
     menuLabel: string;
-    searchLabel: string;
     languageLabel: string;
     languageNames: Record<Language, string>;
   }
@@ -51,7 +48,6 @@ const HEADER_CONTENT: Record<
       { id: 'contact', name: 'CONTACT', path: '/contact' },
     ],
     menuLabel: 'Meniu',
-    searchLabel: 'Cautare',
     languageLabel: 'Limba',
     languageNames: { ro: 'Romana', hu: 'Magyar', en: 'English' },
   },
@@ -82,7 +78,6 @@ const HEADER_CONTENT: Record<
       { id: 'contact', name: 'KAPCSOLAT', path: '/contact' },
     ],
     menuLabel: 'Menu',
-    searchLabel: 'Kereses',
     languageLabel: 'Nyelv',
     languageNames: { ro: 'Romana', hu: 'Magyar', en: 'English' },
   },
@@ -113,14 +108,12 @@ const HEADER_CONTENT: Record<
       { id: 'contact', name: 'CONTACT', path: '/contact' },
     ],
     menuLabel: 'Menu',
-    searchLabel: 'Search',
     languageLabel: 'Language',
     languageNames: { ro: 'Romana', hu: 'Magyar', en: 'English' },
   },
 };
 
 const Header = () => {
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isHeaderVisible, setIsHeaderVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -378,14 +371,6 @@ const Header = () => {
             </div>
 
             <button
-              onClick={() => setIsSearchOpen(true)}
-              className="p-2 text-[#666666] transition-colors duration-200 hover:text-[#333333]"
-              aria-label={content.searchLabel}
-            >
-              <Search size={18} strokeWidth={1.5} />
-            </button>
-
-            <button
               onClick={handleCartToggle}
               className="relative p-2 text-[#666666] transition-colors duration-200 hover:text-[#333333]"
               aria-label="Cart"
@@ -512,18 +497,8 @@ const Header = () => {
               <div className="mb-2 px-2 text-xs uppercase tracking-wider text-[#a8a29e]">
                 {t('common.utilities')}
               </div>
-              <div className="space-y-1">
-                <button
-                  onClick={() => {
-                    setIsSearchOpen(true);
-                    setIsMobileMenuOpen(false);
-                  }}
-                  className="flex w-full items-center px-2 py-3 text-sm font-light text-[#666666] transition-colors duration-200 hover:text-[#333333] focus:outline-none"
-                >
-                  <Search size={16} className="mr-3" />
-                  <span>{content.searchLabel}</span>
-                </button>
-
+              <div className="px-2 py-3 text-sm font-light text-[#888888]">
+                {t('banner.freeShipping')}
               </div>
             </div>
 
@@ -558,10 +533,6 @@ const Header = () => {
           aria-hidden="true"
         />
       )}
-
-      <Suspense fallback={null}>
-        {isSearchOpen ? <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} /> : null}
-      </Suspense>
     </>
   );
 };
