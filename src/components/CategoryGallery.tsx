@@ -30,7 +30,7 @@ const CategoryGallery = () => {
       name: t('categories.accessories.title'),
       image: getAssetPath('/accessories-category.webp'),
       description: t('categories.accessories.description'),
-      route: '/accessories-collection'
+      route: '/accesorii'
     },
     {
       id: 'coming',

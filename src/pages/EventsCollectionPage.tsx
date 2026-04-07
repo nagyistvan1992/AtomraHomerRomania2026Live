@@ -8,9 +8,15 @@ import LazyImage from '../components/LazyImage';
 import AddToCartButton from '../components/AddToCartButton';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getPlaceholderImage, getPreferredImage } from '../utils/imageSources';
+import { getSiteUrl } from '../utils/siteConfig';
+import { generateBreadcrumbStructuredData } from '../utils/seoUtils';
 import type { CatalogProduct as Product } from '../data/catalog';
 
 const EventsCollectionPage = () => {
+  const breadcrumbStructuredData = generateBreadcrumbStructuredData([
+    { name: 'Home', url: getSiteUrl('/') },
+    { name: 'Events Collection', url: getSiteUrl('/events-collection') },
+  ]);
   const [visibleProducts, setVisibleProducts] = useState<boolean[]>([]);
   const [eventProducts, setEventProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -145,7 +151,8 @@ const EventsCollectionPage = () => {
         title="Colecția pentru evenimente | Lumânări din ceară naturală | Atomra Home Romania"
         description="Descoperă colecția noastră de lumânări din ceară naturală pentru evenimente speciale. Lumânări personalizate pentru nunți, botezuri și alte ocazii memorabile."
         keywords="lumânări pentru evenimente, ceară naturală, ceară de soia, lumânări pentru nunți, lumânări speciale, lumânări pentru ocazii"
-        url="https://atomrahomeromania.ro/events-collection"
+        url={getSiteUrl('/events-collection')}
+        structuredData={breadcrumbStructuredData}
       />
       
       <div className="luxury-page-bg luxury-floating-elements min-h-screen">

@@ -77,9 +77,7 @@ const server = createServer((request, response) => {
     }
 
     if (!extname(pathname)) {
-      const redirectTarget = `/#${pathname}${requestUrl.search}`;
-      response.writeHead(302, { Location: redirectTarget });
-      response.end();
+      sendFile(join(distRoot, 'index.html'), response);
       return;
     }
 

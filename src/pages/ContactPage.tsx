@@ -3,9 +3,22 @@ import { Mail, Phone, MapPin, Send, Clock } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import SEOHead from '../components/SEOHead';
 import { motion } from 'framer-motion';
+import { BUSINESS_ADDRESS, CONTACT_EMAIL, CONTACT_PHONE, getSiteUrl } from '../utils/siteConfig';
+import {
+  generateBreadcrumbStructuredData,
+  generateContactPageStructuredData,
+  generateOrganizationStructuredData,
+} from '../utils/seoUtils';
 
 const ContactPage = () => {
   const { language } = useLanguage();
+  const breadcrumbStructuredData = generateBreadcrumbStructuredData([
+    { name: 'Home', url: getSiteUrl('/') },
+    { name: 'Contact', url: getSiteUrl('/contact') },
+  ]);
+  const contactStructuredData = `[${breadcrumbStructuredData},${generateContactPageStructuredData(
+    getSiteUrl('/contact')
+  )},${generateOrganizationStructuredData()}]`;
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -143,7 +156,8 @@ const ContactPage = () => {
         title={getPageTitle()}
         description="Contactează echipa Atomra Home Romania pentru întrebări despre produse, comenzi sau colaborări. Suntem aici să te ajutăm."
         keywords="contact, atomra, lumânări, ceară naturală, asistență clienți, întrebări"
-        url="https://atomrahomeromania.ro/contact"
+        url={getSiteUrl('/contact')}
+        structuredData={contactStructuredData}
       />
       
       <div className="luxury-page-bg luxury-floating-elements min-h-screen">
@@ -210,8 +224,8 @@ const ContactPage = () => {
                         </div>
                         <div>
                           <h3 className="text-lg font-light text-slate-900 mb-1">{contactInfo.email}</h3>
-                          <a href="mailto:atomrahomeromania@gmail.com" className="text-slate-600 hover:text-slate-900 transition-colors duration-200">
-                            atomrahomeromania@gmail.com
+                          <a href={`mailto:${CONTACT_EMAIL}`} className="text-slate-600 hover:text-slate-900 transition-colors duration-200">
+                            {CONTACT_EMAIL}
                           </a>
                         </div>
                       </div>
@@ -222,8 +236,8 @@ const ContactPage = () => {
                         </div>
                         <div>
                           <h3 className="text-lg font-light text-slate-900 mb-1">{contactInfo.phone}</h3>
-                          <a href="tel:+40751801025" className="text-slate-600 hover:text-slate-900 transition-colors duration-200">
-                            0751801025
+                          <a href={`tel:${CONTACT_PHONE}`} className="text-slate-600 hover:text-slate-900 transition-colors duration-200">
+                            {CONTACT_PHONE.replace('+40', '0')}
                           </a>
                         </div>
                       </div>
@@ -235,7 +249,7 @@ const ContactPage = () => {
                         <div>
                           <h3 className="text-lg font-light text-slate-900 mb-1">{contactInfo.address}</h3>
                           <p className="text-slate-600">
-                            Satu Mare, str.Mesteacanului, nr.1B
+                            {BUSINESS_ADDRESS.addressLocality}, {BUSINESS_ADDRESS.streetAddress}
                           </p>
                         </div>
                       </div>

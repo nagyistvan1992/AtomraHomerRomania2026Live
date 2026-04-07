@@ -1,18 +1,23 @@
 # Netlify redirects for SPA routing and SEO
 
-# SPA routing - serve index.html for all routes
-/*    /index.html   200
+# Redirect old domain to current canonical domain
+http://atomra-home-romania.com/*  https://atomrahomeromania.ro/:splat  301!
+http://www.atomra-home-romania.com/*  https://atomrahomeromania.ro/:splat  301!
+https://atomra-home-romania.com/*  https://atomrahomeromania.ro/:splat  301!
+https://www.atomra-home-romania.com/*  https://atomrahomeromania.ro/:splat  301!
 
-# Redirect old URLs (if any)
-/products/*  /all-products  301
-/shop/*      /all-products  301
+# Force canonical host
+http://atomrahomeromania.ro/*  https://atomrahomeromania.ro/:splat  301!
+https://www.atomrahomeromania.ro/*  https://atomrahomeromania.ro/:splat  301!
 
-# Force HTTPS
-http://atomra-home-romania.com/*  https://atomra-home-romania.com/:splat  301!
-http://www.atomra-home-romania.com/*  https://atomra-home-romania.com/:splat  301!
+# Redirect alias routes to canonical URLs
+/all-products  /toate-produsele  301
+/accessories-collection  /accesorii  301
+/products/*  /toate-produsele  301
+/shop/*  /toate-produsele  301
 
-# Redirect www to non-www
-https://www.atomra-home-romania.com/*  https://atomra-home-romania.com/:splat  301!
+# SPA routing - serve index.html for all application routes
+/*  /index.html  200
 
 # Ensure assets are properly served with correct content types
 /assets/*.js    Content-Type=application/javascript

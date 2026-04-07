@@ -118,7 +118,7 @@ const ProductPage = () => {
       case 'Events Collection':
         return '/events-collection';
       case 'Accessories':
-        return '/accessories-collection';
+        return '/accesorii';
       default:
         return '/';
     }
@@ -308,12 +308,26 @@ const ProductPage = () => {
   }
 
   // Generate structured data
-  const productStructuredData = generateProductStructuredData(product);
   const breadcrumbStructuredData = generateBreadcrumbStructuredData([
     { name: 'Home', url: getSiteUrl('/') },
     { name: product.category, url: getSiteUrl(getCategoryRoute(product.category)) },
     { name: product.name, url: getSiteUrl(`/product/${product.slug}`) }
   ]);
+  const combinedStructuredData = `[${generateProductStructuredData({
+    id: product.id,
+    slug: product.slug,
+    name: product.name,
+    description: product.description,
+    images: product.images,
+    price: product.price,
+    in_stock: product.in_stock,
+    rating: product.rating,
+    reviews: product.reviews,
+    url: getSiteUrl(`/product/${product.slug}`),
+    category: product.category,
+    currency: 'RON',
+    tags: product.tags,
+  })}, ${breadcrumbStructuredData}]`;
 
   return (
     <>
@@ -324,7 +338,7 @@ const ProductPage = () => {
         image={getPreferredImage(product.images, getPlaceholderImage())}
         url={getSiteUrl(`/product/${product.slug}`)}
         type="product"
-        structuredData={`[${productStructuredData}, ${breadcrumbStructuredData}]`}
+        structuredData={combinedStructuredData}
         preloadImages={product.images.length > 0 ? product.images.slice(0, 3) : []}
       />
       

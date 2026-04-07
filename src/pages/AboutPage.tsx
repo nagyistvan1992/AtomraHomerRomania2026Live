@@ -4,9 +4,19 @@ import { Award, Globe, Heart, Sparkles, Users } from 'lucide-react';
 import SEOHead from '../components/SEOHead';
 import { useLanguage } from '../context/LanguageContext';
 import { getSiteUrl } from '../utils/siteConfig';
+import {
+  generateBreadcrumbStructuredData,
+  generateOnlineStoreStructuredData,
+  generateOrganizationStructuredData,
+} from '../utils/seoUtils';
 
 const AboutPage = () => {
   const { language } = useLanguage();
+  const breadcrumbStructuredData = generateBreadcrumbStructuredData([
+    { name: 'Home', url: getSiteUrl('/') },
+    { name: 'Despre noi', url: getSiteUrl('/about') },
+  ]);
+  const aboutStructuredData = `[${breadcrumbStructuredData},${generateOrganizationStructuredData()},${generateOnlineStoreStructuredData()}]`;
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -157,6 +167,7 @@ const AboutPage = () => {
         description={content.seoDescription}
         keywords="despre atomra, about atomra, rólunk, lumânări sustenabile, refillable candles, ceară perlată"
         url={getSiteUrl('/about')}
+        structuredData={aboutStructuredData}
       />
 
       <div className="luxury-page-bg luxury-floating-elements min-h-screen">

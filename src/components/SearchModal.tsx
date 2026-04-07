@@ -192,7 +192,7 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
                     {t('nav.events')}
                   </Link>
                   <Link
-                    to="/accessories-collection"
+                    to="/accesorii"
                     onClick={handleResultClick}
                     className="px-4 py-2 bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition-colors duration-200 text-sm font-light"
                   >

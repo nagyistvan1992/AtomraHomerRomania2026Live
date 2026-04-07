@@ -388,7 +388,7 @@ const HowMuchPage = () => {
                 </p>
                 <div className="flex flex-col justify-center gap-4 sm:flex-row">
                   <Link
-                    to="/all-products"
+                    to="/toate-produsele"
                     className="rounded bg-slate-900 px-6 py-3 text-sm font-light uppercase tracking-wide text-white transition-colors duration-300 hover:bg-slate-800"
                   >
                     {content.ctaPrimary}

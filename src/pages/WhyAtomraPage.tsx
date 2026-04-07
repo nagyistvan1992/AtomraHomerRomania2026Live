@@ -4,9 +4,14 @@ import { Heart, Leaf, Palette, RefreshCw, Shield } from 'lucide-react';
 import SEOHead from '../components/SEOHead';
 import { useLanguage } from '../context/LanguageContext';
 import { getSiteUrl } from '../utils/siteConfig';
+import { generateBreadcrumbStructuredData } from '../utils/seoUtils';
 
 const WhyAtomraPage = () => {
   const { language } = useLanguage();
+  const breadcrumbStructuredData = generateBreadcrumbStructuredData([
+    { name: 'Home', url: getSiteUrl('/') },
+    { name: 'De ce Atomra', url: getSiteUrl('/why-atomra') },
+  ]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -164,6 +169,7 @@ const WhyAtomraPage = () => {
         description={content.seoDescription}
         keywords="de ce atomra, why atomra, miért atomra, refillable candles, ceară perlată, premium candles"
         url={getSiteUrl('/why-atomra')}
+        structuredData={breadcrumbStructuredData}
       />
 
       <div className="luxury-page-bg luxury-floating-elements min-h-screen">

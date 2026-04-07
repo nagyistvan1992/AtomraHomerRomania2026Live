@@ -6,6 +6,7 @@ import { useLanguage } from '../context/LanguageContext';
 import SEOHead from '../components/SEOHead';
 import { getAssetPath } from '../utils/assetPath';
 import { getSiteUrl } from '../utils/siteConfig';
+import { generateBreadcrumbStructuredData } from '../utils/seoUtils';
 
 const galleryImages = [
   {
@@ -32,6 +33,10 @@ const galleryImages = [
 
 const IdeasPage = () => {
   const { language } = useLanguage();
+  const breadcrumbStructuredData = generateBreadcrumbStructuredData([
+    { name: 'Home', url: getSiteUrl('/') },
+    { name: 'Idei si inspiratie', url: getSiteUrl('/ideas') },
+  ]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -71,7 +76,7 @@ const IdeasPage = () => {
           text: 'Combina perle de ceara, fitiluri si un recipient special intr-un set personal. Este un cadou util, frumos si usor de adaptat fiecarui stil.',
           icon: Sparkles,
           cta: 'Descopera toate produsele',
-          link: '/all-products',
+          link: '/toate-produsele',
         },
       ],
       galleryTitle: 'Galerie de inspiratie',
@@ -115,7 +120,7 @@ const IdeasPage = () => {
           text: 'Allits ossze szemelyes szettet viaszgyongyokkel, kanocokkal es egy kulonleges tartallyal. Hasznos, szep es konnyen szemelyre szabott ajandek.',
           icon: Sparkles,
           cta: 'Osszes termek',
-          link: '/all-products',
+          link: '/toate-produsele',
         },
       ],
       galleryTitle: 'Inspiracios galeria',
@@ -159,7 +164,7 @@ const IdeasPage = () => {
           text: 'Pair wax pearls, wicks, and a special vessel into a personal set. It becomes a useful, beautiful gift that still feels tailored.',
           icon: Sparkles,
           cta: 'Browse all products',
-          link: '/all-products',
+          link: '/toate-produsele',
         },
       ],
       galleryTitle: 'Inspiration gallery',
@@ -179,6 +184,7 @@ const IdeasPage = () => {
         description={content.seoDescription}
         keywords={content.seoKeywords}
         url={getSiteUrl('/ideas')}
+        structuredData={breadcrumbStructuredData}
       />
 
       <div className="luxury-page-bg luxury-floating-elements min-h-screen">

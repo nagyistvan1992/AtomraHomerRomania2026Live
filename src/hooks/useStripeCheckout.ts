@@ -23,8 +23,8 @@ export const useStripeCheckout = () => {
         throw new Error('Product price ID is required');
       }
       
-      const defaultSuccessUrl = `${window.location.origin}/#/success?session_id={CHECKOUT_SESSION_ID}`;
-      const defaultCancelUrl = `${window.location.origin}/#/cancel`;
+      const defaultSuccessUrl = `${window.location.origin}/success?session_id={CHECKOUT_SESSION_ID}`;
+      const defaultCancelUrl = `${window.location.origin}/cancel`;
 
       console.log('Creating checkout session for price ID:', priceId);
 

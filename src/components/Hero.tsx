@@ -79,7 +79,7 @@ const Hero = () => {
         
         <div className="relative z-20 mb-12 sm:mb-16 lg:mb-20">
           <Link 
-            to="/all-products"
+            to="/toate-produsele"
             className="group relative inline-block bg-slate-800/25 backdrop-blur-2xl text-slate-50 px-12 sm:px-16 lg:px-20 py-5 sm:py-6 text-sm sm:text-base lg:text-lg rounded-3xl hover:bg-slate-700/35 transition-all duration-700 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-slate-300/40 focus:ring-offset-4 focus:ring-offset-slate-800/20 shadow-2xl hover:shadow-3xl animate-scale-in tracking-[0.15em] uppercase border border-slate-300/20 overflow-hidden"
             style={{ 
               animationDelay: '0.8s',

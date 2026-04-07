@@ -9,9 +9,14 @@ import AddToCartButton from '../components/AddToCartButton';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getPlaceholderImage, getPreferredImage } from '../utils/imageSources';
 import { getSiteUrl } from '../utils/siteConfig';
+import { generateBreadcrumbStructuredData } from '../utils/seoUtils';
 import type { CatalogProduct as Product } from '../data/catalog';
 
 const AccessoriesCollectionPage = () => {
+  const breadcrumbStructuredData = generateBreadcrumbStructuredData([
+    { name: 'Home', url: getSiteUrl('/') },
+    { name: 'Accesorii', url: getSiteUrl('/accesorii') },
+  ]);
   const [visibleProducts, setVisibleProducts] = useState<boolean[]>([]);
   const [accessories, setAccessories] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -147,6 +152,7 @@ const AccessoriesCollectionPage = () => {
         description="Descoperă accesoriile noastre premium pentru lumânări din ceară naturală. Tot ce ai nevoie pentru a întreține și a completa experiența Atomra."
         keywords="accesorii lumânări, fitile, recipiente, ustensile lumânări, întreținere lumânări"
         url={getSiteUrl('/accesorii')}
+        structuredData={breadcrumbStructuredData}
       />
       
       <div className="luxury-page-bg luxury-floating-elements min-h-screen">

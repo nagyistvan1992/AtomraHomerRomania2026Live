@@ -15,7 +15,7 @@ interface SEOHeadProps {
   preloadImages?: string[];
 }
 
-const DEFAULT_TITLE = 'Atomra Home Romania | Lumânări din Ceară Naturală Reîncărcabile';
+const DEFAULT_TITLE = 'Atomra Home Romania | Lumânări din ceară naturală reîncărcabile';
 const DEFAULT_DESCRIPTION =
   'Descoperă lumânările reîncărcabile din ceară naturală Atomra. Lumânări personalizate, ecologice și sustenabile din ceară de soia. Umple. Aprinde. Reîmprospătează.';
 const DEFAULT_KEYWORDS =
@@ -38,13 +38,13 @@ const buildDefaultStructuredData = (description: string, url: string, image: str
     sameAs: ['https://instagram.com/atomra-home-romania', 'https://tiktok.com/@atomra-home-romania'],
     hasOfferCatalog: {
       '@type': 'OfferCatalog',
-      name: 'Lumânări Reîncărcabile',
+      name: 'Lumânări reîncărcabile',
       itemListElement: [
         {
           '@type': 'Offer',
           itemOffered: {
             '@type': 'Product',
-            name: 'Lumânări Perlate Reîncărcabile',
+            name: 'Lumânări perlate reîncărcabile',
             description: 'Lumânări ecologice reîncărcabile din ceară naturală de soia',
           },
         },
@@ -123,7 +123,7 @@ const SEOHead: React.FC<SEOHeadProps> = ({
     addMeta('property', 'og:image:width', '1200');
     addMeta('property', 'og:image:height', '630');
     addMeta('property', 'og:image:alt', title);
-    addMeta('property', 'og:url', url);
+    addMeta('property', 'og:url', resolvedCanonical);
     addMeta('property', 'og:type', type);
     addMeta('property', 'og:site_name', SITE_NAME);
     addMeta('property', 'og:locale', 'ro_RO');
@@ -138,8 +138,8 @@ const SEOHead: React.FC<SEOHeadProps> = ({
 
     addLink('dns-prefetch', '//api.stripe.com');
     addLink('canonical', resolvedCanonical);
-    addLink('alternate', url, { hreflang: 'ro' });
-    addLink('alternate', url, { hreflang: 'x-default' });
+    addLink('alternate', resolvedCanonical, { hreflang: 'ro' });
+    addLink('alternate', resolvedCanonical, { hreflang: 'x-default' });
 
     preloadImages.forEach((imgSrc) => {
       addLink('preload', getAssetPath(imgSrc), { as: 'image' });
@@ -147,13 +147,13 @@ const SEOHead: React.FC<SEOHeadProps> = ({
 
     const script = createManagedElement<HTMLScriptElement>('script');
     script.type = 'application/ld+json';
-    script.text = structuredData || buildDefaultStructuredData(description, url, resolvedImage);
+    script.text = structuredData || buildDefaultStructuredData(description, resolvedCanonical, resolvedImage);
 
     return () => {
       createdNodes.forEach((node) => node.remove());
       document.title = previousTitle;
     };
-  }, [canonical, description, keywords, noindex, preloadImages, resolvedCanonical, resolvedImage, structuredData, title, type, url]);
+  }, [description, keywords, noindex, preloadImages, resolvedCanonical, resolvedImage, structuredData, title, type]);
 
   return null;
 };

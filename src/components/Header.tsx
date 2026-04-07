@@ -32,7 +32,7 @@ const HEADER_CONTENT: Record<
         dropdown: [
           { name: 'ATOMRA PENTRU ACASA', path: '/home-collection' },
           { name: 'ATOMRA PENTRU EVENIMENTE', path: '/events-collection' },
-          { name: 'ACCESORII', path: '/accessories-collection' },
+          { name: 'ACCESORII', path: '/accesorii' },
           { name: 'TOATE PRODUSELE', path: '/toate-produsele' },
         ],
       },
@@ -63,7 +63,7 @@ const HEADER_CONTENT: Record<
         dropdown: [
           { name: 'ATOMRA OTTHONRA', path: '/home-collection' },
           { name: 'ATOMRA ESEMENYEKRE', path: '/events-collection' },
-          { name: 'KIEGESZITOK', path: '/accessories-collection' },
+          { name: 'KIEGESZITOK', path: '/accesorii' },
           { name: 'OSSZES TERMEK', path: '/toate-produsele' },
         ],
       },
@@ -94,8 +94,8 @@ const HEADER_CONTENT: Record<
         dropdown: [
           { name: 'ATOMRA FOR HOME', path: '/home-collection' },
           { name: 'ATOMRA FOR EVENTS', path: '/events-collection' },
-          { name: 'ACCESSORIES', path: '/accessories-collection' },
-          { name: 'ALL PRODUCTS', path: '/all-products' },
+          { name: 'ACCESSORIES', path: '/accesorii' },
+          { name: 'ALL PRODUCTS', path: '/toate-produsele' },
         ],
       },
       { id: 'ideas', name: 'IDEAS AND INSPIRATION', path: '/ideas' },

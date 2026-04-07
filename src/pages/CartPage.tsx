@@ -30,8 +30,8 @@ const CartPage = () => {
   const [loading, setLoading] = useState(false);
   const [orderNumber, setOrderNumber] = useState('');
   const supabaseFunctionsBaseUrl = isSupabaseConfigured ? `${import.meta.env.VITE_SUPABASE_URL}/functions/v1` : '';
-  const stripeSuccessUrl = `${window.location.origin}/#/success?session_id={CHECKOUT_SESSION_ID}`;
-  const stripeCancelUrl = `${window.location.origin}/#/cancel`;
+  const stripeSuccessUrl = `${window.location.origin}/success?session_id={CHECKOUT_SESSION_ID}`;
+  const stripeCancelUrl = `${window.location.origin}/cancel`;
 
   const shippingCost = getTotalPrice() >= 149 ? 0 : 25;
   const totalAmount = getTotalPrice() + shippingCost;

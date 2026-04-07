@@ -60,7 +60,7 @@ const CancelPage = () => {
                 </Link>
                 
                 <Link
-                  to="/all-products"
+                  to="/toate-produsele"
                   className="border border-slate-300 text-slate-700 px-8 py-3 font-light tracking-wide uppercase hover:bg-slate-50 transition-colors duration-300 rounded flex items-center justify-center space-x-2"
                   onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                 >

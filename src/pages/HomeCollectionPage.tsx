@@ -8,9 +8,15 @@ import LazyImage from '../components/LazyImage';
 import AddToCartButton from '../components/AddToCartButton';
 import { motion } from 'framer-motion';
 import { getPlaceholderImage, getPreferredImage, getResolvedImageList } from '../utils/imageSources';
+import { getSiteUrl } from '../utils/siteConfig';
+import { generateBreadcrumbStructuredData } from '../utils/seoUtils';
 import type { CatalogProduct as Product } from '../data/catalog';
 
 const HomeCollectionPage = () => {
+  const breadcrumbStructuredData = generateBreadcrumbStructuredData([
+    { name: 'Home', url: getSiteUrl('/') },
+    { name: 'Home Collection', url: getSiteUrl('/home-collection') },
+  ]);
   const [visibleProducts, setVisibleProducts] = useState<boolean[]>([]);
   const [homeProducts, setHomeProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -145,7 +151,8 @@ const HomeCollectionPage = () => {
         title="Colecția pentru acasă | Lumânări din ceară naturală | Atomra Home Romania"
         description="Descoperă colecția noastră de lumânări din ceară naturală pentru casă. Produse reîncărcabile, personalizabile și sustenabile care schimbă atmosfera căminului tău."
         keywords="lumânări pentru casă, ceară naturală, ceară de soia, lumânări reîncărcabile, lumânări pentru decor, atmosferă, lumânări ecologice"
-        url="https://atomrahomeromania.ro/home-collection"
+        url={getSiteUrl('/home-collection')}
+        structuredData={breadcrumbStructuredData}
       />
     
       <div className="luxury-page-bg luxury-floating-elements min-h-screen">

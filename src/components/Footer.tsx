@@ -124,7 +124,7 @@ const Footer = () => {
               <h3 className="mb-4 text-sm font-medium uppercase tracking-wider text-slate-900">{content.quickLinks}</h3>
               <ul className="space-y-2">
                 <li>
-                  <Link to="/all-products" className="text-sm font-light text-slate-600 transition-colors duration-200 hover:text-slate-900">
+                  <Link to="/toate-produsele" className="text-sm font-light text-slate-600 transition-colors duration-200 hover:text-slate-900">
                     {content.allProducts}
                   </Link>
                 </li>
