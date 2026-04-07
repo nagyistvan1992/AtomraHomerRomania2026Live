@@ -15,36 +15,39 @@ const WhyAtomraPage = () => {
   const content = {
     ro: {
       title: 'De ce Atomra',
-      subtitle: 'Cinci motive pentru care experiența noastră cu ceară perlata este diferită.',
+      subtitle: 'Cinci motive pentru care experiența noastră cu ceară perlată este diferită.',
       seoTitle: 'De ce Atomra | Atomra Home Romania',
       seoDescription:
         'Află de ce lumânările și produsele Atomra sunt diferite: refillabile, curate, premium și gândite pentru decor contemporan.',
       features: [
         {
           title: 'Ceară mai curată',
-          description: 'Folosim o formulă orientată spre o ardere curată și o experiență mai plăcută în spațiul tău.',
-          icon: <Leaf size={32} strokeWidth={1.5} className="text-green-600" />
+          description:
+            'Folosim o formulă orientată spre o ardere curată și o experiență mai plăcută în spațiul tău.',
+          icon: <Leaf size={32} strokeWidth={1.5} className="text-green-600" />,
         },
         {
           title: 'Sistem refillabil',
           description: 'Recipientele pot fi refolosite, iar reumplerea devine rapidă, practică și estetică.',
-          icon: <RefreshCw size={32} strokeWidth={1.5} className="text-blue-600" />
+          icon: <RefreshCw size={32} strokeWidth={1.5} className="text-blue-600" />,
         },
         {
           title: 'Libertate de personalizare',
           description: 'Poți construi aranjamente diferite pentru acasă, cadouri sau evenimente, în funcție de stilul tău.',
-          icon: <Palette size={32} strokeWidth={1.5} className="text-violet-600" />
+          icon: <Palette size={32} strokeWidth={1.5} className="text-violet-600" />,
         },
         {
           title: 'Aspect premium',
-          description: 'Produsele sunt gândite să arate bine pe masă, în living, în dormitor sau în decoruri speciale.',
-          icon: <Heart size={32} strokeWidth={1.5} className="text-rose-600" />
+          description:
+            'Produsele sunt gândite să arate bine pe masă, în living, în dormitor sau în decoruri speciale.',
+          icon: <Heart size={32} strokeWidth={1.5} className="text-rose-600" />,
         },
         {
           title: 'Mai mult control',
-          description: 'Sistemul pe bază de granule oferă flexibilitate și un plus de siguranță în utilizarea de zi cu zi.',
-          icon: <Shield size={32} strokeWidth={1.5} className="text-amber-600" />
-        }
+          description:
+            'Sistemul pe bază de granule oferă flexibilitate și un plus de siguranță în utilizarea de zi cu zi.',
+          icon: <Shield size={32} strokeWidth={1.5} className="text-amber-600" />,
+        },
       ],
       missionTitle: 'Ce vrem să oferim',
       missionDescription:
@@ -55,8 +58,8 @@ const WhyAtomraPage = () => {
         'Produse curate și atent alese',
         'Design calm, elegant și ușor de integrat',
         'Experiență clară de cumpărare și folosire',
-        'Respect pentru client, spațiu și atmosferă'
-      ]
+        'Respect pentru client, spațiu și atmosferă',
+      ],
     },
     hu: {
       title: 'Miért Atomra',
@@ -67,29 +70,31 @@ const WhyAtomraPage = () => {
       features: [
         {
           title: 'Tisztább viaszélmény',
-          description: 'Olyan élményt szeretnénk adni, amely tisztább égést és kellemesebb jelenlétet nyújt az otthonodban.',
-          icon: <Leaf size={32} strokeWidth={1.5} className="text-green-600" />
+          description:
+            'Olyan élményt szeretnénk adni, amely tisztább égést és kellemesebb jelenlétet nyújt az otthonodban.',
+          icon: <Leaf size={32} strokeWidth={1.5} className="text-green-600" />,
         },
         {
           title: 'Újratölthető rendszer',
           description: 'A tartók újrahasználhatók, az utántöltés gyors, praktikus és szép marad.',
-          icon: <RefreshCw size={32} strokeWidth={1.5} className="text-blue-600" />
+          icon: <RefreshCw size={32} strokeWidth={1.5} className="text-blue-600" />,
         },
         {
           title: 'Személyre szabható',
           description: 'Otthonra, ajándékba vagy eseményre is könnyen alakítható a saját stílusodhoz.',
-          icon: <Palette size={32} strokeWidth={1.5} className="text-violet-600" />
+          icon: <Palette size={32} strokeWidth={1.5} className="text-violet-600" />,
         },
         {
           title: 'Prémium megjelenés',
-          description: 'A termékek a mindennapi enteriőrben és különleges dekorokban is kifinomultan mutatnak.',
-          icon: <Heart size={32} strokeWidth={1.5} className="text-rose-600" />
+          description:
+            'A termékek a mindennapi enteriőrben és különleges dekorokban is kifinomultan mutatnak.',
+          icon: <Heart size={32} strokeWidth={1.5} className="text-rose-600" />,
         },
         {
           title: 'Nagyobb kontroll',
           description: 'A gyöngyös rendszer rugalmasabb használatot és több biztonságérzetet ad.',
-          icon: <Shield size={32} strokeWidth={1.5} className="text-amber-600" />
-        }
+          icon: <Shield size={32} strokeWidth={1.5} className="text-amber-600" />,
+        },
       ],
       missionTitle: 'Mit szeretnénk adni',
       missionDescription:
@@ -100,8 +105,8 @@ const WhyAtomraPage = () => {
         'Tiszta, gondosan válogatott termékek',
         'Nyugodt, elegáns és könnyen beilleszthető design',
         'Átlátható vásárlási és használati élmény',
-        'Tisztelet a vásárló, a tér és a hangulat iránt'
-      ]
+        'Tisztelet a vásárló, a tér és a hangulat iránt',
+      ],
     },
     en: {
       title: 'Why Atomra',
@@ -113,28 +118,30 @@ const WhyAtomraPage = () => {
         {
           title: 'Cleaner wax experience',
           description: 'We focus on a cleaner burn and a more refined atmosphere in your space.',
-          icon: <Leaf size={32} strokeWidth={1.5} className="text-green-600" />
+          icon: <Leaf size={32} strokeWidth={1.5} className="text-green-600" />,
         },
         {
           title: 'Refillable system',
           description: 'Containers can be reused, making refills practical, elegant and easy to maintain.',
-          icon: <RefreshCw size={32} strokeWidth={1.5} className="text-blue-600" />
+          icon: <RefreshCw size={32} strokeWidth={1.5} className="text-blue-600" />,
         },
         {
           title: 'Room to customize',
           description: 'You can build different looks for home styling, gifting or events based on your own taste.',
-          icon: <Palette size={32} strokeWidth={1.5} className="text-violet-600" />
+          icon: <Palette size={32} strokeWidth={1.5} className="text-violet-600" />,
         },
         {
           title: 'Premium presence',
-          description: 'The products are designed to look beautiful in living spaces and special occasion setups alike.',
-          icon: <Heart size={32} strokeWidth={1.5} className="text-rose-600" />
+          description:
+            'The products are designed to look beautiful in living spaces and special occasion setups alike.',
+          icon: <Heart size={32} strokeWidth={1.5} className="text-rose-600" />,
         },
         {
           title: 'More control',
-          description: 'The pearl-based system offers flexibility and an added sense of safety in everyday use.',
-          icon: <Shield size={32} strokeWidth={1.5} className="text-amber-600" />
-        }
+          description:
+            'The pearl-based system offers flexibility and an added sense of safety in everyday use.',
+          icon: <Shield size={32} strokeWidth={1.5} className="text-amber-600" />,
+        },
       ],
       missionTitle: 'What we want to offer',
       missionDescription:
@@ -145,9 +152,9 @@ const WhyAtomraPage = () => {
         'Clean, carefully selected products',
         'Calm and elegant design language',
         'A clear shopping and usage experience',
-        'Respect for the customer, the space and the mood'
-      ]
-    }
+        'Respect for the customer, the space and the mood',
+      ],
+    },
   }[language === 'hu' ? 'hu' : language === 'en' ? 'en' : 'ro'];
 
   return (
@@ -155,16 +162,25 @@ const WhyAtomraPage = () => {
       <SEOHead
         title={content.seoTitle}
         description={content.seoDescription}
-        keywords="de ce atomra, why atomra, miért atomra, refillable candles, ceară perlata, premium candles"
+        keywords="de ce atomra, why atomra, miért atomra, refillable candles, ceară perlată, premium candles"
         url={getSiteUrl('/why-atomra')}
       />
 
       <div className="luxury-page-bg luxury-floating-elements min-h-screen">
         <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
           <div className="absolute top-32 left-16 w-1 h-1 bg-slate-300/20 rounded-full animate-luxury-float"></div>
-          <div className="absolute top-48 right-24 w-0.5 h-0.5 bg-slate-200/30 rounded-full animate-luxury-float" style={{ animationDelay: '2s' }}></div>
-          <div className="absolute bottom-32 left-1/4 w-0.5 h-0.5 bg-slate-300/25 rounded-full animate-luxury-float" style={{ animationDelay: '4s' }}></div>
-          <div className="absolute bottom-48 right-1/4 w-1 h-1 bg-slate-200/20 rounded-full animate-luxury-float" style={{ animationDelay: '1s' }}></div>
+          <div
+            className="absolute top-48 right-24 w-0.5 h-0.5 bg-slate-200/30 rounded-full animate-luxury-float"
+            style={{ animationDelay: '2s' }}
+          ></div>
+          <div
+            className="absolute bottom-32 left-1/4 w-0.5 h-0.5 bg-slate-300/25 rounded-full animate-luxury-float"
+            style={{ animationDelay: '4s' }}
+          ></div>
+          <div
+            className="absolute bottom-48 right-1/4 w-1 h-1 bg-slate-200/20 rounded-full animate-luxury-float"
+            style={{ animationDelay: '1s' }}
+          ></div>
         </div>
 
         <div className="pt-32 sm:pt-36 md:pt-40 lg:pt-44 relative z-10">

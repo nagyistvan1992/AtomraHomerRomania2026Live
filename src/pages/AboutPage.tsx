@@ -23,7 +23,7 @@ const AboutPage = () => {
       storyParagraphs: [
         'Atomra Home Romania a apărut din dorința de a transforma gestul simplu de a aprinde o lumânare într-o experiență mai elegantă, mai sigură și mai sustenabilă.',
         'Ne-a inspirat ideea unui produs care păstrează farmecul decorului cu lumânări, dar reduce risipa produsă de recipientele aruncate și de ceara folosită o singură dată.',
-        'Astfel am construit o colecție bazată pe ceară perlata reîncărcabilă, recipiente reutilizabile și o estetică atent aleasă pentru case, evenimente și ritualuri de zi cu zi.'
+        'Astfel am construit o colecție bazată pe ceară perlată reîncărcabilă, recipiente reutilizabile și o estetică atent aleasă pentru case, evenimente și ritualuri de zi cu zi.',
       ],
       missionTitle: 'Misiunea noastră',
       missionDescription:
@@ -33,30 +33,30 @@ const AboutPage = () => {
         {
           title: 'Sustenabilitate',
           description: 'Construim produse gândite pentru reutilizare și pentru un impact mai mic asupra mediului.',
-          icon: <Globe size={32} strokeWidth={1.5} className="text-green-600" />
+          icon: <Globe size={32} strokeWidth={1.5} className="text-green-600" />,
         },
         {
           title: 'Calitate',
           description: 'Alegem materiale și detalii care oferă o experiență premium, de la aprindere până la prezentare.',
-          icon: <Award size={32} strokeWidth={1.5} className="text-amber-600" />
+          icon: <Award size={32} strokeWidth={1.5} className="text-amber-600" />,
         },
         {
           title: 'Rafinament',
           description: 'Punem accent pe un design curat și elegant, potrivit atât pentru acasă, cât și pentru evenimente speciale.',
-          icon: <Sparkles size={32} strokeWidth={1.5} className="text-slate-700" />
+          icon: <Sparkles size={32} strokeWidth={1.5} className="text-slate-700" />,
         },
         {
           title: 'Grijă pentru oameni',
           description: 'Ne dorim ca fiecare comandă să aducă bucurie, liniște și o experiență frumoasă de la început până la final.',
-          icon: <Heart size={32} strokeWidth={1.5} className="text-rose-600" />
-        }
+          icon: <Heart size={32} strokeWidth={1.5} className="text-rose-600" />,
+        },
       ],
       teamTitle: 'O echipă mică, atentă la detalii',
       teamDescription:
         'În spatele Atomra este o echipă care combină pasiunea pentru design, produse curate și experiențe memorabile. Lucrăm atent la selecția produselor, la prezentare și la fiecare detaliu care ajunge la client.',
       futureTitle: 'Încotro mergem',
       futureDescription:
-        'Continuăm să extindem colecția, să rafinăm experiența de cumpărare și să dezvoltăm colaborări pentru decor de interior, cadouri și evenimente. Ne dorim ca Atomra să rămână un brand cald, elegant și ușor de recunoscut.'
+        'Continuăm să extindem colecția, să rafinăm experiența de cumpărare și să dezvoltăm colaborări pentru decor de interior, cadouri și evenimente. Ne dorim ca Atomra să rămână un brand cald, elegant și ușor de recunoscut.',
     },
     hu: {
       title: 'Rólunk',
@@ -68,7 +68,7 @@ const AboutPage = () => {
       storyParagraphs: [
         'Az Atomra Home Romania abból a vágyból született, hogy a gyertyagyújtás hétköznapi pillanatát elegánsabbá, biztonságosabbá és fenntarthatóbbá tegyük.',
         'Olyan terméket szerettünk volna létrehozni, amely megőrzi a gyertyafény hangulatát, miközben csökkenti az egyszer használatos viasz és a kidobott tartók okozta pazarlást.',
-        'Így született meg az újratölthető gyöngyviasz, az újrahasználható tartók és a tudatosan megtervezett vizuális világ kombinációja.'
+        'Így született meg az újratölthető gyöngyviasz, az újrahasználható tartók és a tudatosan megtervezett vizuális világ kombinációja.',
       ],
       missionTitle: 'Küldetésünk',
       missionDescription:
@@ -78,30 +78,30 @@ const AboutPage = () => {
         {
           title: 'Fenntarthatóság',
           description: 'Olyan termékeket építünk, amelyek az újrahasználatra és a kisebb környezeti terhelésre készülnek.',
-          icon: <Globe size={32} strokeWidth={1.5} className="text-green-600" />
+          icon: <Globe size={32} strokeWidth={1.5} className="text-green-600" />,
         },
         {
           title: 'Minőség',
           description: 'Anyagokat és részleteket úgy választunk, hogy a teljes élmény prémium legyen.',
-          icon: <Award size={32} strokeWidth={1.5} className="text-amber-600" />
+          icon: <Award size={32} strokeWidth={1.5} className="text-amber-600" />,
         },
         {
           title: 'Elegancia',
           description: 'A letisztult, finom megjelenést otthonra és különleges alkalmakra is fontosnak tartjuk.',
-          icon: <Sparkles size={32} strokeWidth={1.5} className="text-slate-700" />
+          icon: <Sparkles size={32} strokeWidth={1.5} className="text-slate-700" />,
         },
         {
           title: 'Törődés',
           description: 'Azt szeretnénk, hogy minden rendelés nyugodt, örömteli és igényes élmény legyen.',
-          icon: <Heart size={32} strokeWidth={1.5} className="text-rose-600" />
-        }
+          icon: <Heart size={32} strokeWidth={1.5} className="text-rose-600" />,
+        },
       ],
       teamTitle: 'Kis csapat, nagy figyelem',
       teamDescription:
         'Az Atomra mögött egy olyan csapat áll, amely a design, a tiszta termékek és az emlékezetes élmények iránt elkötelezett. Minden részletre figyelünk, a kínálattól a csomagolásig.',
       futureTitle: 'Merre tartunk',
       futureDescription:
-        'Tovább bővítjük a kollekciót, finomítjuk a vásárlási élményt, és új együttműködéseket építünk enteriőr, ajándék és esemény dekor területen is.'
+        'Tovább bővítjük a kollekciót, finomítjuk a vásárlási élményt, és új együttműködéseket építünk enteriőr, ajándék és eseménydekor területen is.',
     },
     en: {
       title: 'About us',
@@ -113,7 +113,7 @@ const AboutPage = () => {
       storyParagraphs: [
         'Atomra Home Romania began with the idea that lighting a candle should feel elegant, safe and sustainable at the same time.',
         'We wanted to preserve the beauty of candlelight while reducing the waste created by single-use wax and discarded containers.',
-        'That vision led us to a curated collection built around refillable pearl wax, reusable vessels and a visual identity designed for homes, gifting and events.'
+        'That vision led us to a curated collection built around refillable pearl wax, reusable vessels and a visual identity designed for homes, gifting and events.',
       ],
       missionTitle: 'Our mission',
       missionDescription:
@@ -123,31 +123,31 @@ const AboutPage = () => {
         {
           title: 'Sustainability',
           description: 'We build products designed for reuse and for a lighter environmental footprint.',
-          icon: <Globe size={32} strokeWidth={1.5} className="text-green-600" />
+          icon: <Globe size={32} strokeWidth={1.5} className="text-green-600" />,
         },
         {
           title: 'Quality',
           description: 'We choose materials and details that make the experience feel premium from first light to final presentation.',
-          icon: <Award size={32} strokeWidth={1.5} className="text-amber-600" />
+          icon: <Award size={32} strokeWidth={1.5} className="text-amber-600" />,
         },
         {
           title: 'Refinement',
           description: 'We care about a clean and elegant aesthetic that fits both everyday living and special occasions.',
-          icon: <Sparkles size={32} strokeWidth={1.5} className="text-slate-700" />
+          icon: <Sparkles size={32} strokeWidth={1.5} className="text-slate-700" />,
         },
         {
           title: 'Care',
           description: 'We want every order to feel thoughtful, calm and beautifully put together.',
-          icon: <Heart size={32} strokeWidth={1.5} className="text-rose-600" />
-        }
+          icon: <Heart size={32} strokeWidth={1.5} className="text-rose-600" />,
+        },
       ],
       teamTitle: 'A small team with high standards',
       teamDescription:
         'Behind Atomra is a team that cares deeply about design, clean products and memorable experiences. We work carefully on product selection, presentation and every detail that reaches the customer.',
       futureTitle: 'Where we are going',
       futureDescription:
-        'We are continuing to expand the collection, refine the shopping experience and develop new collaborations for interiors, gifting and event styling.'
-    }
+        'We are continuing to expand the collection, refine the shopping experience and develop new collaborations for interiors, gifting and event styling.',
+    },
   }[language === 'hu' ? 'hu' : language === 'en' ? 'en' : 'ro'];
 
   return (
@@ -155,16 +155,25 @@ const AboutPage = () => {
       <SEOHead
         title={content.seoTitle}
         description={content.seoDescription}
-        keywords="despre atomra, about atomra, rólunk, lumânări sustenabile, refillable candles, ceară perlata"
+        keywords="despre atomra, about atomra, rólunk, lumânări sustenabile, refillable candles, ceară perlată"
         url={getSiteUrl('/about')}
       />
 
       <div className="luxury-page-bg luxury-floating-elements min-h-screen">
         <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
           <div className="absolute top-32 left-16 w-1 h-1 bg-slate-300/20 rounded-full animate-luxury-float"></div>
-          <div className="absolute top-48 right-24 w-0.5 h-0.5 bg-slate-200/30 rounded-full animate-luxury-float" style={{ animationDelay: '2s' }}></div>
-          <div className="absolute bottom-32 left-1/4 w-0.5 h-0.5 bg-slate-300/25 rounded-full animate-luxury-float" style={{ animationDelay: '4s' }}></div>
-          <div className="absolute bottom-48 right-1/4 w-1 h-1 bg-slate-200/20 rounded-full animate-luxury-float" style={{ animationDelay: '1s' }}></div>
+          <div
+            className="absolute top-48 right-24 w-0.5 h-0.5 bg-slate-200/30 rounded-full animate-luxury-float"
+            style={{ animationDelay: '2s' }}
+          ></div>
+          <div
+            className="absolute bottom-32 left-1/4 w-0.5 h-0.5 bg-slate-300/25 rounded-full animate-luxury-float"
+            style={{ animationDelay: '4s' }}
+          ></div>
+          <div
+            className="absolute bottom-48 right-1/4 w-1 h-1 bg-slate-200/20 rounded-full animate-luxury-float"
+            style={{ animationDelay: '1s' }}
+          ></div>
         </div>
 
         <div className="pt-32 sm:pt-36 md:pt-40 lg:pt-44 relative z-10">

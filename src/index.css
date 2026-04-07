@@ -25,14 +25,35 @@
   
   /* Apply consistent typography */
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: 'Inter', 'Segoe UI', 'Noto Sans', system-ui, sans-serif;
     letter-spacing: -0.01em;
     line-height: 1.2;
   }
   
   p, a, button, input, textarea, select, li, span {
-    font-family: 'Inter', system-ui, sans-serif;
-    letter-spacing: -0.01em;
+    font-family: 'Inter', 'Segoe UI', 'Noto Sans', system-ui, sans-serif;
+    letter-spacing: 0;
+  }
+
+  html[lang='ro'] body,
+  html[lang='ro'] h1,
+  html[lang='ro'] h2,
+  html[lang='ro'] h3,
+  html[lang='ro'] h4,
+  html[lang='ro'] h5,
+  html[lang='ro'] h6,
+  html[lang='ro'] p,
+  html[lang='ro'] a,
+  html[lang='ro'] button,
+  html[lang='ro'] input,
+  html[lang='ro'] textarea,
+  html[lang='ro'] select,
+  html[lang='ro'] li,
+  html[lang='ro'] span {
+    font-family: 'Noto Sans', 'Segoe UI', 'Inter', system-ui, sans-serif !important;
+    font-synthesis: none;
+    font-kerning: normal;
+    font-variant-ligatures: none;
   }
   
   /* Luxury page container base */

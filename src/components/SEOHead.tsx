@@ -15,42 +15,42 @@ interface SEOHeadProps {
   preloadImages?: string[];
 }
 
-const DEFAULT_TITLE = 'Atomra Home Romania | LumÃ¢nÄƒri din CearÄƒ NaturalÄƒ ReÃ®ncÄƒrcabile';
-const DEFAULT_DESCRIPTION = 'DescoperÄƒ lumÃ¢nÄƒrile reÃ®ncÄƒrcabile din cearÄƒ naturalÄƒ Atomra. LumÃ¢nÄƒri personalizate, ecologice È™i sustenabile din cearÄƒ de soia. Umple. Aprinde. ReÃ®mprospÄƒteazÄƒ.';
-const DEFAULT_KEYWORDS = 'lumanare ceara naturala, ceara de soia, lumanari ceara naturala, lumanare personalizata, lumanari din ceara naturala, lumÃ¢nÄƒri reÃ®ncÄƒrcabile, lumÃ¢nÄƒri sustenabile, RomÃ¢nia';
+const DEFAULT_TITLE = 'Atomra Home Romania | Lumânări din Ceară Naturală Reîncărcabile';
+const DEFAULT_DESCRIPTION =
+  'Descoperă lumânările reîncărcabile din ceară naturală Atomra. Lumânări personalizate, ecologice și sustenabile din ceară de soia. Umple. Aprinde. Reîmprospătează.';
+const DEFAULT_KEYWORDS =
+  'lumanare ceara naturala, ceara de soia, lumanari ceara naturala, lumanare personalizata, lumanari din ceara naturala, lumânări reîncărcabile, lumânări sustenabile, România';
 const HEAD_MARKER = 'data-atomra-seo';
 
-const buildDefaultStructuredData = (description: string, url: string, image: string) => JSON.stringify({
-  '@context': 'https://schema.org',
-  '@type': 'Organization',
-  name: SITE_NAME,
-  description,
-  url,
-  logo: `${SITE_URL}/AtomraICON%20WHITE%20TRANSP.png`,
-  image,
-  address: {
-    '@type': 'PostalAddress',
-    addressCountry: 'RO'
-  },
-  sameAs: [
-    'https://instagram.com/atomra-home-romania',
-    'https://tiktok.com/@atomra-home-romania'
-  ],
-  hasOfferCatalog: {
-    '@type': 'OfferCatalog',
-    name: 'LumÃ¢nÄƒri ReÃ®ncÄƒrcabile',
-    itemListElement: [
-      {
-        '@type': 'Offer',
-        itemOffered: {
-          '@type': 'Product',
-          name: 'LumÃ¢nÄƒri Perlate ReÃ®ncÄƒrcabile',
-          description: 'LumÃ¢nÄƒri ecologice reÃ®ncÄƒrcabile din cearÄƒ naturalÄƒ de soia'
-        }
-      }
-    ]
-  }
-});
+const buildDefaultStructuredData = (description: string, url: string, image: string) =>
+  JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: SITE_NAME,
+    description,
+    url,
+    logo: `${SITE_URL}/AtomraICON%20WHITE%20TRANSP.png`,
+    image,
+    address: {
+      '@type': 'PostalAddress',
+      addressCountry: 'RO',
+    },
+    sameAs: ['https://instagram.com/atomra-home-romania', 'https://tiktok.com/@atomra-home-romania'],
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      name: 'Lumânări Reîncărcabile',
+      itemListElement: [
+        {
+          '@type': 'Offer',
+          itemOffered: {
+            '@type': 'Product',
+            name: 'Lumânări Perlate Reîncărcabile',
+            description: 'Lumânări ecologice reîncărcabile din ceară naturală de soia',
+          },
+        },
+      ],
+    },
+  });
 
 const SEOHead: React.FC<SEOHeadProps> = ({
   title = DEFAULT_TITLE,
@@ -62,7 +62,7 @@ const SEOHead: React.FC<SEOHeadProps> = ({
   structuredData,
   canonical,
   noindex = false,
-  preloadImages = []
+  preloadImages = [],
 }) => {
   const resolvedImage = getAbsoluteAssetUrl(image);
   const resolvedCanonical = canonical || url;
@@ -102,7 +102,11 @@ const SEOHead: React.FC<SEOHeadProps> = ({
     addMeta('name', 'description', description);
     addMeta('name', 'keywords', keywords);
     addMeta('name', 'author', SITE_NAME);
-    addMeta('name', 'robots', noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1');
+    addMeta(
+      'name',
+      'robots',
+      noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'
+    );
     addMeta('name', 'viewport', 'width=device-width, initial-scale=1.0, viewport-fit=cover');
     addMeta('http-equiv', 'x-dns-prefetch-control', 'on');
     addMeta('http-equiv', 'content-language', 'ro');

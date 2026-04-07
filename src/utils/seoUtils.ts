@@ -19,7 +19,7 @@ export const generateStructuredData = (type: string, data: StructuredData) => {
   const baseData = {
     '@context': 'https://schema.org',
     '@type': type,
-    ...data
+    ...data,
   };
 
   return JSON.stringify(baseData);
@@ -32,7 +32,7 @@ export const generateProductStructuredData = (product: ProductSeoData) => {
     image: product.images,
     brand: {
       '@type': 'Brand',
-      name: SITE_NAME
+      name: SITE_NAME,
     },
     offers: {
       '@type': 'Offer',
@@ -41,15 +41,16 @@ export const generateProductStructuredData = (product: ProductSeoData) => {
       availability: product.in_stock ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
       seller: {
         '@type': 'Organization',
-        name: SITE_NAME
-      }
+        name: SITE_NAME,
+      },
     },
     aggregateRating: {
       '@type': 'AggregateRating',
       ratingValue: product.rating,
-      reviewCount: product.reviews
+      reviewCount: product.reviews,
     },
-    keywords: 'lumanare ceara naturala, ceara de soia, lumanari ceara naturala, lumanare personalizata, lumanari din ceara naturala'
+    keywords:
+      'lumanare ceara naturala, ceara de soia, lumanari ceara naturala, lumanare personalizata, lumanari din ceara naturala',
   });
 };
 
@@ -59,8 +60,8 @@ export const generateBreadcrumbStructuredData = (breadcrumbs: Array<{ name: stri
       '@type': 'ListItem',
       position: index + 1,
       name: crumb.name,
-      item: crumb.url
-    }))
+      item: crumb.url,
+    })),
   });
 };
 
@@ -74,23 +75,21 @@ export const generateOrganizationStructuredData = () => {
       '@type': 'ContactPoint',
       telephone: '+40-123-456-789',
       contactType: 'customer service',
-      availableLanguage: ['Romanian', 'Hungarian', 'English']
+      availableLanguage: ['Romanian', 'Hungarian', 'English'],
     },
     address: {
       '@type': 'PostalAddress',
-      addressCountry: 'RO'
+      addressCountry: 'RO',
     },
-    sameAs: [
-      'https://instagram.com/atomra-home-romania',
-      'https://tiktok.com/@atomra-home-romania'
-    ]
+    sameAs: ['https://instagram.com/atomra-home-romania', 'https://tiktok.com/@atomra-home-romania'],
   });
 };
 
 export const preloadCriticalResources = () => {
   const fontLink = document.createElement('link');
   fontLink.rel = 'preload';
-  fontLink.href = 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap';
+  fontLink.href =
+    'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Sans:wght@300;400;500;600&display=swap';
   fontLink.as = 'style';
   fontLink.crossOrigin = 'anonymous';
   document.head.appendChild(fontLink);
@@ -121,7 +120,7 @@ export const addCriticalCSS = () => {
   const criticalCSS = `
     body {
       margin: 0;
-      font-family: Inter, system-ui, -apple-system, sans-serif;
+      font-family: "Noto Sans", Inter, system-ui, -apple-system, sans-serif;
       line-height: 1.6;
       color: #1e293b;
     }
