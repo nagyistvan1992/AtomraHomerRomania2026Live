@@ -1,5 +1,5 @@
 ﻿import React, { useEffect, useRef, useState } from 'react';
-import { Star, ArrowLeft, ShoppingBag, Filter, Grid, List, AlertCircle, RefreshCw, X } from 'lucide-react';
+import { Star, ArrowLeft, ShoppingBag, Filter, ArrowDownUp, AlertCircle, RefreshCw, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import SEOHead from '../components/SEOHead';
@@ -17,7 +17,7 @@ const AllProductsPage = () => {
   const [categories, setCategories] = useState<{id: string; name: string}[]>([]);
   const [selectedCategory, setSelectedCategory] = useState('all'); 
   const [sortBy, setSortBy] = useState('name'); 
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid'); 
+  const viewMode = 'grid' as const;
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -164,7 +164,7 @@ const AllProductsPage = () => {
 
   if (loading) {
     return (
-      <div className="luxury-page-bg luxury-floating-elements min-h-screen pt-32 sm:pt-36 md:pt-40 lg:pt-44">
+      <div className="luxury-page-bg luxury-floating-elements min-h-screen pt-24 sm:pt-36 md:pt-40 lg:pt-44">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col items-center justify-center h-64">
             <div className="w-20 h-20 relative">
@@ -180,7 +180,7 @@ const AllProductsPage = () => {
 
   if (error) {
     return (
-      <div className="luxury-page-bg luxury-floating-elements min-h-screen pt-32 sm:pt-36 md:pt-40 lg:pt-44">
+      <div className="luxury-page-bg luxury-floating-elements min-h-screen pt-24 sm:pt-36 md:pt-40 lg:pt-44">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col items-center justify-center py-20">
             <div className="w-20 h-20 flex items-center justify-center rounded-full bg-red-50 mb-6">
@@ -218,13 +218,13 @@ const AllProductsPage = () => {
           <div className="absolute bottom-48 right-1/4 w-1 h-1 bg-slate-200/20 rounded-full animate-luxury-float" style={{ animationDelay: '1s' }}></div>
         </div>
         
-        <div className="pt-32 sm:pt-36 md:pt-40 lg:pt-44 relative z-10">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 py-6">
+        <div className="pt-24 sm:pt-36 md:pt-40 lg:pt-44 relative z-10">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 py-4 sm:py-6">
             {/* Header with Back Link */}
-            <div className="mb-8">
+            <div className="mb-4 sm:mb-8">
               <Link 
                 to="/" 
-                className="flex items-center space-x-2 text-slate-600 hover:text-slate-900 transition-colors duration-200 group mb-6"
+                className="flex items-center space-x-2 text-slate-600 hover:text-slate-900 transition-colors duration-200 group mb-3 sm:mb-6 text-sm sm:text-base"
               >
                 <ArrowLeft size={18} strokeWidth={1.5} className="group-hover:-translate-x-1 transition-transform duration-200" />
                 <span className="font-light">Înapoi la pagina principală</span>
@@ -234,22 +234,22 @@ const AllProductsPage = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                className="text-center mb-12"
+                className="text-center mb-5 sm:mb-12"
               >
-                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extralight text-slate-900 mb-4 tracking-tight">
+                <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extralight text-slate-900 mb-2 sm:mb-4 tracking-tight">
                   Toate Produsele
                 </h1>
-                <div className="w-16 h-px bg-slate-300 mx-auto mb-4"></div>
-                <p className="text-lg text-slate-600 max-w-2xl mx-auto font-light leading-relaxed">
+                <div className="w-12 sm:w-16 h-px bg-slate-300 mx-auto mb-2 sm:mb-4"></div>
+                <p className="text-sm sm:text-lg text-slate-600 max-w-2xl mx-auto font-light leading-relaxed">
                   Descoperă întreaga noastră colecție de lumânări din ceară naturală și accesorii premium
                 </p>
               </motion.div>
             </div>
 
             {/* Filters and Controls */}
-            <div className="bg-white rounded-lg shadow-sm p-6 mb-8 border border-slate-100">
-              <div className="flex flex-col sm:flex-row justify-between gap-4">
-                <div className="flex flex-col sm:flex-row gap-4 flex-1 md:flex-initial md:w-2/3">
+            <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6 mb-6 sm:mb-8 border border-slate-100">
+              <div className="flex flex-col sm:flex-row justify-between gap-3 sm:gap-4">
+                <div className="hidden sm:flex sm:flex-row gap-4 flex-1 md:flex-initial md:w-2/3">
                   {/* Category Filter */}
                   <div className="relative flex-1 sm:max-w-xs">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -270,7 +270,52 @@ const AllProductsPage = () => {
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between sm:justify-end gap-4">
+                <div className="flex sm:hidden items-center gap-3">
+                  <div className="relative h-11 w-11 shrink-0 rounded-md border border-slate-200 bg-white shadow-sm">
+                    <div className="pointer-events-none absolute inset-0 flex items-center justify-center text-slate-600">
+                      <Filter size={18} strokeWidth={1.5} />
+                    </div>
+                    <label htmlFor="mobile-category-filter" className="sr-only">Filtrează după categorie</label>
+                    <select
+                      id="mobile-category-filter"
+                      value={selectedCategory}
+                      onChange={(e) => setSelectedCategory(e.target.value)}
+                      className="absolute inset-0 h-full w-full cursor-pointer appearance-none rounded-md opacity-0"
+                    >
+                      <option value="all">Toate Categoriile</option>
+                      {categories.map(category => (
+                        <option key={category.id} value={category.name}>
+                          {category.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="relative h-11 w-11 shrink-0 rounded-md border border-slate-200 bg-white shadow-sm">
+                    <div className="pointer-events-none absolute inset-0 flex items-center justify-center text-slate-600">
+                      <ArrowDownUp size={18} strokeWidth={1.5} />
+                    </div>
+                    <label htmlFor="mobile-sort-filter" className="sr-only">Sortează produsele</label>
+                    <select
+                      id="mobile-sort-filter"
+                      value={sortBy}
+                      onChange={(e) => setSortBy(e.target.value)}
+                      className="absolute inset-0 h-full w-full cursor-pointer appearance-none rounded-md opacity-0"
+                    >
+                      <option value="name">Sortează după: Nume</option>
+                      <option value="price-low">Preț: De la mic la mare</option>
+                      <option value="price-high">Preț: De la mare la mic</option>
+                      <option value="rating">Rating</option>
+                      <option value="newest">Cele mai noi</option>
+                    </select>
+                  </div>
+
+                  <div className="ml-auto text-xs text-slate-500 font-light">
+                    {filteredProducts.length} {filteredProducts.length === 1 ? 'produs' : 'produse'}
+                  </div>
+                </div>
+
+                <div className="hidden sm:flex items-center justify-between sm:justify-end gap-4">
                   {/* Sort Dropdown */}
                   <div className="flex-1 sm:flex-initial">
                     <select
@@ -285,28 +330,10 @@ const AllProductsPage = () => {
                       <option value="newest">Cele mai noi</option>
                     </select>
                   </div>
-                  
-                  {/* View Toggle */}
-                  <div className="flex space-x-2 border border-slate-200 rounded-md overflow-hidden">
-                    <button
-                      onClick={() => setViewMode('grid')}
-                      className={`p-2.5 ${viewMode === 'grid' ? 'bg-slate-900 text-white' : 'bg-white text-slate-700 hover:bg-slate-50'}`}
-                      aria-label="Grid view"
-                    >
-                      <Grid size={16} />
-                    </button>
-                    <button
-                      onClick={() => setViewMode('list')}
-                      className={`p-2.5 ${viewMode === 'list' ? 'bg-slate-900 text-white' : 'bg-white text-slate-700 hover:bg-slate-50'}`}
-                      aria-label="List view"
-                    >
-                      <List size={16} />
-                    </button>
-                  </div>
                 </div>
               </div>
 
-              <div className="flex flex-wrap gap-2 mt-4">
+              <div className="hidden sm:flex flex-wrap gap-2 mt-4">
                 {selectedCategory !== 'all' && (
                   <div className="inline-flex items-center py-1 px-3 rounded-full text-xs font-light bg-slate-900 text-white">
                     {selectedCategory}
@@ -365,7 +392,7 @@ const AllProductsPage = () => {
                   transition={{ duration: 0.5 }}
                 >
                   {viewMode === 'grid' ? (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6">
                       {filteredProducts.map((product, index) => (
                         <motion.div
                           key={product.id}
