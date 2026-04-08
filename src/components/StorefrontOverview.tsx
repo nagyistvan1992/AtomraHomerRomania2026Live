@@ -1,4 +1,4 @@
-import { ArrowRight, Gift, Home, Sparkles, Star, Wand2 } from 'lucide-react';
+import { ArrowRight, Gift, Home, ShieldCheck, Sparkles, Star, Wand2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 
@@ -7,108 +7,129 @@ const StorefrontOverview = () => {
 
   const content = {
     ro: {
-      eyebrow: 'Ce găsești aici',
-      title: 'Lumânări refillable și decor elegant, explicate simplu din primul ecran.',
+      eyebrow: 'Ce gasesti aici',
+      title: 'Lumanari refillable si decor premium, usor de inteles si usor de comandat.',
       description:
-        'Atomra Home România este un magazin de lumânări refillable cu ceară naturală, perle de ceară și accesorii premium pentru acasă, cadouri și evenimente. Alegi colecția, vezi produsul, apoi comanzi rapid.',
+        'Atomra Home Romania te ajuta sa alegi rapid lumanari elegante pentru acasa, cadouri si evenimente. Intri pe colectia potrivita, vezi produsul si comanzi fara pasi complicati.',
       proofPoints: [
-        'ceară naturală și estetică premium',
-        'produse pentru acasă, cadouri și mese festive',
-        'sistem ușor de reumplut și reutilizat',
+        'ceara naturala si aspect premium',
+        'produse pentru acasa, cadouri si evenimente',
+        'sistem reutilizabil, simplu de reumplut',
       ],
-      primaryCta: 'Vezi toate produsele',
-      secondaryCta: 'Cum funcționează',
+      primaryCta: 'Vezi produsele disponibile acum',
+      secondaryCta: 'Afla cum functioneaza',
+      helperBadge: 'Alegere rapida',
+      helperTitle: 'Cum alegi mai repede',
+      helperPoints: [
+        'Pentru decor de zi cu zi, incepe cu Home Collection.',
+        'Pentru nunta, botez sau mese festive, mergi direct la colectia de evenimente.',
+        'Pentru o comanda rapida, deschide produsul dorit si adauga-l direct in cos.',
+      ],
       sections: [
         {
           icon: Home,
-          title: 'Pentru acasă',
-          description: 'Lumânări și seturi pentru living, dining, dormitor și colțuri cozy.',
+          title: 'Pentru acasa',
+          description: 'Seturi si lumanari pentru living, dining, dormitor si colturi cozy.',
           href: '/home-collection',
-          cta: 'Explorează colecția',
+          cta: 'Vezi colectia pentru acasa',
         },
         {
           icon: Sparkles,
           title: 'Pentru evenimente',
-          description: 'Soluții elegante pentru nunți, mese festive și decor cu impact vizual.',
+          description: 'Decor elegant pentru nunti, mese festive si momente cu impact vizual.',
           href: '/events-collection',
-          cta: 'Vezi opțiunile',
+          cta: 'Vezi decorul pentru evenimente',
         },
         {
           icon: Gift,
-          title: 'Accesorii și completări',
-          description: 'Fitile, piese utile și detalii care fac experiența mai simplă și mai frumoasă.',
+          title: 'Accesorii si completari',
+          description: 'Fitile si detalii utile care completeaza experienta si usureaza reumplerea.',
           href: '/accesorii',
-          cta: 'Descoperă accesoriile',
+          cta: 'Vezi accesoriile disponibile',
         },
       ],
     },
     hu: {
-      eyebrow: 'Mit találsz itt',
-      title: 'Újratölthető gyertyák és elegáns dekor, első pillantásra érthetően.',
+      eyebrow: 'Mit talalsz itt',
+      title: 'Ujratoltheto gyertyak es premium dekor, erthetoen es gyors rendelessel.',
       description:
-        'Az Atomra Home România újratölthető, természetes viaszos gyertyákat, viaszgyöngyöket és prémium kiegészítőket kínál otthonra, ajándékba és eseményekre. Kiválasztod a kollekciót, megnézed a terméket, majd gyorsan rendelsz.',
+        'Az Atomra Home Romania segit gyorsan valasztani elegans gyertyakat otthonra, ajandekba es esemenyekre. Kivalasztod a megfelelo kollekciot, megnezed a termeket, majd egyszeruen rendelsz.',
       proofPoints: [
-        'természetes viasz és prémium megjelenés',
-        'termékek otthonra, ajándékba és ünnepi asztalokhoz',
-        'könnyen újratölthető és újrahasználható rendszer',
+        'termeszetes viasz es premium megjelenes',
+        'termekek otthonra, ajandekba es esemenyekre',
+        'ujratoltheto, ujrahasznalhato rendszer',
       ],
-      primaryCta: 'Összes termék',
-      secondaryCta: 'Hogyan működik',
+      primaryCta: 'Mutasd a most elerheto termekeket',
+      secondaryCta: 'Igy mukodik',
+      helperBadge: 'Gyors indulas',
+      helperTitle: 'Hogyan valassz gyorsabban',
+      helperPoints: [
+        'Mindennapi otthoni hangulathoz kezdd a Home Collectionnel.',
+        'Eskuvohoz vagy unnepi asztalhoz menj egybol az esemeny kollekciora.',
+        'Gyors rendeleshez nyisd meg a megfelelo termeket es tedd kosarba.',
+      ],
       sections: [
         {
           icon: Home,
           title: 'Otthonra',
-          description: 'Gyertyák és szettek nappaliba, étkezőbe, hálóba és hangulatos sarkokba.',
+          description: 'Gyertyak es szettek nappaliba, etkezobe, haloba es meghitt sarkokba.',
           href: '/home-collection',
-          cta: 'Kollekció megnyitása',
+          cta: 'Otthoni kollekcio megnyitasa',
         },
         {
           icon: Sparkles,
-          title: 'Eseményekre',
-          description: 'Elegáns megoldások esküvőkre, ünnepi asztalokra és látványos dekorhoz.',
+          title: 'Esemenyekre',
+          description: 'Elegans dekor eskovokre, unnepi asztalokra es kulonleges alkalmakra.',
           href: '/events-collection',
-          cta: 'Lehetőségek megtekintése',
+          cta: 'Esemeny dekor megtekintese',
         },
         {
           icon: Gift,
-          title: 'Kiegészítők',
-          description: 'Kanócok és hasznos részletek, hogy az élmény egyszerűbb és szebb legyen.',
+          title: 'Kiegeszitok',
+          description: 'Fitilek es hasznos reszletek a teljesebb es egyszerubb elmenyhez.',
           href: '/accesorii',
-          cta: 'Kiegészítők felfedezése',
+          cta: 'Kiegeszitok megtekintese',
         },
       ],
     },
     en: {
       eyebrow: 'What you will find here',
-      title: 'Refillable candles and elegant decor, made clear from the first screen.',
+      title: 'Refillable candles and premium decor, presented clearly and built to convert.',
       description:
-        'Atomra Home Romania is a refillable candle store built around natural wax, wax pearls, and premium accessories for home styling, gifting, and events. Choose a collection, open a product, and order with confidence.',
+        'Atomra Home Romania helps shoppers quickly choose elegant candles for home styling, gifting, and events. Pick the right collection, open a product, and place an order without friction.',
       proofPoints: [
-        'natural wax and premium styling',
-        'products for home, gifting, and event tables',
-        'an easy refillable and reusable system',
+        'natural wax with premium styling',
+        'products for home, gifting, and events',
+        'reusable system that is easy to refill',
       ],
-      primaryCta: 'View all products',
-      secondaryCta: 'How it works',
+      primaryCta: 'Shop what is available now',
+      secondaryCta: 'See how it works',
+      helperBadge: 'Quick start',
+      helperTitle: 'How to choose faster',
+      helperPoints: [
+        'For everyday home styling, begin with the Home Collection.',
+        'For weddings or festive tables, go straight to the Events Collection.',
+        'For the fastest order path, open a product and add it directly to cart.',
+      ],
       sections: [
         {
           icon: Home,
           title: 'For home',
           description: 'Candles and curated sets for living spaces, dining tables, bedrooms, and cozy corners.',
           href: '/home-collection',
-          cta: 'Explore the collection',
+          cta: 'Shop home collection',
         },
         {
           icon: Sparkles,
           title: 'For events',
-          description: 'Elegant options for weddings, festive tables, and statement decor moments.',
+          description: 'Elegant decor options for weddings, festive tables, and statement moments.',
           href: '/events-collection',
-          cta: 'See the options',
+          cta: 'See event decor',
         },
         {
           icon: Gift,
           title: 'Accessories',
-          description: 'Wicks and useful finishing pieces that make the experience smoother and more beautiful.',
+          description: 'Wicks and practical finishing details that make the system easier to use.',
           href: '/accesorii',
           cta: 'Browse accessories',
         },
@@ -159,6 +180,22 @@ const StorefrontOverview = () => {
               >
                 {content.secondaryCta}
               </Link>
+            </div>
+
+            <div className="mt-8 rounded-3xl border border-slate-200 bg-white/90 p-5 shadow-sm ring-1 ring-slate-100">
+              <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-slate-900 px-3 py-1 text-[11px] uppercase tracking-[0.18em] text-white">
+                <ShieldCheck size={14} strokeWidth={1.6} />
+                <span>{content.helperBadge}</span>
+              </div>
+              <h3 className="text-lg font-light text-slate-900">{content.helperTitle}</h3>
+              <div className="mt-4 space-y-3">
+                {content.helperPoints.map((point) => (
+                  <div key={point} className="flex items-start gap-3 text-sm leading-7 text-slate-600">
+                    <span className="mt-2 h-1.5 w-1.5 rounded-full bg-amber-500" />
+                    <span>{point}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 
