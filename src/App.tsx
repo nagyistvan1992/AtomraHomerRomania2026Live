@@ -36,6 +36,7 @@ const SandWaxLandingPage = lazy(() => import('./pages/SandWaxLandingPage'));
 const EventCandlesLandingPage = lazy(() => import('./pages/EventCandlesLandingPage'));
 const NaturalWaxCandlesLandingPage = lazy(() => import('./pages/NaturalWaxCandlesLandingPage'));
 const PremiumCandleGiftsLandingPage = lazy(() => import('./pages/PremiumCandleGiftsLandingPage'));
+const HandmadeCandlesLandingPage = lazy(() => import('./pages/HandmadeCandlesLandingPage'));
 const RefillableGuidePage = lazy(() => import('./pages/RefillableGuidePage'));
 const RefillableVsClassicPage = lazy(() => import('./pages/RefillableVsClassicPage'));
 const SoyVsSandWaxPage = lazy(() => import('./pages/SoyVsSandWaxPage'));
@@ -105,8 +106,18 @@ function App() {
                 <Route path="/lumanari-refillabile" element={<RefillableCandlesLandingPage />} />
                 <Route path="/ceara-de-nisip" element={<SandWaxLandingPage />} />
                 <Route path="/lumanari-pentru-evenimente" element={<EventCandlesLandingPage />} />
+                <Route path="/lumanari-nunta" element={<Navigate to="/lumanari-pentru-evenimente" replace />} />
+                <Route path="/lumanare-nunta" element={<Navigate to="/lumanari-pentru-evenimente" replace />} />
+                <Route path="/lumanari-pentru-nunta" element={<Navigate to="/lumanari-pentru-evenimente" replace />} />
                 <Route path="/lumanari-ceara-naturala" element={<NaturalWaxCandlesLandingPage />} />
+                <Route path="/lumanari-naturale" element={<Navigate to="/lumanari-ceara-naturala" replace />} />
+                <Route path="/lumanare-naturala" element={<Navigate to="/lumanari-ceara-naturala" replace />} />
+                <Route path="/lumanari-din-ceara-de-soia" element={<Navigate to="/lumanari-ceara-naturala" replace />} />
                 <Route path="/cadouri-lumanari-premium" element={<PremiumCandleGiftsLandingPage />} />
+                <Route path="/idei-cadouri-personalizate" element={<Navigate to="/cadouri-lumanari-premium" replace />} />
+                <Route path="/cadouri-personalizate" element={<Navigate to="/cadouri-lumanari-premium" replace />} />
+                <Route path="/lumanari-handmade" element={<HandmadeCandlesLandingPage />} />
+                <Route path="/lumanare-handmade" element={<Navigate to="/lumanari-handmade" replace />} />
                 <Route path="/ghid/cum-functioneaza-lumanarile-refillabile" element={<RefillableGuidePage />} />
                 <Route path="/comparatie/lumanari-refillabile-vs-clasice" element={<RefillableVsClassicPage />} />
                 <Route path="/comparatie/ceara-de-soia-vs-ceara-de-nisip" element={<SoyVsSandWaxPage />} />

@@ -3,25 +3,32 @@ import { Link } from 'react-router-dom';
 
 const guides = [
   {
-    title: 'Lumânări din ceară naturală',
+    title: 'Lumanari naturale',
     description:
-      'O pagină orientată spre cei care caută lumânări curate, elegante și potrivite pentru decor interior premium.',
+      'Pentru cautari precum lumanari naturale, lumanare naturala sau lumanari din ceara de soia.',
     href: '/lumanari-ceara-naturala',
     cta: 'Vezi pagina',
   },
   {
-    title: 'Cadouri cu lumânări premium',
+    title: 'Lumanari nunta',
     description:
-      'Idei pentru housewarming, aniversări și cadouri elegante care au prezență vizuală și valoare reală.',
-    href: '/cadouri-lumanari-premium',
-    cta: 'Explorează ideile de cadou',
+      'Pentru cei care cauta decor elegant pentru nunta, botez sau evenimente cu impact vizual clar.',
+    href: '/lumanari-pentru-evenimente',
+    cta: 'Exploreaza colectia',
   },
   {
-    title: 'Cum funcționează lumânările refillabile',
+    title: 'Lumanari handmade',
     description:
-      'Un ghid clar pentru cei care vor să înțeleagă rapid sistemul, beneficiile și modul de folosire.',
-    href: '/ghid/cum-functioneaza-lumanarile-refillabile',
-    cta: 'Citește ghidul',
+      'Pentru intentii in care clientul cauta o lumanare cu aspect artizanal, premium si potrivita pentru cadou.',
+    href: '/lumanari-handmade',
+    cta: 'Descopera optiunile',
+  },
+  {
+    title: 'Cadouri personalizate',
+    description:
+      'Pentru cautari de tip idei cadouri personalizate, cadouri premium si gesturi elegante pentru acasa.',
+    href: '/cadouri-lumanari-premium',
+    cta: 'Vezi ideile',
   },
 ];
 
@@ -31,15 +38,15 @@ const IntentGuides = () => {
       <div className="mx-auto max-w-6xl px-6 sm:px-8 lg:px-12">
         <div className="mb-12 text-center">
           <h2 className="mb-4 text-3xl font-extralight tracking-tight text-slate-900 sm:text-4xl">
-            Ghiduri și pagini utile
+            Ghiduri si pagini utile
           </h2>
           <div className="mx-auto mb-5 h-px w-16 bg-slate-300" />
           <p className="mx-auto max-w-3xl text-lg font-light leading-relaxed text-slate-600">
-            Resurse construite pentru întrebările reale pe care le au clienții înainte să cumpere.
+            Pagini construite pentru intrebarile si cautarile reale pe care le au clientii inainte sa cumpere.
           </p>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-3">
+        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
           {guides.map((guide) => (
             <article key={guide.href} className="luxury-card rounded-lg p-6 sm:p-8">
               <h3 className="mb-3 text-xl font-light text-slate-900">{guide.title}</h3>

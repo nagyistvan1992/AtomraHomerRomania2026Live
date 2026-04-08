@@ -32,16 +32,16 @@ const HomePage = () => {
   const getLocalizedSEO = () => {
     const seoData = {
       ro: {
-        title: 'Atomra Home România | Lumânări din ceară naturală reîncărcabile',
+        title: 'Atomra Home Romania | Lumanari naturale, nunta si cadouri premium',
         description:
-          'Descoperă lumânările reîncărcabile din ceară naturală Atomra. Lumânări personalizate, ecologice și sustenabile din ceară de soia. Umple. Aprinde. Reîmprospătează.',
+          'Descopera lumanari naturale, lumanari nunta, lumanari din ceara de soia, lumanari handmade si idei de cadouri personalizate de la Atomra Home Romania.',
         keywords:
-          'lumanare ceara naturala, ceara de soia, lumanari ceara naturala, lumanare personalizata, lumanari din ceara naturala, lumânări reîncărcabile, lumânări sustenabile, România',
+          'lumanari naturale, lumanare naturala, lumanari nunta, lumanare nunta, lumanari din ceara de soia, lumanari handmade, idei cadouri personalizate, cadouri personalizate, Romania',
       },
       hu: {
-        title: 'Atomra Home România | Újratölthető természetes viaszgyertyák',
+        title: 'Atomra Home Romania | Ujratoltheto termeszetes viaszgyertyak',
         description:
-          'Fedezd fel az Atomra újratölthető természetes viaszgyertyákat. Személyre szabható, környezetbarát és fenntartható gyertyák szójaviaszból. Töltsd. Gyújtsd. Frissítsd.',
+          'Fedezd fel az Atomra ujratoltheto termeszetes viaszgyertyakat. Szemelyre szabott, kornyezetbarat es fenntarthato gyertyak szojaviaszbol.',
         keywords:
           'termeszetes viaszgyertya, szojaviasz, termeszetes viaszgyertyak, szemelyre szabott gyertya, ujratoltheto gyertyak, fenntarthato gyertyak, Romania',
       },
@@ -77,25 +77,25 @@ const HomePage = () => {
       />
 
       <div className="fixed inset-0 pointer-events-none z-0 hidden overflow-hidden md:block">
-        <div className="absolute top-20 left-10 w-1 h-1 bg-slate-300/20 rounded-full animate-luxury-float"></div>
+        <div className="absolute top-20 left-10 w-1 h-1 rounded-full bg-slate-300/20 animate-luxury-float"></div>
         <div
-          className="absolute top-40 right-20 w-0.5 h-0.5 bg-slate-200/30 rounded-full animate-luxury-float"
+          className="absolute top-40 right-20 h-0.5 w-0.5 rounded-full bg-slate-200/30 animate-luxury-float"
           style={{ animationDelay: '2s' }}
         ></div>
         <div
-          className="absolute top-60 left-1/3 w-0.5 h-0.5 bg-slate-300/25 rounded-full animate-luxury-float"
+          className="absolute top-60 left-1/3 h-0.5 w-0.5 rounded-full bg-slate-300/25 animate-luxury-float"
           style={{ animationDelay: '4s' }}
         ></div>
         <div
-          className="absolute bottom-40 right-1/3 w-1 h-1 bg-slate-200/20 rounded-full animate-luxury-float"
+          className="absolute bottom-40 right-1/3 h-1 w-1 rounded-full bg-slate-200/20 animate-luxury-float"
           style={{ animationDelay: '1s' }}
         ></div>
         <div
-          className="absolute bottom-60 left-1/4 w-0.5 h-0.5 bg-slate-300/30 rounded-full animate-luxury-float"
+          className="absolute bottom-60 left-1/4 h-0.5 w-0.5 rounded-full bg-slate-300/30 animate-luxury-float"
           style={{ animationDelay: '3s' }}
         ></div>
         <div
-          className="absolute top-1/2 right-10 w-0.5 h-0.5 bg-slate-200/25 rounded-full animate-luxury-float"
+          className="absolute top-1/2 right-10 h-0.5 w-0.5 rounded-full bg-slate-200/25 animate-luxury-float"
           style={{ animationDelay: '5s' }}
         ></div>
       </div>
@@ -103,14 +103,14 @@ const HomePage = () => {
       <div className="relative z-10">
         <Hero />
         <StorefrontOverview />
-        <DeferredSection className="luxury-section-light">
-          <Suspense fallback={sectionFallback}>
-            <CategoryGallery />
-          </Suspense>
-        </DeferredSection>
         <DeferredSection className="luxury-section-dark">
           <Suspense fallback={sectionFallback}>
             <HowItWorks />
+          </Suspense>
+        </DeferredSection>
+        <DeferredSection className="luxury-section-light">
+          <Suspense fallback={sectionFallback}>
+            <CategoryGallery />
           </Suspense>
         </DeferredSection>
         <DeferredSection className="luxury-section-light">

@@ -6,19 +6,19 @@ import { generateBreadcrumbStructuredData, generateFAQStructuredData } from '../
 
 const faqItems = [
   {
-    question: 'De ce sunt lumânările un cadou premium bun?',
+    question: 'Ce inseamna idei de cadouri personalizate in zona de decor?',
     answer:
-      'Pentru că oferă emoție, atmosferă și utilitate reală. O lumânare bine aleasă nu este doar decor, ci un obiect care schimbă felul în care arată și se simte un spațiu.',
+      'Inseamna idei de cadouri alese mai atent, astfel incat sa se potriveasca stilului persoanei, ocaziei si felului in care produsul va fi folosit in spatiu.',
   },
   {
-    question: 'Pentru ce ocazii sunt potrivite?',
+    question: 'Pentru ce ocazii sunt potrivite aceste cadouri?',
     answer:
-      'Sunt potrivite pentru casă nouă, aniversări, sărbători, cadouri corporate, mulțumiri elegante sau gesturi de apreciere în contexte personale și profesionale.',
+      'Sunt potrivite pentru casa noua, aniversari, sarbatori, gesturi elegante de multumire si chiar cadouri corporate cu nota personala.',
   },
   {
-    question: 'Ce face Atomra diferit ca opțiune de cadou?',
+    question: 'Cum aleg un cadou personalizat fara sa cunosc foarte bine gusturile persoanei?',
     answer:
-      'Aspectul premium, ideea de refill, prezentarea curată și faptul că produsul poate fi păstrat și refolosit îl fac mai memorabil decât o lumânare standard de consum.',
+      'Alege un produs cu aspect premium, utilitate reala si integrare usoara in decor. In astfel de cazuri, o lumanare bine aleasa este una dintre cele mai sigure optiuni.',
   },
 ];
 
@@ -29,15 +29,15 @@ const PremiumCandleGiftsLandingPage = () => {
 
   const structuredData = `[${generateBreadcrumbStructuredData([
     { name: 'Home', url: getSiteUrl('/') },
-    { name: 'Cadouri lumânări premium', url: getSiteUrl('/cadouri-lumanari-premium') },
+    { name: 'Idei de cadouri personalizate', url: getSiteUrl('/cadouri-lumanari-premium') },
   ])},${generateFAQStructuredData(faqItems)}]`;
 
   return (
     <>
       <SEOHead
-        title="Cadouri cu lumânări premium | Atomra Home Romania"
-        description="Idei elegante de cadouri cu lumânări premium pentru casă nouă, aniversări și gesturi rafinate. Descoperă pachetele Atomra pentru un cadou memorabil."
-        keywords="cadouri lumânări premium, cadou elegant lumanare, cadou casa noua, cadouri premium romania, lumanari cadou"
+        title="Idei de cadouri personalizate cu lumanari premium | Atomra Home Romania"
+        description="Descopera idei de cadouri personalizate cu lumanari premium pentru casa noua, aniversari si gesturi elegante. Atomra te ajuta sa alegi un cadou memorabil si usor de oferit."
+        keywords="idei cadouri personalizate, cadouri personalizate, cadou personalizat elegant, lumanari cadou, cadou casa noua"
         url={getSiteUrl('/cadouri-lumanari-premium')}
         structuredData={structuredData}
       />
@@ -45,13 +45,14 @@ const PremiumCandleGiftsLandingPage = () => {
       <div className="luxury-page-bg min-h-screen pt-32 sm:pt-36 md:pt-40">
         <section className="luxury-section-light py-12 sm:py-16">
           <div className="mx-auto max-w-5xl px-6 text-center sm:px-8 lg:px-12">
-            <p className="mb-4 text-sm uppercase tracking-[0.3em] text-slate-500">Cadouri premium</p>
+            <p className="mb-4 text-sm uppercase tracking-[0.3em] text-slate-500">Cadouri personalizate</p>
             <h1 className="mb-6 text-4xl font-extralight tracking-tight text-slate-900 sm:text-5xl">
-              Cadouri cu lumânări premium care arată bine și se păstrează în timp
+              Idei de cadouri personalizate cu lumanari premium si prezenta memorabila
             </h1>
             <p className="mx-auto max-w-3xl text-lg font-light leading-relaxed text-slate-600">
-              Dacă vrei un cadou elegant, lumânările premium sunt o alegere puternică atunci când vrei să transmiți
-              grijă, rafinament și bun gust. Atomra duce această idee mai departe printr-un format refillabil și memorabil.
+              Daca cineva cauta idei de cadouri personalizate, de obicei cauta un obiect cu gust, utilitate si
+              valoare emotionala. Atomra duce aceasta idee mai departe prin lumanari premium care se potrivesc
+              usor cu stilul persoanei care le primeste.
             </p>
           </div>
         </section>
@@ -59,24 +60,24 @@ const PremiumCandleGiftsLandingPage = () => {
         <section className="luxury-section-dark py-12 sm:py-16">
           <div className="mx-auto grid max-w-6xl gap-8 px-6 sm:px-8 lg:grid-cols-3 lg:px-12">
             <article className="luxury-card rounded-lg p-8">
-              <h2 className="mb-4 text-2xl font-light text-slate-900">Cadou pentru casă nouă</h2>
+              <h2 className="mb-4 text-2xl font-light text-slate-900">Cadou pentru casa noua</h2>
               <p className="font-light leading-7 text-slate-600">
-                O alegere ideală când vrei să oferi ceva util, decorativ și elegant. O lumânare premium se
-                integrează ușor în orice spațiu nou și creează imediat atmosferă.
+                O alegere foarte buna cand vrei sa oferi ceva elegant, practic si potrivit pentru un spatiu nou care
+                abia incepe sa capete personalitate.
               </p>
             </article>
             <article className="luxury-card rounded-lg p-8">
-              <h2 className="mb-4 text-2xl font-light text-slate-900">Cadou pentru aniversări</h2>
+              <h2 className="mb-4 text-2xl font-light text-slate-900">Cadou pentru aniversari</h2>
               <p className="font-light leading-7 text-slate-600">
-                Pentru ocazii personale, o prezentare atentă contează mult. Pachetele Atomra sunt potrivite când
-                vrei un cadou cu impact vizual și emoțional, nu doar ceva generic.
+                Pentru momente personale, o lumanare premium functioneaza bine atunci cand vrei un cadou frumos,
+                usor de oferit si usor de pastrat in decor.
               </p>
             </article>
             <article className="luxury-card rounded-lg p-8">
               <h2 className="mb-4 text-2xl font-light text-slate-900">Cadou corporate elegant</h2>
               <p className="font-light leading-7 text-slate-600">
-                Pentru colaboratori, parteneri sau echipe, lumânările premium pot funcționa foarte bine ca gest de
-                apreciere, mai ales dacă vrei un obiect sofisticat și memorabil.
+                Pentru colaboratori, parteneri sau echipe, este o optiune rafinata atunci cand vrei un obiect care
+                transmite atentie si bun gust.
               </p>
             </article>
           </div>
@@ -85,19 +86,18 @@ const PremiumCandleGiftsLandingPage = () => {
         <section className="luxury-section-light py-12 sm:py-16">
           <div className="mx-auto max-w-5xl px-6 sm:px-8 lg:px-12">
             <div className="luxury-card rounded-lg p-8 sm:p-10">
-              <h2 className="mb-6 text-3xl font-extralight text-slate-900">Ce pachet alegi</h2>
+              <h2 className="mb-6 text-3xl font-extralight text-slate-900">Ce alegi mai usor</h2>
               <div className="grid gap-6 md:grid-cols-2">
                 <div>
                   <h3 className="mb-3 text-xl font-light text-slate-900">Essenza</h3>
                   <p className="font-light leading-7 text-slate-600">
-                    O opțiune bună când vrei un cadou elegant, discret și ușor de oferit, fără să pierzi din
-                    impresia premium.
+                    Potrivita cand vrei un cadou elegant, discret si usor de oferit, fara sa pierzi senzatia de produs premium.
                   </p>
                 </div>
                 <div>
                   <h3 className="mb-3 text-xl font-light text-slate-900">Splendore</h3>
                   <p className="font-light leading-7 text-slate-600">
-                    Potrivit când vrei un cadou mai generos, cu prezență mai puternică și un efect vizual mai bogat.
+                    Mai potrivit cand vrei un cadou mai generos, cu prezenta mai puternica si impact vizual mai bogat.
                   </p>
                 </div>
               </div>
@@ -108,9 +108,9 @@ const PremiumCandleGiftsLandingPage = () => {
         <section className="luxury-section-dark py-12 sm:py-16">
           <div className="mx-auto max-w-5xl px-6 sm:px-8 lg:px-12">
             <div className="mb-10 text-center">
-              <h2 className="mb-4 text-3xl font-extralight text-slate-900">Întrebări frecvente</h2>
+              <h2 className="mb-4 text-3xl font-extralight text-slate-900">Intrebari frecvente</h2>
               <p className="mx-auto max-w-3xl font-light leading-7 text-slate-600">
-                Câteva răspunsuri utile dacă alegi lumânările ca idee de cadou premium.
+                Cateva raspunsuri utile daca vrei sa alegi mai bine intre mai multe idei de cadouri personalizate.
               </p>
             </div>
             <div className="space-y-4">
@@ -128,7 +128,7 @@ const PremiumCandleGiftsLandingPage = () => {
           <div className="mx-auto max-w-4xl px-6 text-center sm:px-8 lg:px-12">
             <h2 className="mb-4 text-3xl font-extralight text-slate-900">Vezi pachetele potrivite pentru cadou</h2>
             <p className="mb-8 font-light leading-7 text-slate-600">
-              Dacă vrei să alegi rapid, începe cu pachetele Essenza și Splendore sau răsfoiește toate produsele.
+              Daca vrei sa alegi rapid, incepe cu pachetele Essenza si Splendore sau rasfoieste toate produsele.
             </p>
             <div className="flex flex-col justify-center gap-4 sm:flex-row">
               <Link

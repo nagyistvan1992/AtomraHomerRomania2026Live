@@ -2,6 +2,51 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "redirects": [
     {
+      "source": "/lumanari-naturale",
+      "destination": "/lumanari-ceara-naturala",
+      "permanent": true
+    },
+    {
+      "source": "/lumanare-naturala",
+      "destination": "/lumanari-ceara-naturala",
+      "permanent": true
+    },
+    {
+      "source": "/lumanari-din-ceara-de-soia",
+      "destination": "/lumanari-ceara-naturala",
+      "permanent": true
+    },
+    {
+      "source": "/lumanari-nunta",
+      "destination": "/lumanari-pentru-evenimente",
+      "permanent": true
+    },
+    {
+      "source": "/lumanare-nunta",
+      "destination": "/lumanari-pentru-evenimente",
+      "permanent": true
+    },
+    {
+      "source": "/lumanari-pentru-nunta",
+      "destination": "/lumanari-pentru-evenimente",
+      "permanent": true
+    },
+    {
+      "source": "/idei-cadouri-personalizate",
+      "destination": "/cadouri-lumanari-premium",
+      "permanent": true
+    },
+    {
+      "source": "/cadouri-personalizate",
+      "destination": "/cadouri-lumanari-premium",
+      "permanent": true
+    },
+    {
+      "source": "/lumanare-handmade",
+      "destination": "/lumanari-handmade",
+      "permanent": true
+    },
+    {
       "source": "/product-page/ceara-de-nisip-4-5-kg-60-fitile-lumanare-perlata-idei-decor-eveniment",
       "destination": "/product/ceara-nisip-4-5kg-evenimente",
       "permanent": true
