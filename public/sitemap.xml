@@ -7,88 +7,34 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://atomrahomeromania.ro/toate-produsele</loc>
+    <loc>https://atomrahomeromania.ro/about</loc>
     <lastmod>2026-04-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://atomrahomeromania.ro/home-collection</loc>
-    <lastmod>2026-04-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://atomrahomeromania.ro/events-collection</loc>
-    <lastmod>2026-04-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
+    <changefreq>monthly</changefreq>
+    <priority>0.74</priority>
   </url>
   <url>
     <loc>https://atomrahomeromania.ro/accesorii</loc>
+    <lastmod>2025-06-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://atomrahomeromania.ro/blog</loc>
     <lastmod>2026-04-08</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://atomrahomeromania.ro/coming-soon</loc>
-    <lastmod>2026-04-08</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://atomrahomeromania.ro/why-atomra</loc>
-    <lastmod>2026-04-08</lastmod>
-    <changefreq>monthly</changefreq>
     <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://atomrahomeromania.ro/lumanari-refillabile</loc>
-    <lastmod>2026-04-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://atomrahomeromania.ro/ceara-de-nisip</loc>
-    <lastmod>2026-04-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://atomrahomeromania.ro/lumanari-pentru-evenimente</loc>
-    <lastmod>2026-04-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://atomrahomeromania.ro/lumanari-ceara-naturala</loc>
-    <lastmod>2026-04-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
   </url>
   <url>
     <loc>https://atomrahomeromania.ro/cadouri-lumanari-premium</loc>
     <lastmod>2026-04-08</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.88</priority>
   </url>
   <url>
-    <loc>https://atomrahomeromania.ro/lumanari-handmade</loc>
+    <loc>https://atomrahomeromania.ro/ceara-de-nisip</loc>
     <lastmod>2026-04-08</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://atomrahomeromania.ro/ghid/cum-functioneaza-lumanarile-refillabile</loc>
-    <lastmod>2026-04-08</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://atomrahomeromania.ro/comparatie/lumanari-refillabile-vs-clasice</loc>
-    <lastmod>2026-04-08</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.92</priority>
   </url>
   <url>
     <loc>https://atomrahomeromania.ro/comparatie/ceara-de-soia-vs-ceara-de-nisip</loc>
@@ -103,40 +49,40 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://atomrahomeromania.ro/blog</loc>
+    <loc>https://atomrahomeromania.ro/comparatie/lumanari-refillabile-vs-clasice</loc>
     <lastmod>2026-04-08</lastmod>
-    <changefreq>weekly</changefreq>
+    <changefreq>monthly</changefreq>
     <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://atomrahomeromania.ro/how-much</loc>
-    <lastmod>2026-04-08</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://atomrahomeromania.ro/about</loc>
-    <lastmod>2026-04-08</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://atomrahomeromania.ro/instructions</loc>
-    <lastmod>2026-04-08</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://atomrahomeromania.ro/contact</loc>
     <lastmod>2026-04-08</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.76</priority>
   </url>
   <url>
-    <loc>https://atomrahomeromania.ro/wholesale</loc>
+    <loc>https://atomrahomeromania.ro/events-collection</loc>
+    <lastmod>2025-06-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://atomrahomeromania.ro/ghid/cum-functioneaza-lumanarile-refillabile</loc>
     <lastmod>2026-04-08</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.78</priority>
+  </url>
+  <url>
+    <loc>https://atomrahomeromania.ro/home-collection</loc>
+    <lastmod>2025-06-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://atomrahomeromania.ro/how-much</loc>
+    <lastmod>2026-04-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.68</priority>
   </url>
   <url>
     <loc>https://atomrahomeromania.ro/ideas</loc>
@@ -145,22 +91,40 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://atomrahomeromania.ro/scents</loc>
+    <loc>https://atomrahomeromania.ro/instructions</loc>
     <lastmod>2026-04-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://atomrahomeromania.ro/lumanari-ceara-naturala</loc>
+    <lastmod>2026-04-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://atomrahomeromania.ro/lumanari-handmade</loc>
+    <lastmod>2026-04-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.88</priority>
+  </url>
+  <url>
+    <loc>https://atomrahomeromania.ro/lumanari-pentru-evenimente</loc>
+    <lastmod>2026-04-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.92</priority>
+  </url>
+  <url>
+    <loc>https://atomrahomeromania.ro/lumanari-refillabile</loc>
+    <lastmod>2026-04-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.92</priority>
   </url>
   <url>
     <loc>https://atomrahomeromania.ro/plant-based</loc>
     <lastmod>2026-04-08</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://atomrahomeromania.ro/refillable</loc>
-    <lastmod>2026-04-08</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.68</priority>
   </url>
   <url>
     <loc>https://atomrahomeromania.ro/privacy-policy</loc>
@@ -169,33 +133,81 @@
     <priority>0.3</priority>
   </url>
   <url>
+    <loc>https://atomrahomeromania.ro/product/ceara-nisip-4-5kg-evenimente</loc>
+    <lastmod>2025-06-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.88</priority>
+  </url>
+  <url>
+    <loc>https://atomrahomeromania.ro/product/fitile-mari-20-buc</loc>
+    <lastmod>2026-04-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.76</priority>
+  </url>
+  <url>
+    <loc>https://atomrahomeromania.ro/product/fitile-medii-20-buc</loc>
+    <lastmod>2026-04-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.76</priority>
+  </url>
+  <url>
+    <loc>https://atomrahomeromania.ro/product/fitile-mici-20-buc</loc>
+    <lastmod>2026-04-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.76</priority>
+  </url>
+  <url>
+    <loc>https://atomrahomeromania.ro/product/granule-box-750g</loc>
+    <lastmod>2025-06-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.88</priority>
+  </url>
+  <url>
+    <loc>https://atomrahomeromania.ro/product/pachet-essenza-150g</loc>
+    <lastmod>2025-11-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.88</priority>
+  </url>
+  <url>
+    <loc>https://atomrahomeromania.ro/product/pachet-splendore-250g</loc>
+    <lastmod>2025-11-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.88</priority>
+  </url>
+  <url>
+    <loc>https://atomrahomeromania.ro/refillable</loc>
+    <lastmod>2026-04-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.68</priority>
+  </url>
+  <url>
+    <loc>https://atomrahomeromania.ro/scents</loc>
+    <lastmod>2026-04-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.68</priority>
+  </url>
+  <url>
     <loc>https://atomrahomeromania.ro/terms</loc>
     <lastmod>2026-04-08</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://atomrahomeromania.ro/product/granule-box-750g</loc>
+    <loc>https://atomrahomeromania.ro/toate-produsele</loc>
     <lastmod>2026-04-08</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
+    <priority>0.95</priority>
   </url>
   <url>
-    <loc>https://atomrahomeromania.ro/product/pachet-essenza-150g</loc>
+    <loc>https://atomrahomeromania.ro/wholesale</loc>
     <lastmod>2026-04-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
+    <changefreq>monthly</changefreq>
+    <priority>0.72</priority>
   </url>
   <url>
-    <loc>https://atomrahomeromania.ro/product/pachet-splendore-250g</loc>
+    <loc>https://atomrahomeromania.ro/why-atomra</loc>
     <lastmod>2026-04-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://atomrahomeromania.ro/product/ceara-nisip-4-5kg-evenimente</loc>
-    <lastmod>2026-04-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
+    <changefreq>monthly</changefreq>
+    <priority>0.82</priority>
   </url>
 </urlset>
