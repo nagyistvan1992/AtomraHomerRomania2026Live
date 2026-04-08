@@ -23,7 +23,7 @@ const FOOTER_CONTENT: Record<
   }
 > = {
   ro: {
-    tagline: 'Lumanari refillable din ceara vegetala, gandite pentru decor calm si reutilizare eleganta.',
+    tagline: 'Lumanari reincarcabile din ceara vegetala, gandite pentru decor calm si reutilizare eleganta.',
     quickLinks: 'Linkuri rapide',
     allProducts: 'Toate produsele',
     about: 'Despre noi',

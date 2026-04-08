@@ -15,12 +15,12 @@ const RefillablePage = () => {
 
   const content = {
     ro: {
-      seoTitle: 'Lumanari refillable si reutilizabile | Atomra Home Romania',
+      seoTitle: 'Lumanari reincarcabile si reutilizabile | Atomra Home Romania',
       seoDescription:
-        'Descopera cum functioneaza sistemul Atomra refillable: recipient reutilizat, perle de ceara usor de completat si un decor care ramane mereu proaspat.',
+        'Descopera cum functioneaza sistemul Atomra reincarcabil: recipient reutilizat, perle de ceara usor de completat si un decor care ramane mereu proaspat.',
       seoKeywords:
-        'lumanari refillable, lumanari reutilizabile, ceara perlata, refill decor, Atomra',
-      title: 'Refillable si reutilizabile',
+        'lumanari reincarcabile, lumanari reutilizabile, ceara perlata, refill decor, Atomra',
+      title: 'Reincarcabile si reutilizabile',
       subtitle:
         'Construim un sistem in care recipientul ramane, fitilul se schimba, iar perlele de ceara pot fi completate usor ori de cate ori vrei sa reimprospatezi decorul.',
       intro:
@@ -69,7 +69,7 @@ const RefillablePage = () => {
         'recipiente simple, minimaliste, pentru birou sau baie',
       ],
       closing:
-        'Refillable nu inseamna compromis. Inseamna sa poti pastra partea frumoasa a obiectului si sa reinnoiesti doar ceea ce tine de utilizare.',
+        'Reincarcabil nu inseamna compromis. Inseamna sa poti pastra partea frumoasa a obiectului si sa reinnoiesti doar ceea ce tine de utilizare.',
       primaryCta: 'Vezi toate produsele',
       secondaryCta: 'Inspiratie pentru acasa',
     },

@@ -1,5 +1,5 @@
 ﻿import React, { useEffect, useRef, useState } from 'react';
-import { Star, ArrowLeft, ShoppingCart, Heart, AlertCircle, RefreshCw } from 'lucide-react';
+import { Star, ArrowLeft, ShoppingCart, AlertCircle, RefreshCw } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { getCatalogProductsByCategory } from '../lib/catalog';
@@ -7,7 +7,7 @@ import SEOHead from '../components/SEOHead';
 import LazyImage from '../components/LazyImage'; 
 import AddToCartButton from '../components/AddToCartButton';
 import { motion } from 'framer-motion';
-import { getPlaceholderImage, getPreferredImage, getResolvedImageList } from '../utils/imageSources';
+import { getPlaceholderImage, getPreferredImage } from '../utils/imageSources';
 import { getSiteUrl } from '../utils/siteConfig';
 import { generateBreadcrumbStructuredData } from '../utils/seoUtils';
 import type { CatalogProduct as Product } from '../data/catalog';
@@ -21,7 +21,6 @@ const HomeCollectionPage = () => {
   const [homeProducts, setHomeProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [hoveredProduct, setHoveredProduct] = useState<string | null>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
   useLanguage();
 
@@ -222,41 +221,22 @@ const HomeCollectionPage = () => {
                         opacity: visibleProducts[index] ? 1 : 0,
                         y: visibleProducts[index] ? 0 : 20
                       }}
-                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
                       className="group bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden"
-                      onMouseEnter={() => setHoveredProduct(product.id)}
-                      onMouseLeave={() => setHoveredProduct(null)}
                     >
                       <div className="aspect-square overflow-hidden relative">
                         <Link 
                           to={`/product/${product.slug}`}
                           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                          className="block"
+                          className="block relative h-full w-full overflow-hidden"
                         >
                           <LazyImage
                             src={getPreferredImage(product.images, getPlaceholderImage())}
                             alt={product.name}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                           />
+                          <div className="pointer-events-none absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                         </Link>
-                        {hoveredProduct === product.id && getResolvedImageList(product.images)[1] && (
-                          <Link 
-                            to={`/product/${product.slug}`}
-                            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                            className="block absolute inset-0"
-                          >
-                            <LazyImage
-                              src={getResolvedImageList(product.images)[1]}
-                              alt={product.name}
-                              className="w-full h-full object-cover transition-opacity duration-300"
-                            />
-                          </Link>
-                        )}
-                        <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                          <button className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md hover:shadow-lg transition-shadow duration-200">
-                            <Heart size={16} strokeWidth={1.5} className="text-slate-600" />
-                          </button>
-                        </div>
                       </div>
                       
                       <div className="p-4 flex flex-col h-[calc(100%-100%)]">

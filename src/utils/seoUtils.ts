@@ -71,7 +71,7 @@ export const generateProductStructuredData = (product: ProductSeoData) => {
     .filter(Boolean)
     .join(', ');
 
-  return generateStructuredData('Product', {
+  const structuredProduct: StructuredData = {
     name: product.name,
     description: product.description,
     image: images,
@@ -100,13 +100,18 @@ export const generateProductStructuredData = (product: ProductSeoData) => {
         name: SITE_NAME,
       },
     },
-    aggregateRating: {
+    keywords,
+  };
+
+  if (product.reviews > 0 && product.rating > 0) {
+    structuredProduct.aggregateRating = {
       '@type': 'AggregateRating',
       ratingValue: product.rating,
       reviewCount: product.reviews,
-    },
-    keywords,
-  });
+    };
+  }
+
+  return generateStructuredData('Product', structuredProduct);
 };
 
 export const generateBreadcrumbStructuredData = (breadcrumbs: Array<{ name: string; url: string }>) => {

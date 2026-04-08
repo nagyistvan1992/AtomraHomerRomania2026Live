@@ -36,7 +36,7 @@ const translations: Record<Language, Record<string, string>> = {
     'hero.title1': 'Umple.',
     'hero.title2': 'Aprinde.',
     'hero.title3': 'Reimprospateaza.',
-    'hero.subtitle': 'Cel mai elegant mod de a te bucura de lumanari refillable cu perle de ceara.',
+    'hero.subtitle': 'Cel mai elegant mod de a te bucura de lumanari reincarcabile cu perle de ceara.',
     'hero.cta': 'Exploreaza colectia',
     'hero.scroll': 'Deruleaza',
 
@@ -64,7 +64,7 @@ const translations: Record<Language, Record<string, string>> = {
 
     'whyAtomra.title': 'De ce Atomra',
     'whyAtomra.subtitle': 'O alternativa mai flexibila, mai curata si mai frumoasa pentru ritualul de acasa.',
-    'whyAtomra.refillable.title': 'Refillable',
+    'whyAtomra.refillable.title': 'Reincarcabil',
     'whyAtomra.refillable.description': 'Recipientele pot ramane in decor, iar continutul se reface usor.',
     'whyAtomra.eco.title': 'Mai atent cu mediul',
     'whyAtomra.eco.description': 'Mizand pe reutilizare, reducem risipa si pastram obiectele bune in folosire.',

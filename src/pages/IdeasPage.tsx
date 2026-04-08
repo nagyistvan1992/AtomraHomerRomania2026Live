@@ -46,7 +46,7 @@ const IdeasPage = () => {
     ro: {
       seoTitle: 'Idei si inspiratie | Atomra Home Romania',
       seoDescription:
-        'Descopera idei de styling pentru acasa, cadouri si evenimente folosind sistemul refillable de perle de ceara Atomra.',
+        'Descopera idei de styling pentru acasa, cadouri si evenimente folosind sistemul reincarcabil de perle de ceara Atomra.',
       seoKeywords:
         'idei decor lumanari, inspiratie lumanari, ceara perlata, decor evenimente, Atomra',
       title: 'Idei si inspiratie',

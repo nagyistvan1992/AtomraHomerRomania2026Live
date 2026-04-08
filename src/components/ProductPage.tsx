@@ -5,10 +5,8 @@ import { useCart } from '../context/CartContext';
 import { useLanguage } from '../context/LanguageContext';
 import SEOHead from './SEOHead';
 import LazyImage from './LazyImage';
-import { StripeCheckoutButton } from './StripeCheckoutButton';
 import { generateProductStructuredData, generateBreadcrumbStructuredData } from '../utils/seoUtils';
 import { motion, AnimatePresence } from 'framer-motion';
-import { getProductById } from '../stripe-config';
 import { getSiteUrl } from '../utils/siteConfig';
 import { getPlaceholderImage, getPreferredImage, getResolvedImageList } from '../utils/imageSources';
 import { getCatalogProductBySlug } from '../lib/catalog';
@@ -22,6 +20,43 @@ const normalizeProductData = (product: Product): Product => ({
   image_alt_texts: Array.isArray(product.image_alt_texts) ? product.image_alt_texts.filter(Boolean) : [],
   long_description: typeof product.long_description === 'string' ? product.long_description : ''
 });
+
+const normalizeBulletLine = (line: string) =>
+  line.replace(/^[-•]\s*/, '').replace(/^â€¢\s*/, '').trim();
+
+const isBulletLine = (line: string) =>
+  /^[-•]\s+/.test(line) || /^â€¢\s*/.test(line);
+
+const parseLongDescriptionBlocks = (text: string) =>
+  text
+    .split('\n\n')
+    .map((block) => block.trim())
+    .filter(Boolean)
+    .map((block) => {
+      const lines = block
+        .split('\n')
+        .map((line) => line.trim())
+        .filter(Boolean);
+
+      if (lines.length > 0 && lines.every(isBulletLine)) {
+        return {
+          type: 'list' as const,
+          items: lines.map(normalizeBulletLine),
+        };
+      }
+
+      if (lines.length === 1 && lines[0].endsWith(':')) {
+        return {
+          type: 'heading' as const,
+          text: lines[0].slice(0, -1),
+        };
+      }
+
+      return {
+        type: 'paragraph' as const,
+        text: lines.join(' '),
+      };
+    });
 
 const ProductPage = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -123,9 +158,6 @@ const ProductPage = () => {
         return '/';
     }
   };
-
-  // Find matching Stripe product
-  const stripeProduct = product ? getProductById(product.slug) : null;
 
   // Custom SVG Icons for Quality Features
   const QualityIcons = {
@@ -328,6 +360,7 @@ const ProductPage = () => {
     currency: 'RON',
     tags: product.tags,
   })}, ${breadcrumbStructuredData}]`;
+  const longDescriptionBlocks = parseLongDescriptionBlocks(product.long_description);
 
   return (
     <>
@@ -427,13 +460,13 @@ const ProductPage = () => {
           </div>
 
           {/* Product Content */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+          <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:gap-10 xl:gap-12">
             {/* Product Images */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="transition-all duration-700"
+              className="self-start transition-all duration-700 lg:sticky lg:top-24 xl:top-28 2xl:top-32"
               ref={galleryRef}
             >
               {/* Main Image */}
@@ -531,7 +564,7 @@ const ProductPage = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
-              className="transition-all duration-700"
+              className="min-w-0 transition-all duration-700"
             >
               {/* Product Title and Price */}
               <div className="mb-6">
@@ -621,61 +654,80 @@ const ProductPage = () => {
                   </div>
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-4">
-                  {/* Regular Add to Cart Button */}
+                <div className="flex flex-col gap-4">
                   <motion.button
                     onClick={handleAddToCart}
                     disabled={!product.in_stock}
                     whileTap={{ scale: 0.97 }}
-                    className="flex-1 bg-gray-900 text-white py-3 px-4 sm:py-4 sm:px-8 font-light tracking-wide uppercase hover:bg-gray-800 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2 rounded"
+                    className="group relative w-full overflow-hidden rounded-2xl bg-gradient-to-r from-slate-950 via-slate-900 to-slate-800 px-5 py-4 sm:px-6 sm:py-5 text-white shadow-[0_18px_40px_-20px_rgba(15,23,42,0.75)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_24px_48px_-20px_rgba(15,23,42,0.85)] disabled:cursor-not-allowed disabled:opacity-50"
                     type="button"
                   >
-                    <AnimatePresence mode="wait">
-                      {isAdded ? (
-                        <motion.div
-                          key="success"
-                          initial={{ opacity: 0, scale: 0.5 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          exit={{ opacity: 0, scale: 0.5 }}
-                          transition={{ duration: 0.2 }}
-                          className="flex items-center space-x-2"
-                        >
-                          <Check size={18} strokeWidth={1.5} className="text-green-400" />
-                          <span>{language === 'ro' ? 'Adăugat în coș' : language === 'hu' ? 'Kosárba téve' : 'Added to Cart'}</span>
-                        </motion.div>
-                      ) : (
-                        <motion.div
-                          key="normal"
-                          initial={{ opacity: 0, scale: 0.5 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          exit={{ opacity: 0, scale: 0.5 }}
-                          transition={{ duration: 0.2 }}
-                          className="flex items-center space-x-2"
-                        >
-                          <ShoppingCart size={18} strokeWidth={1.5} />
-                          <span>{t('product.addToCart')}</span>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </motion.button>
-
-                  {/* Stripe Checkout Button (if available) */}
-                  {stripeProduct && (
-                    <div className="flex-1">
-                      <StripeCheckoutButton
-                        priceId={stripeProduct.priceId}
-                        mode={stripeProduct.mode}
-                        productName={product.name}
-                        className="w-full bg-indigo-600 text-white py-3 px-4 sm:py-4 sm:px-8 font-light tracking-wide uppercase hover:bg-indigo-700 transition-all duration-300 rounded"
-                      >
-                        {language === 'ro' ? 'Cumpără acum' : 
-                         language === 'hu' ? 'Vásárolj most' : 
-                         'Buy Now'} - {product.price.toFixed(0)} Lei
-                      </StripeCheckoutButton>
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.22),transparent_52%)] opacity-80 transition-opacity duration-300 group-hover:opacity-100" />
+                    <div className="relative flex items-center justify-center gap-3">
+                      <span className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/10 backdrop-blur-sm">
+                        <AnimatePresence mode="wait">
+                          {isAdded ? (
+                            <motion.span
+                              key="success-icon"
+                              initial={{ opacity: 0, scale: 0.6 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              exit={{ opacity: 0, scale: 0.6 }}
+                              transition={{ duration: 0.2 }}
+                            >
+                              <Check size={18} strokeWidth={1.8} className="text-emerald-300" />
+                            </motion.span>
+                          ) : (
+                            <motion.span
+                              key="cart-icon"
+                              initial={{ opacity: 0, scale: 0.6 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              exit={{ opacity: 0, scale: 0.6 }}
+                              transition={{ duration: 0.2 }}
+                            >
+                              <ShoppingCart size={18} strokeWidth={1.8} />
+                            </motion.span>
+                          )}
+                        </AnimatePresence>
+                      </span>
+                      <AnimatePresence mode="wait">
+                        {isAdded ? (
+                          <motion.div
+                            key="success-copy"
+                            initial={{ opacity: 0, y: 6 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -6 }}
+                            transition={{ duration: 0.2 }}
+                            className="text-left"
+                          >
+                            <div className="text-sm font-medium uppercase tracking-[0.24em] text-white/75">
+                              {language === 'ro' ? 'Perfect' : language === 'hu' ? 'Rendben' : 'Done'}
+                            </div>
+                            <div className="text-base sm:text-lg font-medium tracking-[0.08em] uppercase">
+                              {language === 'ro' ? 'Adăugat în coș' : language === 'hu' ? 'Kosárba téve' : 'Added to Cart'}
+                            </div>
+                          </motion.div>
+                        ) : (
+                          <motion.div
+                            key="default-copy"
+                            initial={{ opacity: 0, y: 6 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -6 }}
+                            transition={{ duration: 0.2 }}
+                            className="text-left"
+                          >
+                            <div className="text-sm font-medium uppercase tracking-[0.24em] text-white/75">
+                              {language === 'ro' ? 'Gata de comandă' : language === 'hu' ? 'Rendelésre kész' : 'Ready to order'}
+                            </div>
+                            <div className="text-base sm:text-lg font-medium tracking-[0.08em] uppercase">
+                              {t('product.addToCart')}
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
                     </div>
-                  )}
+                  </motion.button>
                   
-                  <div className="flex space-x-2">
+                  <div className="flex justify-end space-x-2">
                     <motion.button 
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
@@ -699,46 +751,77 @@ const ProductPage = () => {
               </div>
 
               {/* Quality Features Section */}
-              <div className="mb-8 p-4 sm:p-6 bg-gray-50 rounded-lg">
-                <h3 className="text-lg font-light text-gray-900 mb-4 sm:mb-6 text-center">{t('product.whyChooseAtomra')}</h3>
-                <div className="grid grid-cols-1 gap-4">
+              <section className="mb-8 rounded-3xl border border-slate-200/80 bg-gradient-to-br from-slate-50 via-white to-slate-100/70 p-5 shadow-sm sm:p-7">
+                <div className="mb-5 flex flex-col gap-2 sm:mb-6">
+                  <p className="text-xs font-medium uppercase tracking-[0.28em] text-slate-500">
+                    Atomra Home
+                  </p>
+                  <h3 className="text-xl font-light text-slate-950 sm:text-2xl">{t('product.whyChooseAtomra')}</h3>
+                  <p className="max-w-2xl text-sm font-light leading-relaxed text-slate-600 sm:text-base">
+                    {language === 'ro'
+                      ? 'Am organizat avantajele care contează cel mai mult atunci când alegi o lumânare elegantă, reîncărcabilă și ușor de integrat în decorul tău.'
+                      : language === 'hu'
+                        ? 'Összerendeztük a legfontosabb előnyöket, hogy könnyebb legyen dönteni.'
+                        : 'We grouped the key benefits so it is easier to see what makes Atomra different.'}
+                  </p>
+                </div>
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
                   {qualityFeatures.map((feature, index) => (
                     <motion.div 
                       key={index} 
-                      className="flex items-center space-x-4 group"
+                      className="group rounded-2xl border border-slate-200 bg-white/90 p-4 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.3, delay: 0.5 + index * 0.1 }}
                     >
-                      <div className="flex-shrink-0 w-10 h-10 bg-white rounded-full flex items-center justify-center text-gray-600 group-hover:text-gray-900 group-hover:bg-gray-100 transition-all duration-300">
-                        {feature.icon}
-                      </div>
-                      <div className="flex-1">
-                        <h4 className="font-light text-gray-900 text-sm mb-1">{feature.title}</h4>
-                        <p className="text-xs text-gray-600 font-light">{feature.description}</p>
+                      <div className="flex items-start gap-4">
+                        <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl bg-slate-100 text-slate-700 transition-all duration-300 group-hover:bg-slate-900 group-hover:text-white">
+                          {feature.icon}
+                        </div>
+                        <div className="min-w-0">
+                          <h4 className="mb-1 text-sm font-medium text-slate-950 sm:text-base">{feature.title}</h4>
+                          <p className="text-xs font-light leading-relaxed text-slate-600 sm:text-sm">{feature.description}</p>
+                        </div>
                       </div>
                     </motion.div>
                   ))}
                 </div>
-              </div>
+              </section>
 
               {/* Long Description */}
-              <div className="border-t border-gray-100 pt-8">
-                <h3 className="text-lg font-light text-gray-900 mb-4">{t('product.aboutProduct')}</h3>
-                <div className="prose prose-gray max-w-none">
-                  {product.long_description.split('\n\n').map((paragraph, index) => (
-                    <motion.p 
-                      key={index} 
-                      className="text-gray-600 font-light leading-relaxed mb-4"
+              <section className="rounded-3xl border border-slate-200/80 bg-white p-5 shadow-sm sm:p-7">
+                <div className="mb-5 flex flex-col gap-2 border-b border-slate-100 pb-5">
+                  <p className="text-xs font-medium uppercase tracking-[0.28em] text-slate-500">
+                    {language === 'ro' ? 'Detalii utile' : language === 'hu' ? 'Hasznos részletek' : 'Useful details'}
+                  </p>
+                  <h3 className="text-xl font-light text-slate-950 sm:text-2xl">{t('product.aboutProduct')}</h3>
+                </div>
+                <div className="space-y-4">
+                  {longDescriptionBlocks.map((block, index) => (
+                    <motion.div
+                      key={`${block.type}-${index}`}
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.3, delay: 0.8 + index * 0.1 }}
+                      transition={{ duration: 0.3, delay: 0.8 + index * 0.08 }}
                     >
-                      {paragraph}
-                    </motion.p>
+                      {block.type === 'heading' ? (
+                        <h4 className="text-base font-medium text-slate-900 sm:text-lg">{block.text}</h4>
+                      ) : block.type === 'list' ? (
+                        <ul className="grid gap-3 rounded-2xl bg-slate-50 p-4 text-sm font-light leading-relaxed text-slate-700 sm:grid-cols-2 sm:text-base">
+                          {block.items.map((item, itemIndex) => (
+                            <li key={itemIndex} className="flex items-start gap-3">
+                              <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-slate-400" />
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p className="text-sm font-light leading-7 text-slate-600 sm:text-base">{block.text}</p>
+                      )}
+                    </motion.div>
                   ))}
                 </div>
-              </div>
+              </section>
             </motion.div>
           </div>
           

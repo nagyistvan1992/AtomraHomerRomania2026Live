@@ -8,7 +8,7 @@ const StorefrontOverview = () => {
   const content = {
     ro: {
       eyebrow: 'Ce gasesti aici',
-      title: 'Lumanari refillable si decor premium, usor de inteles si usor de comandat.',
+      title: 'Lumanari reincarcabile si decor premium, usor de inteles si usor de comandat.',
       description:
         'Atomra Home Romania te ajuta sa alegi rapid lumanari elegante pentru acasa, cadouri si evenimente. Intri pe colectia potrivita, vezi produsul si comanzi fara pasi complicati.',
       proofPoints: [

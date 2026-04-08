@@ -8,7 +8,7 @@ const faqItems = [
   {
     question: 'Care este diferența principală între lumânările refillabile și cele clasice?',
     answer:
-      'Diferența principală este reutilizarea recipientului și flexibilitatea decorului. La sistemul refillable poți reface compoziția și păstra mai ușor un setup premium în timp.',
+      'Diferența principală este reutilizarea recipientului și flexibilitatea decorului. La sistemul reincarcabil poți reface compoziția și păstra mai ușor un setup premium în timp.',
   },
   {
     question: 'Cine ar trebui să aleagă varianta refillabilă?',
@@ -51,7 +51,7 @@ const RefillableVsClassicPage = () => {
               Lumânări refillabile vs lumânări clasice
             </h1>
             <p className="mx-auto max-w-3xl text-lg font-light leading-relaxed text-slate-600">
-              Dacă urmărești decor elegant și flexibilitate, sistemul refillable are avantaje clare. Dacă vrei doar
+              Dacă urmărești decor elegant și flexibilitate, sistemul reincarcabil are avantaje clare. Dacă vrei doar
               o soluție simplă, rapidă și de consum, varianta clasică poate fi suficientă.
             </p>
           </div>
@@ -86,10 +86,10 @@ const RefillableVsClassicPage = () => {
         <section className="luxury-section-light py-12 sm:py-16">
           <div className="mx-auto max-w-5xl px-6 sm:px-8 lg:px-12">
             <div className="luxury-card rounded-lg p-8 sm:p-10">
-              <h2 className="mb-6 text-3xl font-extralight text-slate-900">Când merită să alegi refillable</h2>
+              <h2 className="mb-6 text-3xl font-extralight text-slate-900">Când merită să alegi un sistem reincarcabil</h2>
               <p className="font-light leading-7 text-slate-600">
                 Dacă vrei o piesă decorativă care să rămână în spațiul tău, să poată fi reîmprospătată și să
-                susțină o atmosferă premium, refillable este alegerea mai bună. Este mai ales relevant pentru
+                susțină o atmosferă premium, sistemul reincarcabil este alegerea mai bună. Este mai ales relevant pentru
                 home styling, mese festive, cadouri și decor de eveniment.
               </p>
             </div>
@@ -112,7 +112,7 @@ const RefillableVsClassicPage = () => {
             <h2 className="mb-4 text-3xl font-extralight text-slate-900">Vezi sistemul Atomra în practică</h2>
             <div className="flex flex-col justify-center gap-4 sm:flex-row">
               <Link to="/lumanari-refillabile" className="rounded-full bg-slate-900 px-8 py-3 text-sm font-medium text-white transition hover:bg-slate-800">
-                Vezi pagina refillable
+                Vezi pagina sistemului reincarcabil
               </Link>
               <Link to="/toate-produsele" className="rounded-full border border-slate-300 px-8 py-3 text-sm font-medium text-slate-700 transition hover:border-slate-400 hover:text-slate-900">
                 Vezi toate produsele

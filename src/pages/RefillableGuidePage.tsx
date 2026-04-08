@@ -148,7 +148,7 @@ const RefillableGuidePage = () => {
                 to="/refillable"
                 className="rounded-full border border-slate-300 px-8 py-3 text-sm font-medium text-slate-700 transition hover:border-slate-400 hover:text-slate-900"
               >
-                Vezi pagina refillable
+                Vezi pagina despre sistemul reincarcabil
               </Link>
             </div>
           </div>

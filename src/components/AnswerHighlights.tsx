@@ -19,7 +19,7 @@ const AnswerHighlights = () => {
           href: '/lumanari-refillabile',
         },
         {
-          title: 'Cum funcționează sistemul refillable?',
+          title: 'Cum functioneaza sistemul reincarcabil?',
           answer:
             'Torni granulele de ceară într-un recipient, adaugi fitilul, aprinzi și reîmprospătezi ușor prin completare atunci când este nevoie.',
           cta: 'Află mai multe despre ceara de nisip',

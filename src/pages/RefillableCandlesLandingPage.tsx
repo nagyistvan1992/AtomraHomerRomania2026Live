@@ -72,7 +72,7 @@ const RefillableCandlesLandingPage = () => {
             <article className="luxury-card rounded-lg p-8">
               <h2 className="mb-4 text-2xl font-light text-slate-900">2. Stil flexibil</h2>
               <p className="font-light leading-7 text-slate-600">
-                Sistemul refillable se potrivește atât în interioare minimaliste, cât și în setup-uri mai
+                Sistemul reincarcabil se potrivește atât în interioare minimaliste, cât și în setup-uri mai
                 festive. Poți adapta ușor recipientul, volumul și atmosfera în funcție de spațiu.
               </p>
             </article>
@@ -102,7 +102,7 @@ const RefillableCandlesLandingPage = () => {
                 <div>
                   <h3 className="mb-3 text-xl font-light text-slate-900">Pentru cadou sau eveniment</h3>
                   <p className="font-light leading-7 text-slate-600">
-                    Un sistem refillable este ușor de prezentat premium și transmite mai multă grijă decât o
+                    Un sistem reincarcabil este ușor de prezentat premium și transmite mai multă grijă decât o
                     lumânare clasică de consum. În plus, poate fi refolosit și după momentul special.
                   </p>
                 </div>

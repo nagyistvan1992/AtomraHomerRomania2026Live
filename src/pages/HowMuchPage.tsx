@@ -28,7 +28,7 @@ const HowMuchPage = () => {
       subtitle:
         'Un ghid simplu pentru a estima cantitatea de perle de ceara necesara in functie de dimensiunea recipientului.',
       intro:
-        'Daca folosesti pentru prima data sistemul nostru refillable, aceasta pagina te ajuta sa alegi cantitatea potrivita fara risipa si fara sa ramai fara material in mijlocul unui decor.',
+        'Daca folosesti pentru prima data sistemul nostru reincarcabil, aceasta pagina te ajuta sa alegi cantitatea potrivita fara risipa si fara sa ramai fara material in mijlocul unui decor.',
       calculatorTitle: 'Calculator rapid',
       calculatorText:
         'Introdu diametrul si inaltimea recipientului, iar noi iti oferim o estimare orientativa in grame.',

@@ -9,7 +9,7 @@ const Hero = () => {
 
   const heroMeta = {
     ro: {
-      eyebrow: 'Lumanari refillable premium pentru acasa, cadouri si evenimente',
+      eyebrow: 'Lumanari premium reincarcabile pentru acasa, cadouri si evenimente',
       primaryCta: t('hero.cta'),
       trustItems: [
         { icon: Truck, label: 'Transport gratuit peste 149 Lei' },
