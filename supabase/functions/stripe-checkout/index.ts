@@ -7,7 +7,7 @@ const corsHeaders = {
 }
 
 const SHIPPING_THRESHOLD = 149
-const PAID_SHIPPING_RATE_ID = 'shr_1Rf1hEBEuvxC28ex0O5aqEqE'
+const PAID_SHIPPING_RATE_ID = 'shr_1TKI8wBEuvxC28exfeCH7h1w'
 const FREE_SHIPPING_RATE_ID = 'shr_1TKGjeBEuvxC28exl2vxEz1k'
 
 Deno.serve(async (req) => {
