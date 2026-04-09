@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "prebuild": "node scripts/generate-seo-assets.mjs",
-    "build": "vite build",
+    "build": "vite build && node scripts/generate-static-product-pages.mjs",
     "lint": "eslint .",
     "preview": "vite preview",
     "serve:local": "node scripts/local-preview.mjs",

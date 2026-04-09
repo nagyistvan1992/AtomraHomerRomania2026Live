@@ -62,6 +62,12 @@ const toMerchantDescription = (product) => {
 
 const formatPrice = (price) => `${Number(price).toFixed(2)} RON`;
 
+const googleProductCategoryMap = {
+  'home-collection': 'Home & Garden > Decor > Candles',
+  'events-collection': 'Home & Garden > Decor > Candles',
+  accessories: 'Home & Garden > Decor > Candles > Candle Making Kits',
+};
+
 const loadTypeScriptModule = async (relativePath) => {
   const absolutePath = path.join(projectRoot, relativePath);
   const source = await readFile(absolutePath, 'utf8');
@@ -164,6 +170,8 @@ ${catalogProducts
     const primaryImage = toAbsoluteUrl(SITE_URL, images[0] || '/placeholder-image.jpg');
     const additionalImages = images.slice(1, 10).map((image) => toAbsoluteUrl(SITE_URL, image));
     const productType = [...new Set([product.category, ...product.tags].filter(Boolean))].join(' > ');
+    const googleProductCategory =
+      googleProductCategoryMap[product.category_slug] ?? 'Home & Garden > Decor > Candles';
 
     return `    <item>
       <g:id>${escapeXml(product.id)}</g:id>
@@ -178,6 +186,7 @@ ${additionalImages.map((image) => `      <g:additional_image_link>${escapeXml(im
       <g:brand>${escapeXml(SITE_NAME)}</g:brand>
       <g:mpn>${escapeXml(product.slug || product.id)}</g:mpn>
       <g:identifier_exists>no</g:identifier_exists>
+      <g:google_product_category>${escapeXml(googleProductCategory)}</g:google_product_category>
       <g:product_type>${escapeXml(productType)}</g:product_type>
       <g:custom_label_0>${escapeXml(product.category_slug)}</g:custom_label_0>
     </item>`;
