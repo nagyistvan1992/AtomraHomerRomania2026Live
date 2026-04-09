@@ -6,6 +6,10 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
+const SHIPPING_THRESHOLD = 149
+const PAID_SHIPPING_RATE_ID = 'shr_1Rf1hEBEuvxC28ex0O5aqEqE'
+const FREE_SHIPPING_RATE_ID = 'shr_1TKGjeBEuvxC28exl2vxEz1k'
+
 Deno.serve(async (req) => {
   // Handle CORS
   if (req.method === 'OPTIONS') {
@@ -13,11 +17,17 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { price_id, success_url, cancel_url, mode, customer_email } = await req.json()
+    const { price_id, line_items, success_url, cancel_url, mode, customer_email, cart_subtotal } = await req.json()
+
+    const normalizedLineItems = Array.isArray(line_items) && line_items.length > 0
+      ? line_items
+      : price_id
+        ? [{ price_id, quantity: 1 }]
+        : []
 
     // Validate required parameters
-    if (!price_id) {
-      throw new Error('price_id is required')
+    if (!normalizedLineItems.length) {
+      throw new Error('At least one Stripe line item is required')
     }
 
     // Get Stripe secret key from environment variables
@@ -98,13 +108,18 @@ Deno.serve(async (req) => {
       }
     }
 
+    const subtotal = Number(cart_subtotal ?? 0)
+    const shippingRateId = subtotal > SHIPPING_THRESHOLD
+      ? FREE_SHIPPING_RATE_ID
+      : PAID_SHIPPING_RATE_ID
+
     // Create checkout session
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
-      line_items: [{
-        price: price_id,
-        quantity: 1,
-      }],
+      line_items: normalizedLineItems.map((item) => ({
+        price: item.price_id,
+        quantity: Number(item.quantity) > 0 ? Number(item.quantity) : 1,
+      })),
       mode: mode || 'payment',
       success_url: success_url || `${req.headers.get('origin')}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: cancel_url || `${req.headers.get('origin')}/cancel`,
@@ -114,8 +129,13 @@ Deno.serve(async (req) => {
       shipping_address_collection: {
         allowed_countries: ['RO'],
       },
+      shipping_options: [{ shipping_rate: shippingRateId }],
       phone_number_collection: { enabled: true },
       customer_email: !customerId ? emailToUse : undefined,
+      metadata: {
+        cart_subtotal: Number.isFinite(subtotal) ? subtotal.toFixed(2) : '0.00',
+        shipping_rule: shippingRateId === FREE_SHIPPING_RATE_ID ? 'free_shipping' : 'paid_shipping',
+      },
     })
 
     return new Response(

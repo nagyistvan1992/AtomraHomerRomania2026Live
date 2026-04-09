@@ -33,7 +33,7 @@ const CartPage = () => {
   const stripeSuccessUrl = `${window.location.origin}/success?session_id={CHECKOUT_SESSION_ID}`;
   const stripeCancelUrl = `${window.location.origin}/cancel`;
 
-  const shippingCost = getTotalPrice() >= 149 ? 0 : 25;
+  const shippingCost = getTotalPrice() > 149 ? 0 : 25;
   const totalAmount = getTotalPrice() + shippingCost;
   
   // Close the cart drawer when CartPage mounts
@@ -162,11 +162,16 @@ const CartPage = () => {
   };
 
   const requestStripeCheckoutUrl = async (payload: {
-    price_id: string;
+    price_id?: string;
+    line_items?: Array<{
+      price_id: string;
+      quantity: number;
+    }>;
     mode: 'payment' | 'subscription';
     success_url: string;
     cancel_url: string;
     customer_email: string;
+    cart_subtotal?: number;
   }) => {
     const parsedBody = await invokeSupabaseFunction<{ url?: string; error?: string; message?: string }>(
       'stripe-checkout',
@@ -282,7 +287,7 @@ const CartPage = () => {
       const details = sanitizeCustomerDetails();
 
       // Import the stripe config to get product price IDs 
-      const { stripeProducts, getProductById } = await import('../stripe-config');
+      const { getProductById } = await import('../stripe-config');
       
       if (state.items.length === 0) {
         throw new Error('Cart is empty');
@@ -305,48 +310,48 @@ const CartPage = () => {
       // Check if we found matching Stripe products for all items
       const missingProducts = cartItemsWithStripe.filter(item => !item.stripeProduct);
       if (missingProducts.length > 0) {
-        console.warn('Some products are not configured for Stripe checkout:', 
-          missingProducts.map(item => item.cartItem.name));
-        
-        // For now, we'll fall back to the first product in the Stripe config
-        // This ensures we maintain backward compatibility
-        const fallbackProduct = stripeProducts[0];
-        if (!fallbackProduct) {
-          throw new Error('No Stripe products configured');
-        }
-
-        console.log('Using fallback product for checkout:', fallbackProduct.name);
-
-        const checkoutUrl = await requestStripeCheckoutUrl({
-          price_id: fallbackProduct.priceId,
-          mode: 'payment',
-          success_url: stripeSuccessUrl,
-          cancel_url: stripeCancelUrl,
-          customer_email: details.email,
-        });
-
-        window.location.href = checkoutUrl;
-        return;
+        console.warn(
+          'Some products are not configured for Stripe checkout:',
+          missingProducts.map(item => item.cartItem.name),
+        );
+        throw new Error(
+          `Produsele urmatoare nu sunt configurate pentru plata cu cardul: ${missingProducts
+            .map(item => item.cartItem.name)
+            .join(', ')}`,
+        );
       }
-      
-      // Find the first item with a matching Stripe product
-      const firstMatchingItem = cartItemsWithStripe.find(item => item.stripeProduct);
-      
-      if (firstMatchingItem) {
-        const { stripeProduct } = firstMatchingItem;
 
-        const checkoutUrl = await requestStripeCheckoutUrl({
-          price_id: stripeProduct.priceId,
-          mode: stripeProduct.mode || 'payment',
-          success_url: stripeSuccessUrl,
-          cancel_url: stripeCancelUrl,
-          customer_email: details.email,
-        });
+      const configuredCartItems = cartItemsWithStripe.filter(
+        (item): item is typeof item & { stripeProduct: NonNullable<typeof item.stripeProduct> } =>
+          Boolean(item.stripeProduct),
+      );
 
-        window.location.href = checkoutUrl;
-      } else {
+      if (configuredCartItems.length === 0) {
         throw new Error('No matching Stripe products found for items in cart');
       }
+
+      const checkoutMode = configuredCartItems[0].stripeProduct.mode || 'payment';
+      const mixedModes = configuredCartItems.some(
+        ({ stripeProduct }) => (stripeProduct.mode || 'payment') !== checkoutMode,
+      );
+
+      if (mixedModes) {
+        throw new Error('Cart contains products with incompatible Stripe checkout modes.');
+      }
+
+      const checkoutUrl = await requestStripeCheckoutUrl({
+        line_items: configuredCartItems.map(({ cartItem, stripeProduct }) => ({
+          price_id: stripeProduct.priceId,
+          quantity: cartItem.quantity,
+        })),
+        mode: checkoutMode,
+        success_url: stripeSuccessUrl,
+        cancel_url: stripeCancelUrl,
+        customer_email: details.email,
+        cart_subtotal: getTotalPrice(),
+      });
+
+      window.location.href = checkoutUrl;
     } catch (error) {
       console.error('Error processing payment:', error);
       alert(`Error processing payment: ${error instanceof Error ? error.message : 'Unknown error'}`);
