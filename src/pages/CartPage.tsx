@@ -11,14 +11,203 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { getAssetPath } from '../utils/assetPath';
 import { getPlaceholderImage, normalizeImageSource } from '../utils/imageSources';
 
+const { useMemo } = React;
+
+type CustomerDetails = {
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  city: string;
+  postalCode: string;
+};
+
+type DetailsStepProps = {
+  initialDetails: CustomerDetails;
+  initialNotes: string;
+  onBack: () => void;
+  onContinue: (details: CustomerDetails, nextNotes: string) => void;
+};
+
+const DetailsStep = React.memo(({ initialDetails, initialNotes, onBack, onContinue }: DetailsStepProps) => {
+  const [draftDetails, setDraftDetails] = useState<CustomerDetails>(initialDetails);
+  const [draftNotes, setDraftNotes] = useState(initialNotes);
+
+  useEffect(() => {
+    setDraftDetails(initialDetails);
+  }, [initialDetails]);
+
+  useEffect(() => {
+    setDraftNotes(initialNotes);
+  }, [initialNotes]);
+
+  const updateField = (field: keyof CustomerDetails, value: string) => {
+    setDraftDetails((current) => ({
+      ...current,
+      [field]: value,
+    }));
+  };
+
+  const isValid = Object.values(draftDetails).every((value) => value.trim().length > 0);
+
+  return (
+    <div className="max-w-2xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+      <div className="flex items-center mb-6 sm:mb-8">
+        <button
+          onClick={onBack}
+          className="mr-4 p-2 rounded-full hover:bg-slate-100 transition-colors"
+          aria-label="Înapoi la coș"
+        >
+          <ArrowLeft className="w-5 h-5 text-slate-600" strokeWidth={1.5} />
+        </button>
+        <h1 className="text-2xl sm:text-3xl font-light text-slate-900">Detalii de livrare</h1>
+      </div>
+
+      <div className="bg-white rounded-lg shadow-sm p-6 border border-slate-100">
+        <form className="space-y-6" onSubmit={(event) => event.preventDefault()}>
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-2">
+              Nume complet *
+            </label>
+            <input
+              type="text"
+              value={draftDetails.name}
+              onChange={(e) => updateField('name', e.target.value)}
+              className="w-full px-4 py-3 border border-slate-200 rounded-md focus:ring-1 focus:ring-slate-400 focus:border-slate-400 font-light text-slate-800"
+              required
+              placeholder="Numele și prenumele"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-2">
+              Email *
+            </label>
+            <input
+              type="email"
+              value={draftDetails.email}
+              onChange={(e) => updateField('email', e.target.value)}
+              className="w-full px-4 py-3 border border-slate-200 rounded-md focus:ring-1 focus:ring-slate-400 focus:border-slate-400 font-light text-slate-800"
+              required
+              placeholder="Adresa de email"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-2">
+              Telefon *
+            </label>
+            <input
+              type="tel"
+              value={draftDetails.phone}
+              onChange={(e) => updateField('phone', e.target.value)}
+              className="w-full px-4 py-3 border border-slate-200 rounded-md focus:ring-1 focus:ring-slate-400 focus:border-slate-400 font-light text-slate-800"
+              required
+              placeholder="Numărul de telefon"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-2">
+              Adresa *
+            </label>
+            <input
+              type="text"
+              value={draftDetails.address}
+              onChange={(e) => updateField('address', e.target.value)}
+              className="w-full px-4 py-3 border border-slate-200 rounded-md focus:ring-1 focus:ring-slate-400 focus:border-slate-400 font-light text-slate-800"
+              required
+              placeholder="Strada, numărul, blocul, apartamentul"
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">
+                Oraș *
+              </label>
+              <input
+                type="text"
+                value={draftDetails.city}
+                onChange={(e) => updateField('city', e.target.value)}
+                className="w-full px-4 py-3 border border-slate-200 rounded-md focus:ring-1 focus:ring-slate-400 focus:border-slate-400 font-light text-slate-800"
+                required
+                placeholder="Orașul"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">
+                Cod poștal *
+              </label>
+              <input
+                type="text"
+                value={draftDetails.postalCode}
+                onChange={(e) => updateField('postalCode', e.target.value)}
+                className="w-full px-4 py-3 border border-slate-200 rounded-md focus:ring-1 focus:ring-slate-400 focus:border-slate-400 font-light text-slate-800"
+                required
+                placeholder="Codul poștal"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-2">
+              Notițe pentru comandă (opțional)
+            </label>
+            <textarea
+              value={draftNotes}
+              onChange={(e) => setDraftNotes(e.target.value)}
+              rows={3}
+              className="w-full px-4 py-3 border border-slate-200 rounded-md focus:ring-1 focus:ring-slate-400 focus:border-slate-400 font-light text-slate-800"
+              placeholder="Instrucțiuni speciale de livrare..."
+            />
+          </div>
+        </form>
+
+        <div className="flex items-center space-x-2 mt-6 p-4 bg-blue-50 rounded-md border border-blue-100 text-blue-800">
+          <User size={18} className="flex-shrink-0" strokeWidth={1.5} />
+          <p className="text-sm font-light">
+            Datele tale sunt securizate și utilizate doar pentru livrarea comenzii
+          </p>
+        </div>
+
+        <button
+          onClick={() => {
+            if (isValid) {
+              onContinue(draftDetails, draftNotes);
+            } else {
+              alert('Te rugăm să completezi toate câmpurile obligatorii marcate cu *');
+            }
+          }}
+          disabled={!isValid}
+          className="w-full mt-6 bg-slate-900 hover:bg-slate-800 disabled:bg-slate-300 disabled:cursor-not-allowed text-white py-3 sm:py-4 rounded-md font-light tracking-wide uppercase transition-colors duration-300 flex items-center justify-center space-x-2"
+        >
+          <span>Continuă către plată</span>
+          <ArrowRight size={16} strokeWidth={1.5} />
+        </button>
+
+        <div className="mt-4">
+          <button
+            onClick={onBack}
+            className="w-full text-center py-2 text-slate-600 hover:text-slate-900 font-light transition-colors"
+          >
+            Înapoi la coș
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+});
+
 const CartPage = () => {
-  const { state, removeItem, updateQuantity, clearCart, closeCart, getTotalPrice } = useCart();
+  const { state, removeItem, updateQuantity, clearCart, closeCart } = useCart();
   const { t } = useLanguage();
   const { isStripeEnabled } = useStripe();
   const navigate = useNavigate();
   
   const [step, setStep] = useState<'cart' | 'details' | 'payment' | 'confirmation'>('cart');
-  const [customerDetails, setCustomerDetails] = useState({
+  const [customerDetails, setCustomerDetails] = useState<CustomerDetails>({
     name: '',
     email: '',
     phone: '',
@@ -33,8 +222,16 @@ const CartPage = () => {
   const stripeSuccessUrl = `${window.location.origin}/success?session_id={CHECKOUT_SESSION_ID}`;
   const stripeCancelUrl = `${window.location.origin}/cancel`;
 
-  const shippingCost = getTotalPrice() > 149 ? 0 : 25;
-  const totalAmount = getTotalPrice() + shippingCost;
+  const subtotalAmount = useMemo(
+    () =>
+      state.items.reduce((total, item) => {
+        const numericPrice = Number.parseFloat(String(item.price).replace(/[^\d.]/g, '')) || 0;
+        return total + numericPrice * item.quantity;
+      }, 0),
+    [state.items],
+  );
+  const shippingCost = subtotalAmount > 149 ? 0 : 25;
+  const totalAmount = subtotalAmount + shippingCost;
   
   // Close the cart drawer when CartPage mounts
   useEffect(() => {
@@ -255,7 +452,7 @@ const CartPage = () => {
         customer_city: details.city,
         customer_postal_code: details.postalCode,
         items: sanitizeOrderItems(),
-        subtotal: getTotalPrice(),
+        subtotal: subtotalAmount,
         shipping_cost: shippingCost,
         total_amount: totalAmount,
         payment_method: paymentMethod,
@@ -348,7 +545,7 @@ const CartPage = () => {
         success_url: stripeSuccessUrl,
         cancel_url: stripeCancelUrl,
         customer_email: details.email,
-        cart_subtotal: getTotalPrice(),
+        cart_subtotal: subtotalAmount,
       });
 
       window.location.href = checkoutUrl;
@@ -468,7 +665,7 @@ const CartPage = () => {
           <div className="space-y-4">
             <div className="flex justify-between items-center text-slate-600">
               <span className="font-light">Subtotal:</span>
-              <span className="font-light">{getTotalPrice().toFixed(0)} Lei</span>
+              <span className="font-light">{subtotalAmount.toFixed(0)} Lei</span>
             </div>
             
             <div className="flex justify-between items-center text-slate-600">
@@ -513,158 +710,6 @@ const CartPage = () => {
             >
               Continuă cumpărăturile
             </Link>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  const renderDetailsStep = () => {
-    return (
-      <div className="max-w-2xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
-        <div className="flex items-center mb-6 sm:mb-8">
-          <button
-            onClick={() => setStep('cart')}
-            className="mr-4 p-2 rounded-full hover:bg-slate-100 transition-colors"
-            aria-label="Înapoi la coș"
-          >
-            <ArrowLeft className="w-5 h-5 text-slate-600" strokeWidth={1.5} />
-          </button>
-          <h1 className="text-2xl sm:text-3xl font-light text-slate-900">Detalii de livrare</h1>
-        </div>
-
-        <div className="bg-white rounded-lg shadow-sm p-6 border border-slate-100">
-          <form className="space-y-6">
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
-                Nume complet *
-              </label>
-              <input
-                type="text"
-                value={customerDetails.name}
-                onChange={(e) => setCustomerDetails({...customerDetails, name: e.target.value})}
-                className="w-full px-4 py-3 border border-slate-200 rounded-md focus:ring-1 focus:ring-slate-400 focus:border-slate-400 font-light text-slate-800"
-                required
-                placeholder="Numele și prenumele"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
-                Email *
-              </label>
-              <input
-                type="email"
-                value={customerDetails.email}
-                onChange={(e) => setCustomerDetails({...customerDetails, email: e.target.value})}
-                className="w-full px-4 py-3 border border-slate-200 rounded-md focus:ring-1 focus:ring-slate-400 focus:border-slate-400 font-light text-slate-800"
-                required
-                placeholder="Adresa de email"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
-                Telefon *
-              </label>
-              <input
-                type="tel"
-                value={customerDetails.phone}
-                onChange={(e) => setCustomerDetails({...customerDetails, phone: e.target.value})}
-                className="w-full px-4 py-3 border border-slate-200 rounded-md focus:ring-1 focus:ring-slate-400 focus:border-slate-400 font-light text-slate-800"
-                required
-                placeholder="Numărul de telefon"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
-                Adresa *
-              </label>
-              <input
-                type="text"
-                value={customerDetails.address}
-                onChange={(e) => setCustomerDetails({...customerDetails, address: e.target.value})}
-                className="w-full px-4 py-3 border border-slate-200 rounded-md focus:ring-1 focus:ring-slate-400 focus:border-slate-400 font-light text-slate-800"
-                required
-                placeholder="Strada, numărul, blocul, apartamentul"
-              />
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
-                  Oraș *
-                </label>
-                <input
-                  type="text"
-                  value={customerDetails.city}
-                  onChange={(e) => setCustomerDetails({...customerDetails, city: e.target.value})}
-                  className="w-full px-4 py-3 border border-slate-200 rounded-md focus:ring-1 focus:ring-slate-400 focus:border-slate-400 font-light text-slate-800"
-                  required
-                  placeholder="Orașul"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
-                  Cod poștal *
-                </label>
-                <input
-                  type="text"
-                  value={customerDetails.postalCode}
-                  onChange={(e) => setCustomerDetails({...customerDetails, postalCode: e.target.value})}
-                  className="w-full px-4 py-3 border border-slate-200 rounded-md focus:ring-1 focus:ring-slate-400 focus:border-slate-400 font-light text-slate-800"
-                  required
-                  placeholder="Codul poștal"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
-                Notițe pentru comandă (opțional)
-              </label>
-              <textarea
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-                rows={3}
-                className="w-full px-4 py-3 border border-slate-200 rounded-md focus:ring-1 focus:ring-slate-400 focus:border-slate-400 font-light text-slate-800"
-                placeholder="Instrucțiuni speciale de livrare..."
-              />
-            </div>
-          </form>
-
-          <div className="flex items-center space-x-2 mt-6 p-4 bg-blue-50 rounded-md border border-blue-100 text-blue-800">
-            <User size={18} className="flex-shrink-0" strokeWidth={1.5} />
-            <p className="text-sm font-light">
-              Datele tale sunt securizate și utilizate doar pentru livrarea comenzii
-            </p>
-          </div>
-
-          <button
-            onClick={() => {
-              if (customerDetails.name && customerDetails.email && customerDetails.phone && 
-                  customerDetails.address && customerDetails.city && customerDetails.postalCode) {
-                setStep('payment');
-              } else {
-                alert("Te rugăm să completezi toate câmpurile obligatorii marcate cu *");
-              }
-            }}
-            disabled={!customerDetails.name || !customerDetails.email || !customerDetails.phone || !customerDetails.address || !customerDetails.city || !customerDetails.postalCode}
-            className="w-full mt-6 bg-slate-900 hover:bg-slate-800 disabled:bg-slate-300 disabled:cursor-not-allowed text-white py-3 sm:py-4 rounded-md font-light tracking-wide uppercase transition-colors duration-300 flex items-center justify-center space-x-2"
-          >
-            <span>Continuă către plată</span>
-            <ArrowRight size={16} strokeWidth={1.5} />
-          </button>
-          
-          <div className="mt-4">
-            <button
-              onClick={() => setStep('cart')}
-              className="w-full text-center py-2 text-slate-600 hover:text-slate-900 font-light transition-colors"
-            >
-              Înapoi la coș
-            </button>
           </div>
         </div>
       </div>
@@ -785,7 +830,7 @@ const CartPage = () => {
           <div className="space-y-3 text-sm">
             <div className="flex justify-between items-center">
               <span className="text-slate-600">Subtotal:</span>
-              <span className="font-light text-slate-800">{getTotalPrice().toFixed(0)} Lei</span>
+              <span className="font-light text-slate-800">{subtotalAmount.toFixed(0)} Lei</span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-slate-600">Transport:</span>
@@ -973,7 +1018,16 @@ const CartPage = () => {
                 exit={{ opacity: 0, x: 20 }}
                 transition={{ duration: 0.3 }}
               >
-                {renderDetailsStep()}
+                <DetailsStep
+                  initialDetails={customerDetails}
+                  initialNotes={notes}
+                  onBack={() => setStep('cart')}
+                  onContinue={(details, nextNotes) => {
+                    setCustomerDetails(details);
+                    setNotes(nextNotes);
+                    setStep('payment');
+                  }}
+                />
               </motion.div>
             )}
             
