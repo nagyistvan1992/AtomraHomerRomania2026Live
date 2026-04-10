@@ -1,14 +1,15 @@
 # Netlify redirects for SPA routing and SEO
 
 # Redirect old domain to current canonical domain
-http://atomra-home-romania.com/*  https://atomrahomeromania.ro/:splat  301!
-http://www.atomra-home-romania.com/*  https://atomrahomeromania.ro/:splat  301!
-https://atomra-home-romania.com/*  https://atomrahomeromania.ro/:splat  301!
-https://www.atomra-home-romania.com/*  https://atomrahomeromania.ro/:splat  301!
+http://atomra-home-romania.com/*  https://www.atomrahomeromania.ro/:splat  301!
+http://www.atomra-home-romania.com/*  https://www.atomrahomeromania.ro/:splat  301!
+https://atomra-home-romania.com/*  https://www.atomrahomeromania.ro/:splat  301!
+https://www.atomra-home-romania.com/*  https://www.atomrahomeromania.ro/:splat  301!
 
 # Force canonical host
-http://atomrahomeromania.ro/*  https://atomrahomeromania.ro/:splat  301!
-https://www.atomrahomeromania.ro/*  https://atomrahomeromania.ro/:splat  301!
+http://atomrahomeromania.ro/*  https://www.atomrahomeromania.ro/:splat  301!
+https://atomrahomeromania.ro/*  https://www.atomrahomeromania.ro/:splat  301!
+http://www.atomrahomeromania.ro/*  https://www.atomrahomeromania.ro/:splat  301!
 
 # Redirect alias routes to canonical URLs
 /all-products  /toate-produsele  301

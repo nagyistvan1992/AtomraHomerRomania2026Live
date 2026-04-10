@@ -19,6 +19,7 @@ const FOOTER_CONTENT: Record<
     followText: string;
     rights: string;
     privacy: string;
+    refund: string;
     terms: string;
   }
 > = {
@@ -36,6 +37,7 @@ const FOOTER_CONTENT: Record<
     followText: 'Urmareste-ne pentru noutati, oferte si inspiratie.',
     rights: '© 2025 Atomra Home Romania. Toate drepturile rezervate.',
     privacy: 'Politica de confidentialitate',
+    refund: 'Politica de retur si rambursare',
     terms: 'Termeni si conditii',
   },
   hu: {
@@ -52,6 +54,7 @@ const FOOTER_CONTENT: Record<
     followText: 'Kovess minket hirekert, ajanlatokert es inspiracioert.',
     rights: '© 2025 Atomra Home Romania. Minden jog fenntartva.',
     privacy: 'Adatvedelmi tajekoztato',
+    refund: 'Visszakuldesi es visszateritesi szabalyzat',
     terms: 'Felhasznalasi feltetelek',
   },
   en: {
@@ -68,6 +71,7 @@ const FOOTER_CONTENT: Record<
     followText: 'Follow us for news, offers, and inspiration.',
     rights: '© 2025 Atomra Home Romania. All rights reserved.',
     privacy: 'Privacy policy',
+    refund: 'Refund policy',
     terms: 'Terms and conditions',
   },
 };
@@ -212,6 +216,10 @@ const Footer = () => {
               {content.rights} |
               <Link to="/privacy-policy" className="ml-1 transition-colors duration-200 hover:text-slate-700 hover:underline">
                 {content.privacy}
+              </Link>{' '}
+              |
+              <Link to="/refund-policy" className="ml-1 transition-colors duration-200 hover:text-slate-700 hover:underline">
+                {content.refund}
               </Link>{' '}
               |
               <Link to="/terms" className="ml-1 transition-colors duration-200 hover:text-slate-700 hover:underline">

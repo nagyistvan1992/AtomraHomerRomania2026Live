@@ -1,5 +1,5 @@
 export const SITE_NAME = 'Atomra Home Romania';
-export const SITE_URL = 'https://atomrahomeromania.ro';
+export const SITE_URL = 'https://www.atomrahomeromania.ro';
 export const CONTACT_EMAIL = 'atomrahomeromania@gmail.com';
 export const CONTACT_PHONE = '+40751801025';
 export const SOCIAL_LINKS = [

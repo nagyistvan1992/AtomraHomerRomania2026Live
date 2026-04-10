@@ -9,6 +9,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { getPlaceholderImage, getPreferredImage } from '../utils/imageSources';
 import { getCatalogCategories, getCatalogProducts } from '../lib/catalog';
 import type { CatalogProduct as Product } from '../data/catalog';
+import { getSiteUrl } from '../utils/siteConfig';
 
 const AllProductsPage = () => {
   const [visibleProducts, setVisibleProducts] = useState<boolean[]>([]);
@@ -207,7 +208,7 @@ const AllProductsPage = () => {
         title="Toate produsele | Lumânări din ceară naturală | Atomra Home Romania"
         description="Descoperă întreaga noastră colecție de lumânări din ceară naturală și accesorii premium. Produse personalizabile, elegante și sustenabile pentru orice ocazie."
         keywords="lumânări, ceară naturală, ceară de soia, lumânări reîncărcabile, lumânări ecologice, lumânări personalizabile, accesorii lumânări"
-        url="https://atomrahomeromania.ro/toate-produsele"
+        url={getSiteUrl('/toate-produsele')}
       />
       
       <div className="luxury-page-bg luxury-floating-elements min-h-screen">

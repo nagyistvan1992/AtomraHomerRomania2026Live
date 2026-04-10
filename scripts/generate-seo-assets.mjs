@@ -112,6 +112,7 @@ const staticRoutes = [
   { path: '/refillable', changefreq: 'monthly', priority: '0.68', lastmod: today },
   { path: '/how-much', changefreq: 'monthly', priority: '0.68', lastmod: today },
   { path: '/privacy-policy', changefreq: 'yearly', priority: '0.3', lastmod: today },
+  { path: '/refund-policy', changefreq: 'yearly', priority: '0.32', lastmod: today },
   { path: '/terms', changefreq: 'yearly', priority: '0.3', lastmod: today },
 ];
 

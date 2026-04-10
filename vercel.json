@@ -2,6 +2,17 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "redirects": [
     {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "atomrahomeromania.ro"
+        }
+      ],
+      "destination": "https://www.atomrahomeromania.ro/:path*",
+      "statusCode": 301
+    },
+    {
       "source": "/lumanari-naturale",
       "destination": "/lumanari-ceara-naturala",
       "permanent": true

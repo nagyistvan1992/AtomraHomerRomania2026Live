@@ -2,6 +2,7 @@
 import { Link } from 'react-router-dom';
 import { XCircle, ArrowLeft, ShoppingBag } from 'lucide-react';
 import SEOHead from '../components/SEOHead';
+import { getSiteUrl } from '../utils/siteConfig';
 
 const CancelPage = () => {
   useEffect(() => {
@@ -13,7 +14,7 @@ const CancelPage = () => {
       <SEOHead
         title="Payment Cancelled | Atomra Home Romania"
         description="Your payment was cancelled. You can try again or continue shopping."
-        url="https://atomrahomeromania.ro/cancel"
+        url={getSiteUrl('/cancel')}
         noindex={true}
       />
       

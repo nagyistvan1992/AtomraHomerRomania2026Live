@@ -656,7 +656,7 @@ const AdminProductForm: React.FC<ProductFormProps> = ({
                   {formData.meta_title || formData.name || 'Product Title'}
                 </p>
                 <p className="text-green-600 text-sm">
-                  https://atomrahomeromania.ro/product/{formData.slug || slugify(formData.name, { lower: true, strict: true }) || 'product-slug'}
+                  https://www.atomrahomeromania.ro/product/{formData.slug || slugify(formData.name, { lower: true, strict: true }) || 'product-slug'}
                 </p>
                 <p className="text-gray-600 text-sm line-clamp-2 mt-1">
                   {formData.meta_description || formData.description || 'Product description will appear here...'}

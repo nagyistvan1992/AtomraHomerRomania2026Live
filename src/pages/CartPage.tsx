@@ -10,6 +10,7 @@ import { ShoppingCart, Plus, Minus, CreditCard, Truck, ArrowLeft, ArrowRight, Ch
 import { motion, AnimatePresence } from 'framer-motion';
 import { getAssetPath } from '../utils/assetPath';
 import { getPlaceholderImage, normalizeImageSource } from '../utils/imageSources';
+import { getSiteUrl } from '../utils/siteConfig';
 
 const { useMemo } = React;
 
@@ -992,7 +993,7 @@ const CartPage = () => {
         <SEOHead
           title="Coșul meu | Atomra Home Romania"
           description="Finalizează comanda ta de lumânări din ceară naturală Atomra. Livrare rapidă și transport gratuit peste 149 Lei."
-          url="https://atomrahomeromania.ro/cart"
+          url={getSiteUrl('/cart')}
           noindex={true}
         />
       

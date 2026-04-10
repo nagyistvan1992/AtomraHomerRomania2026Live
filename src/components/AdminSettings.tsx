@@ -18,7 +18,7 @@ interface SettingsState {
 const AdminSettings = () => {
   const [settings, setSettings] = useState<SettingsState>({
     siteName: 'Atomra Home Romania',
-    siteUrl: 'https://atomrahomeromania.ro',
+    siteUrl: 'https://www.atomrahomeromania.ro',
     adminEmail: 'atomrahomeromania@gmail.com',
     currency: 'Lei',
     freeShippingThreshold: 149,

@@ -30,6 +30,7 @@ const ScentsPage = lazy(() => import('./pages/ScentsPage'));
 const PlantBasedPage = lazy(() => import('./pages/PlantBasedPage'));
 const RefillablePage = lazy(() => import('./pages/RefillablePage'));
 const LegalInfoPage = lazy(() => import('./pages/LegalInfoPage'));
+const RefundPolicyPage = lazy(() => import('./pages/RefundPolicyPage'));
 const CartRoute = lazy(() => import('./routes/CartRoute'));
 const RefillableCandlesLandingPage = lazy(() => import('./pages/RefillableCandlesLandingPage'));
 const SandWaxLandingPage = lazy(() => import('./pages/SandWaxLandingPage'));
@@ -133,6 +134,7 @@ function App() {
                 <Route path="/plant-based" element={<PlantBasedPage />} />
                 <Route path="/refillable" element={<RefillablePage />} />
                 <Route path="/privacy-policy" element={<LegalInfoPage variant="privacy" />} />
+                <Route path="/refund-policy" element={<RefundPolicyPage />} />
                 <Route path="/terms" element={<LegalInfoPage variant="terms" />} />
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Route>

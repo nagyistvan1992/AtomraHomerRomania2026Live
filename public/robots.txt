@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemap location
-Sitemap: https://atomrahomeromania.ro/sitemap.xml
+Sitemap: https://www.atomrahomeromania.ro/sitemap.xml
 
 # Crawl-delay for polite crawling
 Crawl-delay: 1

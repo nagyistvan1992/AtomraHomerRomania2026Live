@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { getEntriLinks } from '../utils/getEntriLinks';
 import { supabase } from '../lib/supabase';
 import { invokeSupabaseFunction } from '../lib/supabaseFunctions';
+import { getSiteUrl } from '../utils/siteConfig';
 
 interface DomainInfo {
   claim_url?: string;
@@ -113,7 +114,7 @@ const SuccessPage = () => {
       <SEOHead
         title="Payment Successful | Atomra Home Romania"
         description="Your payment has been processed successfully. Thank you for your purchase!"
-        url="https://atomrahomeromania.ro/success"
+        url={getSiteUrl('/success')}
         noindex={true}
       />
       
