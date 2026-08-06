@@ -2,6 +2,7 @@ import { createReadStream, existsSync, statSync } from 'node:fs';
 import { extname, join, normalize, resolve } from 'node:path';
 import { createServer } from 'node:http';
 import { fileURLToPath } from 'node:url';
+import https from 'node:https';
 
 const projectRoot = resolve(fileURLToPath(new URL('..', import.meta.url)));
 const distRoot = join(projectRoot, 'dist');
@@ -66,6 +67,26 @@ const server = createServer((request, response) => {
   const requestedFile = resolveDistFile(pathname);
 
   try {
+    if (pathname.startsWith('/api/')) {
+      const targetUrl = `https://www.atomrahomeromania.ro${pathname}${requestUrl.search}`;
+      const proxyRequest = https.request(targetUrl, {
+        method: request.method,
+        headers: {
+          ...request.headers,
+          host: 'www.atomrahomeromania.ro',
+        }
+      }, (proxyResponse) => {
+        response.writeHead(proxyResponse.statusCode, proxyResponse.headers);
+        proxyResponse.pipe(response);
+      });
+      proxyRequest.on('error', (err) => {
+        response.writeHead(500, { 'Content-Type': 'text/plain; charset=utf-8' });
+        response.end(`Proxy error: ${err.message}`);
+      });
+      request.pipe(proxyRequest);
+      return;
+    }
+
     if (pathname === '/' || pathname === '/index.html') {
       sendFile(join(distRoot, 'index.html'), response);
       return;

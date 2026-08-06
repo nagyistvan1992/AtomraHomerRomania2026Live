@@ -56,6 +56,12 @@ export default defineConfig(() => ({
     reportCompressedSize: false
   },
   server: {
+    proxy: {
+      '/api': {
+        target: 'https://www.atomrahomeromania.ro',
+        changeOrigin: true,
+      }
+    },
     headers: {
       'Cache-Control': 'public, max-age=31536000'
     }

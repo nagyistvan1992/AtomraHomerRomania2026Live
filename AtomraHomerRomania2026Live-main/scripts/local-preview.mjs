@@ -2,6 +2,7 @@ import { createReadStream, existsSync, statSync } from 'node:fs';
 import { extname, join, normalize, resolve } from 'node:path';
 import { createServer } from 'node:http';
 import { fileURLToPath } from 'node:url';
+import https from 'node:https';
 
 const projectRoot = resolve(fileURLToPath(new URL('..', import.meta.url)));
 const distRoot = join(projectRoot, 'dist');
@@ -67,52 +68,22 @@ const server = createServer((request, response) => {
 
   try {
     if (pathname.startsWith('/api/')) {
-      const routeName = pathname.replace('/api/', '').split('?')[0];
-      const apiFilePath = resolve(projectRoot, 'api', `${routeName}.ts`);
-      
-      let bodyData = '';
-      request.on('data', (chunk) => { bodyData += chunk; });
-      request.on('end', async () => {
-        try {
-          const handlerModule = await import(`file://${apiFilePath}`);
-          const handler = handlerModule.default;
-          
-          let parsedBody = {};
-          try { if (bodyData) parsedBody = JSON.parse(bodyData); } catch {}
-
-          const mockReq = {
-            ...request,
-            query: Object.fromEntries(requestUrl.searchParams.entries()),
-            body: parsedBody,
-            headers: request.headers,
-            method: request.method,
-          };
-
-          const mockRes = {
-            status: (code) => {
-              response.statusCode = code;
-              return mockRes;
-            },
-            json: (data) => {
-              response.setHeader('Content-Type', 'application/json; charset=utf-8');
-              response.end(JSON.stringify(data));
-              return mockRes;
-            },
-            send: (text) => {
-              response.end(text);
-              return mockRes;
-            },
-            setHeader: (k, v) => response.setHeader(k, v),
-            end: (val) => response.end(val),
-          };
-
-          await handler(mockReq, mockRes);
-        } catch (apiErr) {
-          console.error(`API Route Error [/api/${routeName}]:`, apiErr);
-          response.writeHead(500, { 'Content-Type': 'application/json' });
-          response.end(JSON.stringify({ error: apiErr.message }));
+      const targetUrl = `https://www.atomrahomeromania.ro${pathname}${requestUrl.search}`;
+      const proxyRequest = https.request(targetUrl, {
+        method: request.method,
+        headers: {
+          ...request.headers,
+          host: 'www.atomrahomeromania.ro',
         }
+      }, (proxyResponse) => {
+        response.writeHead(proxyResponse.statusCode, proxyResponse.headers);
+        proxyResponse.pipe(response);
       });
+      proxyRequest.on('error', (err) => {
+        response.writeHead(500, { 'Content-Type': 'text/plain; charset=utf-8' });
+        response.end(`Proxy error: ${err.message}`);
+      });
+      request.pipe(proxyRequest);
       return;
     }
 
