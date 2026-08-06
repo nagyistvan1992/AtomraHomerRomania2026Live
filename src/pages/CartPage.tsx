@@ -220,8 +220,6 @@ const CartPage = () => {
   const [notes, setNotes] = useState('');
   const [loading, setLoading] = useState(false);
   const [orderNumber, setOrderNumber] = useState('');
-  const stripeSuccessUrl = `${window.location.origin}/success?session_id={CHECKOUT_SESSION_ID}`;
-  const stripeCancelUrl = `${window.location.origin}/cancel`;
 
   const subtotalAmount = useMemo(
     () =>
@@ -360,16 +358,11 @@ const CartPage = () => {
   };
 
   const requestStripeCheckoutUrl = async (payload: {
-    price_id?: string;
-    line_items?: Array<{
+    line_items: Array<{
       price_id: string;
       quantity: number;
     }>;
-    mode: 'payment' | 'subscription';
-    success_url: string;
-    cancel_url: string;
     customer_email: string;
-    cart_subtotal?: number;
   }) => {
     const parsedBody = await invokeSupabaseFunction<{ url?: string; error?: string; message?: string }>(
       'stripe-checkout',
@@ -542,11 +535,7 @@ const CartPage = () => {
           price_id: stripeProduct.priceId,
           quantity: cartItem.quantity,
         })),
-        mode: checkoutMode,
-        success_url: stripeSuccessUrl,
-        cancel_url: stripeCancelUrl,
         customer_email: details.email,
-        cart_subtotal: subtotalAmount,
       });
 
       window.location.href = checkoutUrl;
@@ -1062,4 +1051,3 @@ const CartPage = () => {
 };
 
 export default CartPage;
-

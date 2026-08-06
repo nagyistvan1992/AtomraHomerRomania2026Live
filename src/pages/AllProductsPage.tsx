@@ -431,16 +431,16 @@ const AllProductsPage = () => {
                                 </div>
                               )}
                               
-                              {/* Add to cart button */}
-                              <div className="absolute bottom-3 right-3 z-10">
-                                <AddToCartButton 
-                                  product={product}
-                                  variant="icon"
-                                  size="lg"
-                                  disabled={!product.in_stock}
-                                />
-                              </div>
                             </Link>
+                            {/* This remains outside the product link: buttons may not be nested in anchors. */}
+                            <div className="absolute bottom-3 right-3 z-10">
+                              <AddToCartButton
+                                product={product}
+                                variant="icon"
+                                size="lg"
+                                disabled={!product.in_stock}
+                              />
+                            </div>
                             
                             {/* Product Info */}
                             <div className="p-4 flex-1 flex flex-col">
@@ -573,4 +573,3 @@ const AllProductsPage = () => {
 };
 
 export default AllProductsPage;
-
