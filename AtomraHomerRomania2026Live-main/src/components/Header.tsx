@@ -275,9 +275,9 @@ const Header = () => {
         <div className="relative z-10 hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 md:block">
           <div className="flex justify-center py-4">
             <Link to="/" className="group text-center" onClick={(event) => { handleBrandClick(event); handleLinkClick(); }}>
-              <h1 className="text-xl font-extralight tracking-super-wide text-[#1e1e1e] transition-colors duration-300 group-hover:text-[#333333] sm:text-2xl">
+              <span className="block text-xl font-extralight tracking-super-wide text-[#1e1e1e] transition-colors duration-300 group-hover:text-[#333333] sm:text-2xl">
                 ATOMRA
-              </h1>
+              </span>
               <div className="text-xs font-light tracking-super-wide text-[#666666] transition-colors duration-300 group-hover:text-[#888888]">
                 HOME ROMANIA
               </div>
@@ -399,9 +399,9 @@ const Header = () => {
             className="group absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center"
             onClick={(event) => { handleBrandClick(event); handleLinkClick(); }}
           >
-            <h1 className="text-lg font-extralight tracking-super-wide text-[#1e1e1e] transition-colors duration-300 group-hover:text-[#333333]">
+            <span className="block text-lg font-extralight tracking-super-wide text-[#1e1e1e] transition-colors duration-300 group-hover:text-[#333333]">
               ATOMRA
-            </h1>
+            </span>
             <div className="text-[10px] font-light tracking-super-wide text-[#666666] transition-colors duration-300 group-hover:text-[#888888]">
               HOME ROMANIA
             </div>

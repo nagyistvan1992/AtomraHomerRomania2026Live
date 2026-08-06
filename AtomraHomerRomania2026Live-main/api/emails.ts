@@ -104,14 +104,50 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(400).json({ success: false, error: 'Informații comandă incomplete' });
     }
 
+    const resendApiKey = process.env.RESEND_API_KEY;
     const gmailUsername = process.env.GMAIL_USERNAME;
     const gmailAppPassword = process.env.GMAIL_APP_PASSWORD;
+    const senderEmail = process.env.SENDER_EMAIL || 'onboarding@resend.dev';
 
     let customerSent = false;
     let adminSent = false;
     let transportLog = '';
 
-    if (gmailUsername && gmailAppPassword) {
+    if (resendApiKey) {
+      // Send using Resend API
+      const resendHeaders = {
+        'Authorization': `Bearer ${resendApiKey}`,
+        'Content-Type': 'application/json',
+      };
+
+      // 1. Send Email to Customer via Resend
+      const customerRes = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: resendHeaders,
+        body: JSON.stringify({
+          from: `Atomra Homer Romania <${senderEmail}>`,
+          to: [orderData.customerEmail],
+          subject: `Comandă #${orderData.orderId} confirmată`,
+          html: buildCustomerEmailHtml(orderData),
+        }),
+      });
+      if (customerRes.ok) customerSent = true;
+
+      // 2. Send Email to Admin via Resend
+      const adminRes = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: resendHeaders,
+        body: JSON.stringify({
+          from: `Atomra System <${senderEmail}>`,
+          to: [ADMIN_EMAIL],
+          subject: `🔔 Comandă nouă #${orderData.orderId} - ${orderData.customerName}`,
+          html: buildAdminEmailHtml(orderData),
+        }),
+      });
+      if (adminRes.ok) adminSent = true;
+
+      transportLog = 'Emails sent via Resend API.';
+    } else if (gmailUsername && gmailAppPassword) {
       const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
@@ -144,7 +180,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       console.log(`[TEST EMAIL LOG] Sending Admin Email to: ${ADMIN_EMAIL}`);
       customerSent = true;
       adminSent = true;
-      transportLog = 'Simulated email dispatch (GMAIL_USERNAME and GMAIL_APP_PASSWORD not set).';
+      transportLog = 'Simulated email dispatch (RESEND_API_KEY / GMAIL credentials not set).';
     }
 
     return res.status(200).json({
