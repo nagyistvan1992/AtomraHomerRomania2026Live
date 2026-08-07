@@ -1,5 +1,5 @@
-﻿import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { ArrowLeft, Star, ShoppingCart, Plus, Minus, Heart, Share2, Check, ChevronLeft, ChevronRight, X } from 'lucide-react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { ArrowLeft, Star, ShoppingCart, Plus, Minus, Heart, Share2, Check, ChevronLeft, ChevronRight, X, Sparkles, Leaf, Flame, CheckCircle2 } from 'lucide-react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useLanguage } from '../context/LanguageContext';
@@ -826,52 +826,114 @@ const ProductPage = () => {
           </div>
           
           {/* SEO Content Section */}
-          <section className="mt-16 pt-8 border-t border-gray-100">
-            <div className="max-w-4xl mx-auto">
-              <h2 className="text-2xl font-light text-gray-900 mb-6">Despre lumânările din ceară naturală</h2>
+          <section className="mt-20 pt-12 border-t border-amber-100/60">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6">
               
-              <div className="prose prose-slate max-w-none">
-                <p>
-                  <strong>Lumânările din ceară naturală</strong> reprezintă o alternativă mai curată și mai atent construită față de lumânările convenționale din parafină. La Atomra Home Romania, lucrăm cu produse din <strong>ceară naturală</strong> create pentru o experiență plăcută, elegantă și ușor de integrat în decorul de zi cu zi.
-                </p>
+              {/* Header & Intro Box */}
+              <div className="bg-gradient-to-br from-amber-50/70 via-neutral-50 to-orange-50/40 rounded-3xl p-8 lg:p-12 border border-amber-100/80 shadow-sm mb-10">
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-100/80 border border-amber-200/60 text-amber-800 text-xs font-medium tracking-wide uppercase mb-4">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+                  <span>100% Ceară Naturală & Sustenabilitate</span>
+                </div>
                 
-                <p>
-                  Produsul nostru, <strong>{product.name}</strong>, face parte din colecția {product.category} și este realizat din <strong>ceară de soia</strong> 100% naturală. Această <strong>lumânare personalizabilă</strong> este potrivită pentru {product.category === 'Home Collection' ? 'a crea o atmosferă caldă și primitoare în casa ta' : product.category === 'Events Collection' ? 'a adăuga eleganță și rafinament unor evenimente speciale' : 'a completa frumos experiența ta cu lumânările Atomra'}.
-                </p>
+                <h2 className="text-2xl lg:text-3xl font-serif text-gray-900 mb-6 font-normal">
+                  Despre lumânările din ceară naturală
+                </h2>
                 
-                <h3>Beneficiile lumânărilor din ceară naturală</h3>
-                
-                <p>
-                  Alegând <strong>lumânări din ceară naturală</strong> Atomra, beneficiezi de:
-                </p>
-                
-                <ul>
-                  <li>Ardere mai curată și adesea mai uniformă față de lumânările din parafină</li>
-                  <li>Absența toxinelor și a substanțelor chimice nedorite</li>
-                  <li>O experiență mai rafinată pentru decor, cadouri sau seri liniștite</li>
-                  <li>Impact mai redus asupra mediului, deoarece <strong>ceara naturală</strong> este biodegradabilă</li>
-                  <li>Sistem de reumplere care reduce risipa și păstrează recipientele în folosire</li>
-                  <li>Flexibilitate în personalizare și în modul în care îți compui propriul aranjament</li>
-                </ul>
-                
-                <h3>Cum să îngrijești lumânarea ta</h3>
-                
-                <p>
-                  Pentru a te bucura cât mai mult de <strong>lumânarea ta personalizabilă</strong> din <strong>ceară naturală</strong>, urmează aceste recomandări simple:
-                </p>
-                
-                <ul>
-                  <li>La prima aprindere, lasă lumânarea să ardă suficient pentru o topire uniformă la suprafață</li>
-                  <li>Taie fitilul la aproximativ 5-6 mm înainte de fiecare folosire</li>
-                  <li>Ține lumânarea departe de curenți de aer pentru o ardere mai stabilă</li>
-                  <li>Nu lăsa niciodată o lumânare aprinsă nesupravegheată</li>
-                  <li>Reumple recipientul cu granule noi de ceară atunci când nivelul scade</li>
-                </ul>
-                
-                <p>
-                  Descoperă întreaga noastră colecție de <strong>lumânări din ceară naturală</strong> și transformă-ți casa sau evenimentele speciale cu produse Atomra create cu atenție la detalii. Fiecare piesă este gândită pentru o experiență memorabilă, calmă și ușor de personalizat.
-                </p>
+                <div className="space-y-4 text-gray-700 leading-relaxed font-light text-base lg:text-lg">
+                  <p>
+                    <strong className="font-semibold text-gray-900">Lumânările din ceară naturală</strong> reprezintă o alternativă mai curată, rafinată și atent construită față de lumânările convenționale din parafină. La Atomra Home Romania, lucrăm exclusiv cu produse din <strong className="font-semibold text-gray-900">ceară naturală de soia</strong> create pentru o experiență plăcută, elegantă și ușor de integrat în decorul de zi cu zi.
+                  </p>
+                  <p className="text-gray-600 text-sm lg:text-base">
+                    Produsul nostru, <strong className="font-medium text-gray-800">{product.name}</strong>, face parte din colecția {product.category} și este realizat din <strong className="font-medium text-gray-800">ceară de soia 100% naturală</strong>. Această <strong className="font-medium text-gray-800">lumânare personalizabilă</strong> este potrivită pentru {product.category === 'Home Collection' ? 'a crea o atmosferă caldă, relaxantă și primitoare în casa ta' : product.category === 'Events Collection' ? 'a adăuga eleganță, luminozitate și rafinament unor evenimente speciale' : 'a completa frumos experiența ta cu lumânările premium Atomra'}.
+                  </p>
+                </div>
               </div>
+
+              {/* 2-Column Cards Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+                
+                {/* Benefits Card */}
+                <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between">
+                  <div>
+                    <div className="w-12 h-12 rounded-2xl bg-amber-50 flex items-center justify-center text-amber-700 mb-6 border border-amber-100">
+                      <Leaf className="w-6 h-6" />
+                    </div>
+                    <h3 className="text-xl font-serif text-gray-900 mb-2 font-medium">
+                      Beneficiile lumânărilor din ceară naturală
+                    </h3>
+                    <p className="text-xs text-gray-500 mb-6">
+                      Alegând lumânări din ceară naturală Atomra, te bucuri de avantaje superioare:
+                    </p>
+                    <ul className="space-y-3.5">
+                      {[
+                        "Ardere mai curată și uniformă, fără fum negru sau reziduuri nocive",
+                        "Absența toxinelor, a parafinei din petrol și a substanțelor chimice nedorite",
+                        "O experiență olfactivă și vizuală rafinată pentru decor, cadouri sau seri liniștite",
+                        "Impact redus asupra mediului – ceara naturală de soia este 100% biodegradabilă",
+                        "Sistem inteligent de reumplere care reduce risipa și păstrează recipientele în folosire",
+                        "Flexibilitate în personalizare și în modul în care îți compui propriul aranjament"
+                      ].map((benefit, idx) => (
+                        <li key={idx} className="flex items-start gap-3 text-sm text-gray-700 leading-snug">
+                          <CheckCircle2 className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                          <span>{benefit}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+
+                {/* Candle Care Card */}
+                <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between">
+                  <div>
+                    <div className="w-12 h-12 rounded-2xl bg-amber-50 flex items-center justify-center text-amber-700 mb-6 border border-amber-100">
+                      <Flame className="w-6 h-6" />
+                    </div>
+                    <h3 className="text-xl font-serif text-gray-900 mb-2 font-medium">
+                      Cum să îngrijești lumânarea ta
+                    </h3>
+                    <p className="text-xs text-gray-500 mb-6">
+                      Recomandări simple pentru a maximiza durata de ardere și parfumul:
+                    </p>
+                    <ul className="space-y-3.5">
+                      {[
+                        "La prima aprindere, lasă lumânarea să ardă până când stratul superior se topește complet",
+                        "Taie fitilul la aproximativ 5-6 mm înainte de fiecare aprindere pentru a preveni fumul",
+                        "Ține lumânarea departe de curenții puternici de aer pentru o ardere mai stabilă",
+                        "Nu lăsa niciodată o lumânare aprinsă nesupravegheată sau la îndemâna copiilor",
+                        "Reumple recipientul cu granule noi de ceară naturală atunci când nivelul scade"
+                      ].map((tip, idx) => (
+                        <li key={idx} className="flex items-start gap-3 text-sm text-gray-700 leading-snug">
+                          <span className="w-5 h-5 rounded-full bg-amber-100 text-amber-800 text-xs font-semibold flex items-center justify-center shrink-0 mt-0.5">
+                            {idx + 1}
+                          </span>
+                          <span>{tip}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+
+              </div>
+
+              {/* Final Callout Banner */}
+              <div className="bg-neutral-900 rounded-3xl p-8 lg:p-10 text-white flex flex-col md:flex-row items-center justify-between gap-6 shadow-lg">
+                <div className="space-y-2 text-center md:text-left">
+                  <h4 className="text-lg lg:text-xl font-serif font-light text-amber-200">
+                    Transformă-ți spațiul cu lumânările din ceară naturală Atomra
+                  </h4>
+                  <p className="text-sm text-neutral-400 font-light max-w-2xl">
+                    Descoperă colecția noastră completă creată cu atenție la detalii. Fiecare piesă este gândită pentru o experiență memorabilă, calmă și sustenabilă.
+                  </p>
+                </div>
+                <Link
+                  to="/collections/all"
+                  className="shrink-0 px-6 py-3 rounded-full bg-amber-500 hover:bg-amber-400 text-neutral-950 font-medium text-sm transition-all duration-200 shadow-md hover:shadow-amber-500/20"
+                >
+                  Vezi toate colecțiile
+                </Link>
+              </div>
+
             </div>
           </section>
         </div>
