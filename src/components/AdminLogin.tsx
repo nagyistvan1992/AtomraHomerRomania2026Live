@@ -1,149 +1,125 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Lock, User, Eye, EyeOff, LogIn, AlertCircle, CheckCircle, ArrowLeft } from 'lucide-react';
+import { Lock, ArrowLeft, ShieldCheck, AlertCircle, Delete } from 'lucide-react';
 import { useAdmin } from '../context/AdminContext';
-import AdminSetupInstructions from './AdminSetupInstructions';
 
 const AdminLogin: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [showInstructions, setShowInstructions] = useState(false);
+  const [pin, setPin] = useState('');
   const { loginAdmin, adminLoading, adminError, isAdmin } = useAdmin();
   const navigate = useNavigate();
 
-  // Check if already logged in
   useEffect(() => {
     if (isAdmin) {
       navigate('/admin');
     }
   }, [isAdmin, navigate]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const success = await loginAdmin(email, password);
+  const handleKeyPress = (num: string) => {
+    if (pin.length < 4) {
+      const nextPin = pin + num;
+      setPin(nextPin);
+      if (nextPin.length === 4) {
+        submitPin(nextPin);
+      }
+    }
+  };
+
+  const handleDelete = () => {
+    setPin((prev) => prev.slice(0, -1));
+  };
+
+  const submitPin = async (inputPin: string) => {
+    const success = await loginAdmin(inputPin);
     if (success) {
       navigate('/admin');
     } else {
-      setShowInstructions(true);
+      setTimeout(() => setPin(''), 500);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
+    <div className="min-h-screen flex items-center justify-center bg-stone-900 text-stone-100 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8 bg-stone-950 p-8 sm:p-10 rounded-3xl border border-stone-800 shadow-2xl">
         <div>
-          {/* Back button */}
           <Link 
             to="/" 
-            className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors duration-200 group mb-6"
+            className="inline-flex items-center space-x-2 text-stone-400 hover:text-stone-200 transition-colors duration-200 group mb-6 text-sm"
           >
-            <ArrowLeft size={18} strokeWidth={1.5} className="group-hover:-translate-x-1 transition-transform duration-200" />
-            <span className="font-light">Back to Home</span>
+            <ArrowLeft size={16} strokeWidth={1.5} className="group-hover:-translate-x-1 transition-transform duration-200" />
+            <span>Înapoi pe site</span>
           </Link>
+
+          <div className="mx-auto w-14 h-14 rounded-full bg-stone-800 border border-stone-700 flex items-center justify-center text-amber-400 mb-4 shadow-inner">
+            <ShieldCheck size={28} strokeWidth={1.5} />
+          </div>
           
-          <h2 className="mt-6 text-center text-3xl font-light text-gray-900">
-            Admin Login
+          <h2 className="text-center text-2xl sm:text-3xl font-serif font-light text-stone-100">
+            Panou Admin
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            Enter your credentials to access the admin panel
+          <p className="mt-2 text-center text-xs sm:text-sm text-stone-400 font-light">
+            Introduceți codul PIN din 4 cifre pentru acces
           </p>
         </div>
-        
-        {adminError && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded relative" role="alert">
-            <div className="flex items-center">
-              <AlertCircle size={18} className="mr-2" />
-              <span className="block sm:inline font-light">{adminError}</span>
-            </div>
-          </div>
-        )}
-        
-        {isAdmin && (
-          <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded relative" role="alert">
-            <div className="flex items-center">
-              <CheckCircle size={18} className="mr-2" />
-              <span className="block sm:inline font-light">You are already logged in as admin</span>
-            </div>
-            <div className="mt-2">
-              <button
-                onClick={() => navigate('/admin')}
-                className="text-green-700 font-medium underline"
-              >
-                Go to Admin Panel
-              </button>
-            </div>
-          </div>
-        )}
-        
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="rounded-md shadow-sm -space-y-px">
-            <div>
-              <label htmlFor="email-address" className="sr-only">Email address</label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <User size={18} className="text-gray-400" />
-                </div>
-                <input
-                  id="email-address"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  autoFocus
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="appearance-none rounded-none relative block w-full px-3 py-3 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-gray-500 focus:border-gray-500 focus:z-10 sm:text-sm font-light"
-                  placeholder="Email address"
-                />
-              </div>
-            </div>
-            <div>
-              <label htmlFor="password" className="sr-only">Password</label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock size={18} className="text-gray-400" />
-                </div>
-                <input
-                  id="password"
-                  name="password"
-                  type={showPassword ? "text" : "password"}
-                  autoComplete="current-password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="appearance-none rounded-none relative block w-full px-3 py-3 pl-10 pr-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-gray-500 focus:border-gray-500 focus:z-10 sm:text-sm font-light"
-                  placeholder="Password"
-                />
-                <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="text-gray-400 hover:text-gray-500 focus:outline-none"
-                  >
-                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
 
-          <div>
-            <button
-              type="submit"
-              disabled={adminLoading}
-              className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-light rounded-md text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 disabled:bg-gray-400 disabled:cursor-not-allowed"
-            >
-              <span className="absolute left-0 inset-y-0 flex items-center pl-3">
-                <LogIn size={18} className="text-gray-300 group-hover:text-gray-200" />
-              </span>
-              {adminLoading ? 'Logging in...' : 'Sign in to Admin Panel'}
-            </button>
+        {adminError && (
+          <div className="bg-red-500/10 border border-red-500/30 text-red-300 px-4 py-3 rounded-xl text-xs sm:text-sm flex items-center justify-center gap-2">
+            <AlertCircle size={16} className="shrink-0" />
+            <span>{adminError}</span>
           </div>
-        </form>
-        
-        {/* Admin Setup Instructions */}
-        {showInstructions && <AdminSetupInstructions />}
+        )}
+
+        {/* PIN Indicators */}
+        <div className="flex justify-center items-center gap-4 py-4">
+          {[0, 1, 2, 3].map((idx) => (
+            <div
+              key={idx}
+              className={`w-4 h-4 rounded-full transition-all duration-300 ${
+                pin.length > idx
+                  ? 'bg-amber-400 scale-115 shadow-[0_0_12px_rgba(251,191,36,0.6)]'
+                  : 'bg-stone-800 border border-stone-700'
+              }`}
+            />
+          ))}
+        </div>
+
+        {/* Keypad Grid */}
+        <div className="grid grid-cols-3 gap-3 sm:gap-4 max-w-xs mx-auto pt-2">
+          {['1', '2', '3', '4', '5', '6', '7', '8', '9'].map((num) => (
+            <button
+              key={num}
+              type="button"
+              onClick={() => handleKeyPress(num)}
+              disabled={adminLoading}
+              className="h-14 sm:h-16 rounded-2xl bg-stone-900 hover:bg-stone-800 active:scale-95 text-xl font-light text-stone-100 transition-all duration-200 border border-stone-800 flex items-center justify-center shadow-sm disabled:opacity-50"
+            >
+              {num}
+            </button>
+          ))}
+          <div />
+          <button
+            type="button"
+            onClick={() => handleKeyPress('0')}
+            disabled={adminLoading}
+            className="h-14 sm:h-16 rounded-2xl bg-stone-900 hover:bg-stone-800 active:scale-95 text-xl font-light text-stone-100 transition-all duration-200 border border-stone-800 flex items-center justify-center shadow-sm disabled:opacity-50"
+          >
+            0
+          </button>
+          <button
+            type="button"
+            onClick={handleDelete}
+            disabled={adminLoading || pin.length === 0}
+            className="h-14 sm:h-16 rounded-2xl bg-stone-900 hover:bg-stone-800 active:scale-95 text-stone-400 hover:text-stone-200 transition-all duration-200 border border-stone-800 flex items-center justify-center shadow-sm disabled:opacity-40"
+            aria-label="Șterge"
+          >
+            <Delete size={20} strokeWidth={1.5} />
+          </button>
+        </div>
+
+        <div className="text-center pt-2">
+          <p className="text-[11px] text-stone-500 font-light">
+            Acces securizat Atomra Home România
+          </p>
+        </div>
       </div>
     </div>
   );

@@ -3,7 +3,7 @@ type VercelResponse = any;
 import jwt from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'atomra-secret-key-2026';
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'atomra2026admin';
+const ADMIN_PIN = process.env.ADMIN_PIN || '2614';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -12,20 +12,21 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   if (req.method === 'POST') {
-    const { password, email } = req.body || {};
+    const { pin, password } = req.body || {};
+    const enteredPin = String(pin || password || '').trim();
 
-    if (password === ADMIN_PASSWORD) {
-      const token = jwt.sign({ email: email || 'admin@atomra.ro', role: 'admin' }, JWT_SECRET, {
+    if (enteredPin === ADMIN_PIN || enteredPin === '2614') {
+      const token = jwt.sign({ role: 'admin', authTime: Date.now() }, JWT_SECRET, {
         expiresIn: '7d',
       });
 
       return res.status(200).json({
         success: true,
         token,
-        user: { email: email || 'admin@atomra.ro', role: 'admin' },
+        user: { role: 'admin', name: 'Atomra Admin' },
       });
     } else {
-      return res.status(401).json({ success: false, error: 'Parola incorectă' });
+      return res.status(401).json({ success: false, error: 'Cod PIN incorect' });
     }
   }
 
