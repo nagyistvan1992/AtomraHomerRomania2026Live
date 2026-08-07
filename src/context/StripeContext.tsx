@@ -2,8 +2,10 @@
 import React, { createContext, useContext, ReactNode } from 'react';
 import { loadStripe, Stripe } from '@stripe/stripe-js';
 
-// Get Stripe publishable key from environment variables
-const STRIPE_PUBLISHABLE_KEY = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || '';
+// Get Stripe publishable key from environment variables or fallback live key
+const STRIPE_PUBLISHABLE_KEY =
+  import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY ||
+  'pk_live_51L0O3nBEuvxC28expi4udCptWQHLPxRJLPRuABtM3nCCpCyalOH4FtRZB3aufit3V6G7SopNfMhUCP3foxflshpa00K6STmRgW';
 
 // Log Stripe key status for debugging
 console.log('Stripe key status:', STRIPE_PUBLISHABLE_KEY ? 'Available' : 'Not available');
