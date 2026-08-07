@@ -405,7 +405,7 @@ const CartPage = () => {
     };
 
     void invokeVercelFunction<{ success?: boolean; error?: string; message?: string }>(
-      'send-order-emails',
+      'emails',
       {
         body: emailPayload,
         timeoutMs: 8000,

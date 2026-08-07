@@ -1,3 +1,5 @@
+import { sendOrderEmailNotification } from './emails';
+
 export default async function handler(req: any, res: any) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type');
@@ -55,6 +57,34 @@ export default async function handler(req: any, res: any) {
         const data = await response.json();
         if (data.rows && data.rows.length > 0) {
           dbRow = data.rows[0];
+        }
+      }
+
+      // Dispatch automatic order confirmation email
+      if (body.customer_email) {
+        try {
+          const emailItems = Array.isArray(body.items) ? body.items.map((it: any) => ({
+            name: it.name || it.product_name || 'Produs Atomra',
+            quantity: it.quantity || 1,
+            price: typeof it.price === 'number' ? `${it.price} Lei` : (it.price || '0 Lei')
+          })) : [];
+
+          const shippingAddrStr = typeof shippingAddr === 'object'
+            ? `${shippingAddr.line1 || ''}, ${shippingAddr.city || ''} ${shippingAddr.postal_code || ''}`.trim()
+            : String(shippingAddr);
+
+          await sendOrderEmailNotification({
+            orderId: ordNum,
+            customerName: body.customer_name || 'Client',
+            customerEmail: body.customer_email,
+            customerPhone: body.customer_phone || '',
+            customerAddress: shippingAddrStr || 'Adresă furnizată la livrare',
+            items: emailItems,
+            total: totalVal,
+            paymentMethod: body.payment_method || 'Plată la livrare (Ramburs)'
+          });
+        } catch (emailErr) {
+          console.error('Order email notification error:', emailErr);
         }
       }
     } else if (req.method === 'GET') {

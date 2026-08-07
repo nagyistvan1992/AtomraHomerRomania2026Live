@@ -2,37 +2,33 @@ import { useEffect, useLayoutEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 const ScrollToTop = () => {
-  const { pathname, search, hash } = useLocation();
+  const { pathname, search } = useLocation();
 
   useEffect(() => {
     if ('scrollRestoration' in window.history) {
       window.history.scrollRestoration = 'manual';
     }
-
-    return () => {
-      if ('scrollRestoration' in window.history) {
-        window.history.scrollRestoration = 'auto';
-      }
-    };
   }, []);
 
   useLayoutEffect(() => {
-    const scrollToPageTop = () => {
+    const forceScrollTop = () => {
       window.scrollTo(0, 0);
       document.documentElement.scrollTop = 0;
       document.body.scrollTop = 0;
     };
 
-    scrollToPageTop();
+    forceScrollTop();
 
-    const frameId = window.requestAnimationFrame(scrollToPageTop);
-    const timeoutId = window.setTimeout(scrollToPageTop, 80);
+    const t1 = setTimeout(forceScrollTop, 10);
+    const t2 = setTimeout(forceScrollTop, 50);
+    const t3 = setTimeout(forceScrollTop, 150);
 
     return () => {
-      window.cancelAnimationFrame(frameId);
-      window.clearTimeout(timeoutId);
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
     };
-  }, [pathname, search, hash]);
+  }, [pathname, search]);
 
   return null;
 };
