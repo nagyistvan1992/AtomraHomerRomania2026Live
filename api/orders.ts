@@ -1,15 +1,4 @@
-import { neon } from '@neondatabase/serverless';
-
-const HARDCODED_NEON_URL =
-  'postgresql://neondb_owner:npg_1yQmpo6enEPA@ep-green-brook-zajitt3k-pooler.c-2.eu-west-2.aws.neon.tech/neondb?sslmode=require';
-
-function getValidConnectionString(): string {
-  const envUrl = process.env.POSTGRES_URL || process.env.DATABASE_URL || process.env.POSTGRES_URL_NON_POOLING;
-  if (envUrl && (envUrl.startsWith('postgres://') || envUrl.startsWith('postgresql://'))) {
-    return envUrl.replace(/channel_binding=require&?/, '');
-  }
-  return HARDCODED_NEON_URL;
-}
+import { query } from './db/index';
 
 export default async function handler(req: any, res: any) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -17,19 +6,16 @@ export default async function handler(req: any, res: any) {
 
   if (req.method === 'OPTIONS') return res.status(200).end();
 
-  const connStr = getValidConnectionString();
-  const sql = neon(connStr);
-
   try {
     if (req.method === 'GET') {
       const { id, order_number } = req.query || {};
       if (id) {
-        const rows: any = await sql`SELECT * FROM orders WHERE id = ${id} LIMIT 1`;
-        if (rows.length > 0) return res.status(200).json(rows[0]);
+        const result = await query('SELECT * FROM orders WHERE id = $1 LIMIT 1', [id]);
+        if (result.rows && result.rows.length > 0) return res.status(200).json(result.rows[0]);
         return res.status(404).json({ error: 'Order not found' });
       } else if (order_number) {
-        const rows: any = await sql`SELECT * FROM orders WHERE order_number = ${order_number} LIMIT 1`;
-        if (rows.length > 0) return res.status(200).json(rows[0]);
+        const result = await query('SELECT * FROM orders WHERE order_number = $1 LIMIT 1', [order_number]);
+        if (result.rows && result.rows.length > 0) return res.status(200).json(result.rows[0]);
         return res.status(200).json({
           id: `ord-${Date.now()}`,
           order_number,
@@ -39,8 +25,8 @@ export default async function handler(req: any, res: any) {
           created_at: new Date().toISOString()
         });
       } else {
-        const rows: any = await sql`SELECT * FROM orders ORDER BY created_at DESC`;
-        return res.status(200).json(rows);
+        const result = await query('SELECT * FROM orders ORDER BY created_at DESC');
+        return res.status(200).json(result.rows || []);
       }
     }
 
@@ -73,28 +59,29 @@ export default async function handler(req: any, res: any) {
       };
 
       try {
-        const rows: any = await sql`
-          INSERT INTO orders (order_number, customer_name, customer_email, customer_phone, shipping_address, total, subtotal, shipping_cost, status, items, stripe_session_id)
-          VALUES (
-            ${ordNum},
-            ${customer_name || 'Client'},
-            ${customer_email || ''},
-            ${customer_phone || ''},
-            ${JSON.stringify(shippingAddressObj)},
-            ${totalVal},
-            ${subtotal || totalVal},
-            ${shipping_cost || 0},
-            ${statusVal},
-            ${JSON.stringify(items || [])},
-            ${stripe_session_id || ''}
-          )
-          RETURNING *;
-        `;
+        const result = await query(
+          `INSERT INTO orders (order_number, customer_name, customer_email, customer_phone, shipping_address, total, subtotal, shipping_cost, status, items, stripe_session_id)
+           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+           RETURNING *`,
+          [
+            ordNum,
+            customer_name || 'Client',
+            customer_email || '',
+            customer_phone || '',
+            JSON.stringify(shippingAddressObj),
+            totalVal,
+            subtotal || totalVal,
+            shipping_cost || 0,
+            statusVal,
+            JSON.stringify(items || []),
+            stripe_session_id || ''
+          ]
+        );
 
-        if (rows && rows.length > 0) {
+        if (result.rows && result.rows.length > 0) {
           return res.status(201).json({
-            ...rows[0],
-            total_amount: Number(rows[0].total || totalVal),
+            ...result.rows[0],
+            total_amount: Number(result.rows[0].total || totalVal),
             payment_method: stripe_session_id ? 'card' : 'cod'
           });
         }
