@@ -1,10 +1,9 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useLanguage } from '../context/LanguageContext'; 
 import { useStripe } from '../context/StripeContext';
-import { isSupabaseConfigured, supabase } from '../lib/supabase';
-import { invokeSupabaseFunction } from '../lib/supabaseFunctions';
+import { apiClient, invokeVercelFunction } from '../lib/apiClient';
 import SEOHead from '../components/SEOHead';
 import { ShoppingCart, Plus, Minus, CreditCard, Truck, ArrowLeft, ArrowRight, Check, ShieldCheck, User, Trash2, Lock, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -273,7 +272,7 @@ const CartPage = () => {
 
   const findExistingOrder = async (orderNumber: string) => {
     const { data, error } = await withTimeout(
-      supabase
+      apiClient
         .from('orders')
         .select('order_number')
         .eq('order_number', orderNumber)
@@ -308,7 +307,7 @@ const CartPage = () => {
   }) => {
     const insertOrder = async () => {
       const { error } = await withTimeout(
-        supabase.from('orders').insert([orderData]),
+        apiClient.from('orders').insert([orderData]),
         12000,
         'Order creation timed out. Please try again.',
       );
@@ -364,7 +363,7 @@ const CartPage = () => {
     }>;
     customer_email: string;
   }) => {
-    const parsedBody = await invokeSupabaseFunction<{ url?: string; error?: string; message?: string }>(
+    const parsedBody = await invokeVercelFunction<{ url?: string; error?: string; message?: string }>(
       'stripe-checkout',
       {
         body: payload,
@@ -400,7 +399,7 @@ const CartPage = () => {
       }
     };
 
-    void invokeSupabaseFunction<{ success?: boolean; error?: string; message?: string }>(
+    void invokeVercelFunction<{ success?: boolean; error?: string; message?: string }>(
       'send-order-emails',
       {
         body: emailPayload,
@@ -431,10 +430,6 @@ const CartPage = () => {
   const processOrder = async () => {
     setLoading(true);
     try {
-      if (!isSupabaseConfigured) {
-        throw new Error('Supabase is not configured for order processing.');
-      }
-
       const details = sanitizeCustomerDetails();
       const orderNum = generateOrderNumber();
       const orderData = {
@@ -472,9 +467,6 @@ const CartPage = () => {
   const processStripePayment = async () => {
     setLoading(true);
     try {
-      if (!isSupabaseConfigured) {
-        throw new Error('Stripe checkout is not configured. Add the Vercel Supabase and Stripe environment variables first.');
-      }
       const details = sanitizeCustomerDetails();
 
       // Import the stripe config to get product price IDs 

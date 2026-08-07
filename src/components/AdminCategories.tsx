@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../lib/supabase';
+import { apiClient } from '../lib/apiClient';
 import { Plus, Edit, Trash2, RefreshCw } from 'lucide-react';
 import AdminCategoryForm from './AdminCategoryForm';
 import { getAssetPath } from '../utils/assetPath';
@@ -21,7 +21,7 @@ const AdminCategories = () => {
     setError(null);
     
     try {
-      const { data, error } = await supabase
+      const { data, error } = await apiClient
         .from('product_categories')
         .select('*')
         .order('sort_order', { ascending: true });
@@ -53,7 +53,7 @@ const AdminCategories = () => {
     }
     
     try {
-      const { error } = await supabase
+      const { error } = await apiClient
         .from('product_categories')
         .delete()
         .eq('id', id);
@@ -74,7 +74,7 @@ const AdminCategories = () => {
     try {
       if (editingCategory) {
         // Update existing category
-        const { data, error } = await supabase
+        const { data, error } = await apiClient
           .from('product_categories')
           .update(categoryData)
           .eq('id', editingCategory.id)
@@ -86,7 +86,7 @@ const AdminCategories = () => {
         setCategories(categories.map(c => c.id === editingCategory.id ? data[0] : c));
       } else {
         // Create new category
-        const { data, error } = await supabase
+        const { data, error } = await apiClient
           .from('product_categories')
           .insert([categoryData])
           .select();

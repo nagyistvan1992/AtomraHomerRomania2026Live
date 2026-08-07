@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../lib/supabase';
+import { apiClient } from '../lib/apiClient';
 import { Search, Plus, Grid, List, Filter, ArrowUp, ArrowDown, RefreshCw } from 'lucide-react';
 import AdminProductCard from './AdminProductCard';
 import AdminProductForm from './AdminProductForm';
@@ -28,7 +28,7 @@ const AdminProducts = () => {
     setError(null);
     
     try {
-      const { data, error } = await supabase
+      const { data, error } = await apiClient
         .from('products')
         .select('*')
         .order('created_at', { ascending: false });
@@ -46,7 +46,7 @@ const AdminProducts = () => {
 
   const fetchCategories = async () => {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await apiClient
         .from('product_categories')
         .select('*')
         .order('sort_order', { ascending: true });
@@ -91,7 +91,7 @@ const AdminProducts = () => {
     }
     
     try {
-      const { error } = await supabase
+      const { error } = await apiClient
         .from('products')
         .delete()
         .eq('id', id);
@@ -112,7 +112,7 @@ const AdminProducts = () => {
     try {
       if (editingProduct) {
         // Update existing product
-        const { data, error } = await supabase
+        const { data, error } = await apiClient
           .from('products')
           .update(productData)
           .eq('id', editingProduct.id)
@@ -124,7 +124,7 @@ const AdminProducts = () => {
         setProducts(products.map(p => p.id === editingProduct.id ? data[0] : p));
       } else {
         // Create new product
-        const { data, error } = await supabase
+        const { data, error } = await apiClient
           .from('products')
           .insert([productData])
           .select();

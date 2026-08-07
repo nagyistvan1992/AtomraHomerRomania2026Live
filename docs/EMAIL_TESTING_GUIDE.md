@@ -42,10 +42,9 @@ Check that emails contain:
 
 ## **🔍 Debugging Email Issues**
 
-### **Check Supabase Function Logs**
-1. Go to your Supabase dashboard
-2. Navigate to **Edge Functions** → **send-order-emails**
-3. Check the **Logs** tab for any errors
+### **Check Server API Function Logs**
+1. Check your server API logs or Vercel deployment logs
+2. Inspect logs for `/api/emails` endpoint
 
 ### **Common Log Messages**
 ```
@@ -60,7 +59,7 @@ Check that emails contain:
 **If emails are not being sent:**
 1. Verify Gmail app password is correct (16 characters)
 2. Check that 2-Factor Authentication is enabled on Gmail
-3. Ensure environment variables are set in Supabase
+3. Ensure environment variables are set in environment configuration (.env)
 4. Test with a simple order first
 
 **If emails go to spam:**
@@ -114,7 +113,7 @@ Consider adding:
 ## **📞 Support**
 
 If you encounter any issues:
-1. Check the Supabase function logs first
+1. Check the server API logs first
 2. Verify your Gmail app password
 3. Test with a simple order
 4. Review the email templates for any formatting issues

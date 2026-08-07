@@ -3,7 +3,7 @@ import { CardElement, useStripe as useStripeElements, useElements } from '@strip
 import { CreditCard, Lock, Shield, CheckCircle, AlertCircle } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useLanguage } from '../context/LanguageContext';
-import { invokeSupabaseFunction } from '../lib/supabaseFunctions';
+import { invokeVercelFunction } from '../lib/apiClient';
 
 interface OrderItem {
   id: string | number;
@@ -101,8 +101,8 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSuccess, customerInfo }) 
 
         console.log('Payment method created successfully:', paymentMethod.id);
 
-        // Create payment intent via Supabase Edge Function
-        const data = await invokeSupabaseFunction<{ client_secret?: string; error?: string }>('create-payment-intent', {
+        // Create payment intent via API Function
+        const data = await invokeVercelFunction<{ client_secret?: string; error?: string }>('create-payment-intent', {
           body: {
             amount: Math.round(finalTotal * 100), // Convert to cents
             currency: 'ron',

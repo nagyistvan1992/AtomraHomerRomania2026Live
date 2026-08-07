@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Package, User, MapPin, Phone, Mail, Calendar, Truck, CheckCircle, Clock, AlertCircle } from 'lucide-react';
-import { supabase } from '../lib/supabase';
-import { invokeSupabaseFunction } from '../lib/supabaseFunctions';
+import { apiClient, invokeVercelFunction } from '../lib/apiClient';
 import { getAssetPath } from '../utils/assetPath';
 
 interface OrderItem {
@@ -86,7 +85,7 @@ const AdminOrderDetails: React.FC<OrderDetailsProps> = ({
     // If status is shipped, update tracking number first
     if (status === 'shipped' && trackingNumber !== order.tracking_number) {
       try {
-        const { error } = await supabase
+        const { error } = await apiClient
           .from('orders')
           .update({ tracking_number: trackingNumber })
           .eq('id', order.id);
@@ -129,8 +128,8 @@ const AdminOrderDetails: React.FC<OrderDetailsProps> = ({
         total: order.total_amount
       };
       
-      // Call Supabase Edge Function to send email
-      const data = await invokeSupabaseFunction<{ success?: boolean; message?: string }>('send-order-status-email', {
+      // Call API Function to send email
+      const data = await invokeVercelFunction<{ success?: boolean; message?: string }>('send-order-status-email', {
         body: { orderData },
         requireSession: true,
       });
@@ -221,7 +220,7 @@ const AdminOrderDetails: React.FC<OrderDetailsProps> = ({
                     <button
                       onClick={async () => {
                         try {
-                          const { error } = await supabase
+                          const { error } = await apiClient
                             .from('orders')
                             .update({ tracking_number: trackingNumber })
                             .eq('id', order.id);

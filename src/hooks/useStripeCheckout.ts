@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { invokeSupabaseFunction } from '../lib/supabaseFunctions';
+import { invokeVercelFunction } from '../lib/apiClient';
 
 interface CheckoutOptions {
   priceId: string;
@@ -28,7 +28,7 @@ export const useStripeCheckout = () => {
 
       console.log('Creating checkout session for price ID:', priceId);
 
-      const checkoutData = await invokeSupabaseFunction<{ url?: string; error?: string }>('stripe-checkout', {
+      const checkoutData = await invokeVercelFunction<{ url?: string; error?: string }>('stripe-checkout', {
         body: {
           price_id: priceId,
           mode,

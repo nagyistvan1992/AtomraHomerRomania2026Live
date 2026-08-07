@@ -19,23 +19,13 @@ VITE_STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
 
 Do not place `STRIPE_SECRET_KEY` in the frontend `.env` file.
 
-### 3. Supabase Edge Function Setup
-The `create-payment-intent` edge function is already set up in this project. To deploy it:
+### 3. Server API Function Setup
+The `create-payment-intent` API route is set up in `/api/payment-intent`. Add your Stripe secret key to server environment variables:
 
-1. Go to your Supabase dashboard
-2. Navigate to **Edge Functions**
-3. Click **New Function**
-4. Name it `create-payment-intent`
-5. Upload the function code
-6. Add your Stripe secret key as an environment variable:
-   - Name: `STRIPE_SECRET_KEY`
-   - Value: Your Stripe secret key
-7. Add the rest of the required server-side secrets in Supabase:
-   - `SUPABASE_URL`
-   - `SUPABASE_SERVICE_ROLE_KEY`
-   - `STRIPE_WEBHOOK_SECRET`
-   - `GMAIL_USERNAME`
-   - `GMAIL_APP_PASSWORD`
+- `STRIPE_SECRET_KEY`
+- `STRIPE_WEBHOOK_SECRET`
+- `GMAIL_USERNAME`
+- `GMAIL_APP_PASSWORD`
 
 ### 4. Testing the Integration
 
@@ -60,7 +50,7 @@ When you're ready to accept real payments:
 ## Security Best Practices
 
 1. Never expose your Stripe secret key in client-side code
-2. Always process payments server-side using Supabase Edge Functions
+2. Always process payments server-side using secure API routes
 3. Validate all payment data before processing
 4. Use HTTPS for all payment pages
 5. Implement proper error handling for payment failures

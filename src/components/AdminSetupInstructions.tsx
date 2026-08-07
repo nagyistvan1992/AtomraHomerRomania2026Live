@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AlertCircle, CheckCircle, Copy, ExternalLink, User, Database, Shield } from 'lucide-react';
+import { AlertCircle, CheckCircle, Copy, User, Shield, Lock } from 'lucide-react';
 
 const AdminSetupInstructions: React.FC = () => {
   const [copiedStep, setCopiedStep] = useState<number | null>(null);
@@ -12,48 +12,25 @@ const AdminSetupInstructions: React.FC = () => {
 
   const steps = [
     {
-      title: "Access Supabase Dashboard",
-      description: "Go to your Supabase project dashboard",
-      action: "Open your Supabase project at supabase.com/dashboard",
-      icon: ExternalLink
-    },
-    {
-      title: "Navigate to Authentication",
-      description: "Go to Authentication → Users in the sidebar",
-      action: "Click on 'Authentication' then 'Users'",
-      icon: User
-    },
-    {
-      title: "Create Admin User",
-      description: "Click 'Add user' and create a new user",
+      title: "Check Environment Credentials",
+      description: "Verify that ADMIN_EMAIL and ADMIN_PASSWORD are set in environment configuration (.env)",
       details: [
-        "Email: ",
-        "Password: ",
-        "Email confirmed: Yes (check the box)"
+        "ADMIN_EMAIL: atomrahomeromania@gmail.com",
+        "ADMIN_PASSWORD: (set in .env)"
       ],
       action: "",
       icon: User
     },
     {
-      title: "Copy User UUID",
-      description: "After creating the user, copy their UUID from the users table",
-      action: "Copy the UUID from the 'id' column",
-      icon: Copy
+      title: "Log In",
+      description: "Return to the login form and enter your administrator email and password.",
+      action: "atomrahomeromania@gmail.com",
+      icon: Lock
     },
     {
-      title: "Add to Admin Table",
-      description: "Go to Table Editor → admin_users and insert a new row",
-      details: [
-        "user_id: (paste the UUID you copied)",
-        "role: admin (this should be the default)"
-      ],
-      action: "INSERT INTO admin_users (user_id) VALUES ('your-uuid-here');",
-      icon: Database
-    },
-    {
-      title: "Verify Setup",
-      description: "Return to this login page and try logging in",
-      action: "Use the email and password you created",
+      title: "Verify Access",
+      description: "Once authenticated, you will be redirected to the Admin Dashboard.",
+      action: "",
       icon: CheckCircle
     }
   ];
@@ -63,9 +40,9 @@ const AdminSetupInstructions: React.FC = () => {
       <div className="flex items-start space-x-3 mb-4">
         <AlertCircle size={24} strokeWidth={1.5} className="text-blue-600 mt-0.5 flex-shrink-0" />
         <div>
-          <h4 className="text-blue-800 font-medium mb-2">Admin Setup Required</h4>
+          <h4 className="text-blue-800 font-medium mb-2">Admin Setup Guide</h4>
           <p className="text-blue-700 text-sm font-light mb-4">
-            Follow these steps to set up your admin account in Supabase:
+            Follow these steps to access your admin account:
           </p>
         </div>
       </div>
@@ -100,7 +77,7 @@ const AdminSetupInstructions: React.FC = () => {
                     <code className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded font-mono">
                       {step.action}
                     </code>
-                    {(step.action.includes('@') || step.action.includes('INSERT')) && (
+                    {step.action.includes('@') && (
                       <button
                         onClick={() => copyToClipboard(step.action, index)}
                         className="text-blue-600 hover:text-blue-800 transition-colors"
@@ -129,7 +106,7 @@ const AdminSetupInstructions: React.FC = () => {
           </p>
         </div>
         <p className="text-green-600 text-xs font-light mt-1">
-          The admin user will have full access to the admin panel. Make sure to use a strong password and keep the credentials secure.
+          The admin user will have full access to the admin panel. Make sure to keep the credentials secure.
         </p>
       </div>
     </div>

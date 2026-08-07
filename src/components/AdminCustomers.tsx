@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../lib/supabase';
+import { apiClient } from '../lib/apiClient';
 import { Search, RefreshCw, Edit, Eye, User, ArrowDown, ArrowUp, X, Plus } from 'lucide-react';
 import AdminUserForm from './AdminUserForm';
 
@@ -23,7 +23,7 @@ const AdminCustomers = () => {
     setError(null);
     
     try {
-      const { data, error } = await supabase
+      const { data, error } = await apiClient
         .from('users')
         .select('*')
         .order('created_at', { ascending: false });
@@ -67,7 +67,7 @@ const AdminCustomers = () => {
     try {
       if (editingCustomer) {
         // Update existing customer
-        const { data, error } = await supabase
+        const { data, error } = await apiClient
           .from('users')
           .update(customerData)
           .eq('id', editingCustomer.id)
@@ -79,7 +79,7 @@ const AdminCustomers = () => {
         setCustomers(customers.map(c => c.id === editingCustomer.id ? data[0] : c));
       } else {
         // Create new customer
-        const { data, error } = await supabase
+        const { data, error } = await apiClient
           .from('users')
           .insert([customerData])
           .select();

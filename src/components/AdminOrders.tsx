@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../lib/supabase';
+import { apiClient } from '../lib/apiClient';
 import { Search, Filter, RefreshCw, Eye, Package, ArrowDown, ArrowUp, X } from 'lucide-react';
 import AdminOrderDetails from './AdminOrderDetails';
 
@@ -23,7 +23,7 @@ const AdminOrders = () => {
     setError(null);
     
     try {
-      const { data, error } = await supabase
+      const { data, error } = await apiClient
         .from('orders')
         .select('*')
         .order('created_at', { ascending: false });
@@ -67,7 +67,7 @@ const AdminOrders = () => {
     setUpdatingStatus(true);
     
     try {
-      const { error } = await supabase
+      const { error } = await apiClient
         .from('orders')
         .update({ order_status: status })
         .eq('id', id);

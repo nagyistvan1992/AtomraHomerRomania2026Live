@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Save, RefreshCw, Mail, Globe, DollarSign, Truck } from 'lucide-react';
 
 interface SettingsState {
@@ -41,10 +41,7 @@ const AdminSettings = () => {
     const fetchSettings = async () => {
       try {
         // Example of how you might fetch settings
-        // const { data, error } = await supabase
-        //   .from('settings')
-        //   .select('*')
-        //   .single();
+        // const { data, error } = await apiClient.from('settings').select('*').single();
         
         // if (error) throw error;
         
@@ -94,9 +91,7 @@ const AdminSettings = () => {
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       // Example of how you might save settings
-      // const { error } = await supabase
-      //   .from('settings')
-      //   .upsert(settings);
+      // const { error } = await apiClient.from('settings').upsert(settings);
       
       // if (error) throw error;
       

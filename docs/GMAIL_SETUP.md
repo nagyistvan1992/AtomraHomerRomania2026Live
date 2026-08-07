@@ -13,9 +13,9 @@ This guide will help you set up Gmail SMTP to send order confirmation emails to 
 5. Generate a new app password for "Mail"
 6. Copy the 16-character app password (save it securely)
 
-### 2. **Configure Supabase Environment Variables**
+### 2. **Configure Environment Variables**
 
-In your Supabase project dashboard:
+In your environment configuration (.env) or deployment settings:
 
 1. Go to **Settings** → **Environment Variables**
 2. Add the following variables:
@@ -79,9 +79,9 @@ The system sends two types of emails:
 **If emails are not sending:**
 
 1. Verify Gmail app password is correct
-2. Check Supabase environment variables
+2. Check environment variables
 3. Ensure 2-Step Verification is enabled on Gmail
-4. Check Supabase function logs for errors
+4. Check server logs for errors
 
 **Common Issues:**
 

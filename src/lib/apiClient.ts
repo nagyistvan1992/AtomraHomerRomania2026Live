@@ -1,4 +1,4 @@
-// Native Vercel REST API Client (Supabase-Free)
+// Native Vercel REST API Client
 
 const functionRouteMap: Record<string, string> = {
   'stripe-checkout': 'checkout',
@@ -53,8 +53,6 @@ export const invokeVercelFunction = async <T = any>(
 
   return response.json();
 };
-
-export const invokeSupabaseFunction = invokeVercelFunction;
 
 export const vercelApiClient = {
   auth: {
@@ -194,5 +192,5 @@ export const vercelApiClient = {
   },
 };
 
-export const isSupabaseConfigured = true;
-export const supabase = vercelApiClient;
+export const apiClient = vercelApiClient;
+

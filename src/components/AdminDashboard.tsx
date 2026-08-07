@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../lib/supabase';
+import { apiClient } from '../lib/apiClient';
 import { ShoppingBag, Users, DollarSign, ArrowUpRight, ArrowDownRight, Clock } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 
@@ -41,14 +41,14 @@ const AdminDashboard = () => {
       
       try {
         // Fetch total orders
-        const { data: ordersData, error: ordersError } = await supabase
+        const { data: ordersData, error: ordersError } = await apiClient
           .from('orders')
           .select('id, total_amount');
         
         if (ordersError) throw ordersError;
         
         // Fetch total customers (unique emails)
-        const { data: customersData, error: customersError } = await supabase
+        const { data: customersData, error: customersError } = await apiClient
           .from('orders')
           .select('customer_email')
           .limit(1000);
@@ -56,7 +56,7 @@ const AdminDashboard = () => {
         if (customersError) throw customersError;
         
         // Fetch pending orders
-        const { data: pendingOrdersData, error: pendingOrdersError } = await supabase
+        const { data: pendingOrdersData, error: pendingOrdersError } = await apiClient
           .from('orders')
           .select('id')
           .eq('order_status', 'pending');
@@ -64,7 +64,7 @@ const AdminDashboard = () => {
         if (pendingOrdersError) throw pendingOrdersError;
         
         // Fetch recent orders
-        const { data: recentOrdersData, error: recentOrdersError } = await supabase
+        const { data: recentOrdersData, error: recentOrdersError } = await apiClient
           .from('orders')
           .select('*')
           .order('created_at', { ascending: false })

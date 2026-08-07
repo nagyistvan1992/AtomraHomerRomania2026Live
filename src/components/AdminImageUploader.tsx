@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Upload, X, Check, AlertCircle, FileImage, Trash2, RefreshCw } from 'lucide-react';
-import { supabase } from '../lib/supabase';
+import { apiClient } from '../lib/apiClient';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getAssetPath } from '../utils/assetPath';
 
@@ -55,8 +55,8 @@ const AdminImageUploader: React.FC<ImageUploaderProps> = ({
         });
       }, 100);
       
-      // Upload file to Supabase Storage
-      const { error } = await supabase.storage
+      // Upload file to Storage
+      const { error } = await apiClient.storage
         .from('public')
         .upload(filePath, file, {
           cacheControl: '3600',
@@ -68,7 +68,7 @@ const AdminImageUploader: React.FC<ImageUploaderProps> = ({
       if (error) throw error;
       
       // Get public URL
-      const { data: urlData } = supabase.storage
+      const { data: urlData } = apiClient.storage
         .from('public')
         .getPublicUrl(filePath);
       

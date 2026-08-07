@@ -104,83 +104,117 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(400).json({ success: false, error: 'Informații comandă incomplete' });
     }
 
-    const resendApiKey = process.env.RESEND_API_KEY;
     const gmailUsername = process.env.GMAIL_USERNAME;
     const gmailAppPassword = process.env.GMAIL_APP_PASSWORD;
+    const resendApiKey = process.env.RESEND_API_KEY;
     const senderEmail = process.env.SENDER_EMAIL || 'onboarding@resend.dev';
 
     let customerSent = false;
     let adminSent = false;
     let transportLog = '';
+    let emailErrorDetail: string | null = null;
 
-    if (resendApiKey) {
-      // Send using Resend API
-      const resendHeaders = {
-        'Authorization': `Bearer ${resendApiKey}`,
-        'Content-Type': 'application/json',
-      };
+    // 1. Try Gmail SMTP first if configured (No custom domain required!)
+    if (gmailUsername && gmailAppPassword) {
+      try {
+        console.log('Sending emails via Gmail SMTP...');
+        const transporter = nodemailer.createTransport({
+          service: 'gmail',
+          auth: {
+            user: gmailUsername,
+            pass: gmailAppPassword,
+          },
+        });
 
-      // 1. Send Email to Customer via Resend
-      const customerRes = await fetch('https://api.resend.com/emails', {
-        method: 'POST',
-        headers: resendHeaders,
-        body: JSON.stringify({
-          from: `Atomra Homer Romania <${senderEmail}>`,
-          to: [orderData.customerEmail],
-          subject: `Comandă #${orderData.orderId} confirmată`,
+        // Send Email to Customer
+        await transporter.sendMail({
+          from: `"Atomra Homer Romania" <${gmailUsername}>`,
+          to: orderData.customerEmail,
+          subject: `Comanda #${orderData.orderId} confirmata`,
           html: buildCustomerEmailHtml(orderData),
-        }),
-      });
-      if (customerRes.ok) customerSent = true;
+        });
+        customerSent = true;
 
-      // 2. Send Email to Admin via Resend
-      const adminRes = await fetch('https://api.resend.com/emails', {
-        method: 'POST',
-        headers: resendHeaders,
-        body: JSON.stringify({
-          from: `Atomra System <${senderEmail}>`,
-          to: [ADMIN_EMAIL],
+        // Send Notification Email to Admin
+        await transporter.sendMail({
+          from: `"Atomra System" <${gmailUsername}>`,
+          to: ADMIN_EMAIL,
           subject: `🔔 Comandă nouă #${orderData.orderId} - ${orderData.customerName}`,
           html: buildAdminEmailHtml(orderData),
-        }),
-      });
-      if (adminRes.ok) adminSent = true;
+        });
+        adminSent = true;
+        transportLog = 'Emails sent via Gmail SMTP.';
+      } catch (gmailErr: any) {
+        console.error('Gmail SMTP Error:', gmailErr);
+        emailErrorDetail = gmailErr.message || 'Gmail SMTP failed';
+      }
+    }
 
-      transportLog = 'Emails sent via Resend API.';
-    } else if (gmailUsername && gmailAppPassword) {
-      const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          user: gmailUsername,
-          pass: gmailAppPassword,
-        },
-      });
+    // 2. Fallback to Resend API if Gmail SMTP was not used or failed
+    if ((!customerSent || !adminSent) && resendApiKey) {
+      try {
+        console.log('Sending emails via Resend API...');
+        const resendHeaders = {
+          'Authorization': `Bearer ${resendApiKey}`,
+          'Content-Type': 'application/json',
+        };
 
-      // 1. Send Email to Customer
-      await transporter.sendMail({
-        from: `"Atomra Homer Romania" <${gmailUsername}>`,
-        to: orderData.customerEmail,
-        subject: `Comanda #${orderData.orderId} confirmata`,
-        html: buildCustomerEmailHtml(orderData),
-      });
-      customerSent = true;
+        if (!customerSent) {
+          const customerRes = await fetch('https://api.resend.com/emails', {
+            method: 'POST',
+            headers: resendHeaders,
+            body: JSON.stringify({
+              from: `Atomra Homer Romania <${senderEmail}>`,
+              to: [orderData.customerEmail],
+              subject: `Comandă #${orderData.orderId} confirmată`,
+              html: buildCustomerEmailHtml(orderData),
+            }),
+          });
+          if (customerRes.ok) {
+            customerSent = true;
+          } else {
+            const errJson = await customerRes.json().catch(() => ({}));
+            emailErrorDetail = errJson.message || `Resend status ${customerRes.status}`;
+            console.warn('[Resend Customer Email Error]:', emailErrorDetail);
+          }
+        }
 
-      // 2. Send Notification Email to Admin
-      await transporter.sendMail({
-        from: `"Atomra System" <${gmailUsername}>`,
-        to: ADMIN_EMAIL,
-        subject: `🔔 Comandă nouă #${orderData.orderId} - ${orderData.customerName}`,
-        html: buildAdminEmailHtml(orderData),
-      });
-      adminSent = true;
-      transportLog = 'Emails sent via Gmail SMTP transporter.';
-    } else {
-      // Development / Test Simulation Mode
+        if (!adminSent) {
+          const adminRes = await fetch('https://api.resend.com/emails', {
+            method: 'POST',
+            headers: resendHeaders,
+            body: JSON.stringify({
+              from: `Atomra System <${senderEmail}>`,
+              to: [ADMIN_EMAIL],
+              subject: `🔔 Comandă nouă #${orderData.orderId} - ${orderData.customerName}`,
+              html: buildAdminEmailHtml(orderData),
+            }),
+          });
+          if (adminRes.ok) {
+            adminSent = true;
+          } else {
+            const errJson = await adminRes.json().catch(() => ({}));
+            emailErrorDetail = errJson.message || `Resend status ${adminRes.status}`;
+            console.warn('[Resend Admin Email Error]:', emailErrorDetail);
+          }
+        }
+
+        if (customerSent || adminSent) {
+          transportLog = `Emails dispatched via Resend API. (Customer: ${customerSent ? 'OK' : 'failed'}, Admin: ${adminSent ? 'OK' : 'failed'})`;
+        }
+      } catch (resendErr: any) {
+        console.error('Resend API Error:', resendErr);
+        emailErrorDetail = resendErr.message || 'Resend API failed';
+      }
+    }
+
+    // 3. Fallback simulation mode if no credentials configured
+    if (!customerSent && !adminSent && !gmailUsername && !resendApiKey) {
       console.log(`[TEST EMAIL LOG] Sending Customer Email to: ${orderData.customerEmail}`);
       console.log(`[TEST EMAIL LOG] Sending Admin Email to: ${ADMIN_EMAIL}`);
       customerSent = true;
       adminSent = true;
-      transportLog = 'Simulated email dispatch (RESEND_API_KEY / GMAIL credentials not set).';
+      transportLog = 'Simulated email dispatch (GMAIL_USERNAME / RESEND_API_KEY not configured).';
     }
 
     return res.status(200).json({

@@ -22,13 +22,12 @@ This guide provides step-by-step instructions to set up Gmail SMTP for sending o
 
 ---
 
-## **2. Supabase Configuration**
+## **2. Environment Configuration**
 
 ### **Environment Variables Setup**
-In your Supabase project dashboard:
+In your environment configuration (.env) or deployment dashboard:
 
-1. Navigate to **Settings** → **Environment Variables**
-2. Add these variables:
+1. Add these variables:
 
 ```env
 GMAIL_USERNAME=your-email@gmail.com
@@ -126,11 +125,8 @@ Atomra Home România - Admin Panel
 
 ## **6. Production Deployment**
 
-### **Supabase Edge Function Deployment:**
-The email function is automatically deployed with your Supabase project. No manual deployment needed.
-
 ### **Environment Variables:**
-Ensure these are set in your Supabase project:
+Ensure these are set in your environment:
 - `GMAIL_USERNAME` - Your Gmail address
 - `GMAIL_APP_PASSWORD` - 16-character app password
 
@@ -160,10 +156,10 @@ Ensure these are set in your Supabase project:
 **❌ Authentication Failed**
 - Verify app password is correct
 - Ensure 2FA is enabled on Gmail account
-- Check environment variables in Supabase
+- Check environment variables
 
 **❌ Emails Not Sending**
-- Check Supabase function logs
+- Check server API logs
 - Verify Gmail SMTP settings
 - Test with a simple email first
 
@@ -182,7 +178,7 @@ Ensure these are set in your Supabase project:
 ## **9. Advanced Configuration**
 
 ### **Custom Email Templates:**
-Modify the HTML templates in `supabase/functions/send-order-emails/index.ts`
+Modify the HTML templates in `api/emails.js` or `api/emails/index.ts`
 
 ### **Additional Recipients:**
 Add more admin emails by modifying the recipient list
@@ -198,7 +194,7 @@ Consider integrating with services like:
 ## **10. Support & Maintenance**
 
 ### **Monitoring:**
-- Check Supabase function logs regularly
+- Check server logs regularly
 - Monitor email delivery success rates
 - Set up alerts for failed email sends
 
@@ -210,7 +206,7 @@ Consider integrating with services like:
 ---
 
 **📞 Need Help?**
-If you encounter issues with the email setup, check the Supabase function logs first, then verify your Gmail app password configuration.
+If you encounter issues with the email setup, check the server API logs first, then verify your Gmail app password configuration.
 
 **🎯 Success Indicator:**
-When properly configured, you should see successful email logs in the Supabase function console and receive actual emails in both customer and admin inboxes.
+When properly configured, you should see successful email logs in the server console and receive actual emails in both customer and admin inboxes.

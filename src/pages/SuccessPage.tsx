@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSearchParams, Link, useNavigate } from 'react-router-dom';
 import { CheckCircle, ArrowLeft, ShoppingBag } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
@@ -6,8 +6,7 @@ import { useCart } from '../context/CartContext';
 import SEOHead from '../components/SEOHead';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getEntriLinks } from '../utils/getEntriLinks';
-import { supabase } from '../lib/supabase';
-import { invokeSupabaseFunction } from '../lib/supabaseFunctions';
+import { apiClient, invokeVercelFunction } from '../lib/apiClient';
 import { getSiteUrl } from '../utils/siteConfig';
 
 interface DomainInfo {
@@ -50,7 +49,7 @@ const SuccessPage = () => {
         // Try to fetch order details if we have a session ID
         if (sessionId) {
           try {
-            const data = await invokeSupabaseFunction<OrderDetails>('get-session-details', {
+            const data = await invokeVercelFunction<OrderDetails>('get-session-details', {
               body: { session_id: sessionId },
               timeoutMs: 12000,
             });
@@ -64,7 +63,7 @@ const SuccessPage = () => {
           }
         } else if (orderNumberParam) {
           try {
-            const { data, error } = await supabase
+            const { data, error } = await apiClient
               .from('orders')
               .select('order_number,total_amount,customer_email,created_at,payment_method')
               .eq('order_number', orderNumberParam)
