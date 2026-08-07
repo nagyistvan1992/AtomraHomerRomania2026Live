@@ -54,7 +54,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const secretKey = process.env.STRIPE_SECRET_KEY;
   if (!secretKey) {
-    return res.status(500).json({ error: 'Checkout is not configured' });
+    return res.status(400).json({
+      error: 'Stripe Secret Key (STRIPE_SECRET_KEY) is not configured in Vercel environment variables. Please set STRIPE_SECRET_KEY in Vercel Dashboard.'
+    });
   }
 
   const lineItems = normalizeLineItems(req.body || {});
