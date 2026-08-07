@@ -658,11 +658,30 @@ const ProductPage = () => {
                   <motion.button
                     onClick={handleAddToCart}
                     disabled={!product.in_stock}
+                    animate={!isAdded && product.in_stock ? {
+                      scale: [1, 1.012, 1],
+                      boxShadow: [
+                        "0 10px 30px -12px rgba(15,23,42,0.35)",
+                        "0 18px 40px -10px rgba(15,23,42,0.6)",
+                        "0 10px 30px -12px rgba(15,23,42,0.35)"
+                      ]
+                    } : { scale: 1 }}
+                    transition={{
+                      duration: 2.8,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                    whileHover={{ scale: 1.025 }}
                     whileTap={{ scale: 0.97 }}
-                    className="group relative w-full overflow-hidden rounded-2xl bg-gradient-to-r from-slate-950 via-slate-900 to-slate-800 px-5 py-4 sm:px-6 sm:py-5 text-white shadow-[0_18px_40px_-20px_rgba(15,23,42,0.75)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_24px_48px_-20px_rgba(15,23,42,0.85)] disabled:cursor-not-allowed disabled:opacity-50"
+                    className="group relative w-full overflow-hidden rounded-2xl bg-neutral-900 px-5 py-4 sm:px-6 sm:py-5 text-white transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-50 border border-neutral-800"
                     type="button"
                   >
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.22),transparent_52%)] opacity-80 transition-opacity duration-300 group-hover:opacity-100" />
+                    {/* Ambient Breathing Pulse Glow */}
+                    <span className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-neutral-800 via-neutral-700 to-neutral-800 opacity-30 blur-md transition-all duration-1000 group-hover:opacity-60" />
+                    
+                    {/* Glass Overlay */}
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.15),transparent_60%)] opacity-80 transition-opacity duration-300 group-hover:opacity-100" />
+                    
                     <div className="relative flex items-center justify-center gap-3">
                       <span className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/10 backdrop-blur-sm">
                         <AnimatePresence mode="wait">
@@ -674,7 +693,7 @@ const ProductPage = () => {
                               exit={{ opacity: 0, scale: 0.6 }}
                               transition={{ duration: 0.2 }}
                             >
-                              <Check size={18} strokeWidth={1.8} className="text-emerald-300" />
+                              <Check size={18} strokeWidth={2} className="text-emerald-400" />
                             </motion.span>
                           ) : (
                             <motion.span
@@ -699,7 +718,7 @@ const ProductPage = () => {
                             transition={{ duration: 0.2 }}
                             className="text-left"
                           >
-                            <div className="text-sm font-medium uppercase tracking-[0.24em] text-white/75">
+                            <div className="text-xs font-medium uppercase tracking-[0.24em] text-emerald-400">
                               {language === 'ro' ? 'Perfect' : language === 'hu' ? 'Rendben' : 'Done'}
                             </div>
                             <div className="text-base sm:text-lg font-medium tracking-[0.08em] uppercase">
@@ -715,7 +734,7 @@ const ProductPage = () => {
                             transition={{ duration: 0.2 }}
                             className="text-left"
                           >
-                            <div className="text-sm font-medium uppercase tracking-[0.24em] text-white/75">
+                            <div className="text-xs font-medium uppercase tracking-[0.24em] text-neutral-400">
                               {language === 'ro' ? 'Gata de comandă' : language === 'hu' ? 'Rendelésre kész' : 'Ready to order'}
                             </div>
                             <div className="text-base sm:text-lg font-medium tracking-[0.08em] uppercase">
@@ -826,111 +845,92 @@ const ProductPage = () => {
           </div>
           
           {/* SEO Content Section */}
-          <section className="mt-20 pt-12 border-t border-amber-100/60">
-            <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <section className="mt-16 sm:mt-24 pt-12 border-t border-stone-200/80">
+            <div className="w-full">
               
-              {/* Header & Intro Box */}
-              <div className="bg-gradient-to-br from-amber-50/70 via-neutral-50 to-orange-50/40 rounded-3xl p-8 lg:p-12 border border-amber-100/80 shadow-sm mb-10">
-                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-100/80 border border-amber-200/60 text-amber-800 text-xs font-medium tracking-wide uppercase mb-4">
-                  <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-                  <span>100% Ceară Naturală & Sustenabilitate</span>
-                </div>
-                
-                <h2 className="text-2xl lg:text-3xl font-serif text-gray-900 mb-6 font-normal">
+              {/* Section Header & Intro */}
+              <div className="mb-10 sm:mb-14">
+                <p className="text-xs uppercase tracking-widest text-neutral-500 font-medium mb-3">
+                  Atomra Home Romania • Ceară de Soia 100% Naturală
+                </p>
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-light text-neutral-900 tracking-tight mb-6">
                   Despre lumânările din ceară naturală
                 </h2>
-                
-                <div className="space-y-4 text-gray-700 leading-relaxed font-light text-base lg:text-lg">
+                <div className="space-y-4 text-neutral-700 font-light leading-relaxed text-base sm:text-lg max-w-4xl">
                   <p>
-                    <strong className="font-semibold text-gray-900">Lumânările din ceară naturală</strong> reprezintă o alternativă mai curată, rafinată și atent construită față de lumânările convenționale din parafină. La Atomra Home Romania, lucrăm exclusiv cu produse din <strong className="font-semibold text-gray-900">ceară naturală de soia</strong> create pentru o experiență plăcută, elegantă și ușor de integrat în decorul de zi cu zi.
+                    <strong className="font-medium text-neutral-900">Lumânările din ceară naturală</strong> reprezintă o alternativă mai curată, rafinată și atent construită față de lumânările convenționale din parafină. La Atomra Home Romania, lucrăm exclusiv cu produse din <strong className="font-medium text-neutral-900">ceară naturală de soia</strong> create pentru o experiență plăcută, elegantă și ușor de integrat în decorul de zi cu zi.
                   </p>
-                  <p className="text-gray-600 text-sm lg:text-base">
-                    Produsul nostru, <strong className="font-medium text-gray-800">{product.name}</strong>, face parte din colecția {product.category} și este realizat din <strong className="font-medium text-gray-800">ceară de soia 100% naturală</strong>. Această <strong className="font-medium text-gray-800">lumânare personalizabilă</strong> este potrivită pentru {product.category === 'Home Collection' ? 'a crea o atmosferă caldă, relaxantă și primitoare în casa ta' : product.category === 'Events Collection' ? 'a adăuga eleganță, luminozitate și rafinament unor evenimente speciale' : 'a completa frumos experiența ta cu lumânările premium Atomra'}.
+                  <p className="text-neutral-600 text-sm sm:text-base">
+                    Produsul nostru, <strong className="font-medium text-neutral-900">{product.name}</strong>, face parte din colecția {product.category} și este realizat din <strong className="font-medium text-neutral-900">ceară de soia 100% naturală</strong>. Această <strong className="font-medium text-neutral-900">lumânare personalizabilă</strong> este potrivită pentru {product.category === 'Home Collection' ? 'a crea o atmosferă caldă, relaxantă și primitoare în casa ta' : product.category === 'Events Collection' ? 'a adăuga eleganță, luminozitate și rafinament unor evenimente speciale' : 'a completa frumos experiența ta cu lumânările premium Atomra'}.
                   </p>
                 </div>
               </div>
 
-              {/* 2-Column Cards Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+              {/* 2-Column Clean Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 mb-12 sm:mb-16">
                 
                 {/* Benefits Card */}
-                <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between">
-                  <div>
-                    <div className="w-12 h-12 rounded-2xl bg-amber-50 flex items-center justify-center text-amber-700 mb-6 border border-amber-100">
-                      <Leaf className="w-6 h-6" />
-                    </div>
-                    <h3 className="text-xl font-serif text-gray-900 mb-2 font-medium">
-                      Beneficiile lumânărilor din ceară naturală
-                    </h3>
-                    <p className="text-xs text-gray-500 mb-6">
-                      Alegând lumânări din ceară naturală Atomra, te bucuri de avantaje superioare:
-                    </p>
-                    <ul className="space-y-3.5">
-                      {[
-                        "Ardere mai curată și uniformă, fără fum negru sau reziduuri nocive",
-                        "Absența toxinelor, a parafinei din petrol și a substanțelor chimice nedorite",
-                        "O experiență olfactivă și vizuală rafinată pentru decor, cadouri sau seri liniștite",
-                        "Impact redus asupra mediului – ceara naturală de soia este 100% biodegradabilă",
-                        "Sistem inteligent de reumplere care reduce risipa și păstrează recipientele în folosire",
-                        "Flexibilitate în personalizare și în modul în care îți compui propriul aranjament"
-                      ].map((benefit, idx) => (
-                        <li key={idx} className="flex items-start gap-3 text-sm text-gray-700 leading-snug">
-                          <CheckCircle2 className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-                          <span>{benefit}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+                <div className="bg-stone-50/80 rounded-2xl p-6 sm:p-8 border border-stone-200/70 hover:border-stone-300 transition-colors">
+                  <h3 className="text-lg sm:text-xl font-serif font-medium text-neutral-900 mb-4 pb-3 border-b border-stone-200/80">
+                    Beneficiile lumânărilor din ceară naturală
+                  </h3>
+                  <ul className="space-y-3.5 text-sm text-neutral-700 font-light leading-relaxed">
+                    {[
+                      "Ardere mai curată și uniformă, fără fum negru sau reziduuri nocive",
+                      "Absența toxinelor, a parafinei derivate din petrol și a chimicalelor nedorite",
+                      "O experiență olfactivă și vizuală rafinată pentru decor, cadouri sau seri liniștite",
+                      "Impact redus asupra mediului – ceara naturală de soia este 100% biodegradabilă",
+                      "Sistem inteligent de reumplere ce reduce risipa și păstrează recipientele în folosire",
+                      "Flexibilitate în personalizare și în modul în care îți compui propriul aranjament"
+                    ].map((benefit, idx) => (
+                      <li key={idx} className="flex items-start gap-3">
+                        <span className="w-1.5 h-1.5 rounded-full bg-neutral-900 shrink-0 mt-2"></span>
+                        <span>{benefit}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
 
-                {/* Candle Care Card */}
-                <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between">
-                  <div>
-                    <div className="w-12 h-12 rounded-2xl bg-amber-50 flex items-center justify-center text-amber-700 mb-6 border border-amber-100">
-                      <Flame className="w-6 h-6" />
-                    </div>
-                    <h3 className="text-xl font-serif text-gray-900 mb-2 font-medium">
-                      Cum să îngrijești lumânarea ta
-                    </h3>
-                    <p className="text-xs text-gray-500 mb-6">
-                      Recomandări simple pentru a maximiza durata de ardere și parfumul:
-                    </p>
-                    <ul className="space-y-3.5">
-                      {[
-                        "La prima aprindere, lasă lumânarea să ardă până când stratul superior se topește complet",
-                        "Taie fitilul la aproximativ 5-6 mm înainte de fiecare aprindere pentru a preveni fumul",
-                        "Ține lumânarea departe de curenții puternici de aer pentru o ardere mai stabilă",
-                        "Nu lăsa niciodată o lumânare aprinsă nesupravegheată sau la îndemâna copiilor",
-                        "Reumple recipientul cu granule noi de ceară naturală atunci când nivelul scade"
-                      ].map((tip, idx) => (
-                        <li key={idx} className="flex items-start gap-3 text-sm text-gray-700 leading-snug">
-                          <span className="w-5 h-5 rounded-full bg-amber-100 text-amber-800 text-xs font-semibold flex items-center justify-center shrink-0 mt-0.5">
-                            {idx + 1}
-                          </span>
-                          <span>{tip}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+                {/* Care Instructions Card */}
+                <div className="bg-stone-50/80 rounded-2xl p-6 sm:p-8 border border-stone-200/70 hover:border-stone-300 transition-colors">
+                  <h3 className="text-lg sm:text-xl font-serif font-medium text-neutral-900 mb-4 pb-3 border-b border-stone-200/80">
+                    Cum să îngrijești lumânarea ta
+                  </h3>
+                  <ul className="space-y-3.5 text-sm text-neutral-700 font-light leading-relaxed">
+                    {[
+                      "La prima aprindere, lasă lumânarea să ardă până când stratul superior se topește complet",
+                      "Taie fitilul la aproximativ 5-6 mm înainte de fiecare aprindere pentru a preveni fumul",
+                      "Ține lumânarea departe de curenții puternici de aer pentru o ardere mai stabilă",
+                      "Nu lăsa niciodată o lumânare aprinsă nesupravegheată sau la îndemâna copiilor",
+                      "Reumple recipientul cu granule noi de ceară naturală atunci când nivelul scade"
+                    ].map((tip, idx) => (
+                      <li key={idx} className="flex items-start gap-3">
+                        <span className="text-xs font-mono font-medium text-neutral-400 shrink-0 mt-0.5">
+                          0{idx + 1}
+                        </span>
+                        <span>{tip}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
 
               </div>
 
-              {/* Final Callout Banner */}
-              <div className="bg-neutral-900 rounded-3xl p-8 lg:p-10 text-white flex flex-col md:flex-row items-center justify-between gap-6 shadow-lg">
-                <div className="space-y-2 text-center md:text-left">
-                  <h4 className="text-lg lg:text-xl font-serif font-light text-amber-200">
+              {/* Editorial Conclusion Banner */}
+              <div className="bg-neutral-900 rounded-2xl p-6 sm:p-10 text-white flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm">
+                <div className="space-y-2 text-center sm:text-left">
+                  <h4 className="text-lg sm:text-xl font-serif font-light text-neutral-100">
                     Transformă-ți spațiul cu lumânările din ceară naturală Atomra
                   </h4>
-                  <p className="text-sm text-neutral-400 font-light max-w-2xl">
-                    Descoperă colecția noastră completă creată cu atenție la detalii. Fiecare piesă este gândită pentru o experiență memorabilă, calmă și sustenabilă.
+                  <p className="text-xs sm:text-sm text-neutral-400 font-light max-w-2xl">
+                    Descoperă întreaga noastră colecție creată cu atenție la detalii. Fiecare piesă este gândită pentru o experiență memorabilă, calmă și sustenabilă.
                   </p>
                 </div>
                 <Link
                   to="/collections/all"
-                  className="shrink-0 px-6 py-3 rounded-full bg-amber-500 hover:bg-amber-400 text-neutral-950 font-medium text-sm transition-all duration-200 shadow-md hover:shadow-amber-500/20"
+                  className="shrink-0 px-6 py-3 rounded-full bg-white hover:bg-neutral-100 text-neutral-900 font-medium text-xs sm:text-sm uppercase tracking-wider transition-colors"
                 >
-                  Vezi toate colecțiile
+                  Vezi colecțiile
                 </Link>
               </div>
 

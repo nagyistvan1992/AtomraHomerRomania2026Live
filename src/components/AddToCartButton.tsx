@@ -228,8 +228,22 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
     <motion.button
       onClick={handleAddToCart}
       disabled={disabled || isLoading}
+      animate={variant === 'primary' && !isAdded && !disabled ? {
+        scale: [1, 1.015, 1],
+        boxShadow: [
+          "0 4px 14px rgba(0, 0, 0, 0.15)",
+          "0 8px 22px rgba(0, 0, 0, 0.28)",
+          "0 4px 14px rgba(0, 0, 0, 0.15)"
+        ]
+      } : { scale: 1 }}
+      transition={{
+        duration: 3,
+        repeat: Infinity,
+        ease: "easeInOut"
+      }}
+      whileHover={{ scale: 1.03 }}
       whileTap={{ scale: 0.97 }}
-      className={`rounded flex items-center justify-center space-x-2 font-light tracking-wide transition-all duration-300 disabled:cursor-not-allowed ${sizeClasses[size]} ${variantClasses[variant]} ${className}`}
+      className={`rounded-xl flex items-center justify-center space-x-2 font-medium tracking-wide transition-all duration-300 disabled:cursor-not-allowed ${sizeClasses[size]} ${variantClasses[variant]} ${className}`}
       aria-label="Add to cart"
       style={{ minWidth: showText ? '120px' : 'auto' }}
     >

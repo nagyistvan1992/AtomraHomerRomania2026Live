@@ -297,19 +297,19 @@ const CartDrawer = () => {
       <AnimatePresence>
         {state.showAddAnimation && state.lastAddedItem && (
           <motion.div
-            initial={{ opacity: 0, y: 50, scale: 0.8 }}
+            initial={{ opacity: 0, y: -25, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ type: 'spring', stiffness: 500, damping: 30, duration: 0.4 }}
-            className="fixed bottom-6 right-6 z-[80] max-w-xs overflow-hidden rounded-lg bg-white shadow-2xl"
+            exit={{ opacity: 0, y: -20, scale: 0.95 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+            className="fixed top-24 sm:top-28 left-1/2 -translate-x-1/2 z-[100] w-[90%] max-w-sm sm:max-w-md overflow-hidden rounded-2xl bg-neutral-900/95 text-white shadow-2xl backdrop-blur-md border border-neutral-800"
           >
-            <div className="flex items-center space-x-3 border-l-4 border-green-500 bg-gradient-to-r from-green-50 to-green-100 p-4">
-              <div className="flex-shrink-0 rounded-full bg-green-100 p-2">
-                <Check size={20} className="text-green-600" />
+            <div className="flex items-center space-x-3.5 px-4 py-3.5 sm:px-5 sm:py-4">
+              <div className="flex-shrink-0 rounded-full bg-emerald-500/20 p-2 border border-emerald-500/30">
+                <Check size={18} className="text-emerald-400" strokeWidth={2.5} />
               </div>
               <div className="min-w-0 flex-1">
-                <p className="line-clamp-1 text-sm font-medium text-gray-900">{state.lastAddedItem.name}</p>
-                <p className="text-xs text-gray-600">{t('product.addedToCart')}</p>
+                <p className="line-clamp-1 text-xs sm:text-sm font-medium text-white">{state.lastAddedItem.name}</p>
+                <p className="text-[11px] sm:text-xs text-neutral-400 font-light">{t('product.addedToCart')}</p>
               </div>
             </div>
           </motion.div>
