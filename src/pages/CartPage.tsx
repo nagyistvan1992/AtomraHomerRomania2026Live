@@ -48,7 +48,12 @@ const DetailsStep = React.memo(({ initialDetails, initialNotes, onBack, onContin
     }));
   };
 
-  const isValid = Object.values(draftDetails).every((value) => value.trim().length > 0);
+  const isValid =
+    draftDetails.name.trim().length > 0 &&
+    draftDetails.email.trim().length > 0 &&
+    draftDetails.phone.trim().length > 0 &&
+    draftDetails.address.trim().length > 0 &&
+    draftDetails.city.trim().length > 0;
 
   return (
     <div className="max-w-2xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
@@ -257,7 +262,7 @@ const CartPage = () => {
     phone: customerDetails.phone.trim(),
     address: customerDetails.address.trim(),
     city: customerDetails.city.trim(),
-    postalCode: customerDetails.postalCode.trim(),
+    postalCode: customerDetails.postalCode.trim() || '000000',
   });
 
   const sanitizeOrderItems = () =>

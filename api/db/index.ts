@@ -1,5 +1,4 @@
-import pg from 'pg';
-const Pool = pg.Pool || (pg as any).default?.Pool || pg;
+import { neon } from '@neondatabase/serverless';
 
 const connectionString =
   process.env.POSTGRES_URL ||
@@ -9,28 +8,22 @@ const connectionString =
 
 const cleanConnStr = connectionString.replace(/channel_binding=require&?/, '');
 
-let poolInstance: any = null;
+let sqlClient: any = null;
 
-function getPool() {
-  if (!poolInstance) {
-    poolInstance = new Pool({
-      connectionString: cleanConnStr,
-      ssl: { rejectUnauthorized: false },
-      max: 10,
-      idleTimeoutMillis: 30000,
-      connectionTimeoutMillis: 5000,
-    });
+function getSql() {
+  if (!sqlClient) {
+    sqlClient = neon(cleanConnStr);
   }
-  return poolInstance;
+  return sqlClient;
 }
 
-export async function query(text: string, params?: any[]) {
+export async function query(text: string, params: any[] = []) {
   try {
-    const p = getPool();
-    return await p.query(text, params);
+    const sql = getSql();
+    const rows = await sql.query(text, params);
+    return { rows: Array.isArray(rows) ? rows : [], rowCount: Array.isArray(rows) ? rows.length : 0 };
   } catch (error: any) {
     console.error('Database query exception caught gracefully:', error?.message || error);
     return { rows: [], rowCount: 0, error };
   }
 }
-
