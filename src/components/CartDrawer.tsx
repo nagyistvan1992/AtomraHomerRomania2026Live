@@ -297,19 +297,19 @@ const CartDrawer = () => {
       <AnimatePresence>
         {state.showAddAnimation && state.lastAddedItem && (
           <motion.div
-            initial={{ opacity: 0, y: -60, scale: 0.9 }}
+            initial={{ opacity: 0, y: -50, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -40, scale: 0.9 }}
-            transition={{ type: 'spring', stiffness: 500, damping: 28 }}
-            className="fixed top-4 sm:top-6 left-1/2 -translate-x-1/2 z-[9999] w-[92%] max-w-sm sm:max-w-md overflow-hidden rounded-2xl bg-neutral-950/95 text-white shadow-[0_20px_50px_rgba(0,0,0,0.5)] backdrop-blur-xl border border-white/20 pointer-events-none"
+            exit={{ opacity: 0, y: -30, scale: 0.95 }}
+            transition={{ type: 'spring', stiffness: 450, damping: 28 }}
+            className="fixed top-5 sm:top-8 left-0 right-0 mx-auto z-[9999] w-[90%] max-w-sm sm:max-w-md overflow-hidden rounded-2xl bg-[#241F1C]/95 text-[#F7F5F2] shadow-[0_20px_50px_rgba(0,0,0,0.5)] backdrop-blur-xl border border-[#3A332E] pointer-events-none"
           >
             <div className="flex items-center space-x-3.5 px-4 py-3.5 sm:px-5 sm:py-4">
-              <div className="flex-shrink-0 rounded-full bg-emerald-500/20 p-2 border border-emerald-500/40 shadow-inner">
+              <div className="flex-shrink-0 rounded-full bg-emerald-500/20 p-2 border border-emerald-500/30 shadow-inner">
                 <Check size={18} className="text-emerald-400" strokeWidth={2.5} />
               </div>
               <div className="min-w-0 flex-1">
-                <p className="line-clamp-1 text-xs sm:text-sm font-semibold text-white">{state.lastAddedItem.name}</p>
-                <p className="text-[11px] sm:text-xs text-neutral-300 font-light">{t('product.addedToCart')}</p>
+                <p className="line-clamp-1 text-xs sm:text-sm font-medium text-[#F7F5F2]">{state.lastAddedItem.name}</p>
+                <p className="text-[11px] sm:text-xs text-[#D4C8BC] font-light">{t('product.addedToCart')}</p>
               </div>
             </div>
           </motion.div>

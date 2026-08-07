@@ -92,7 +92,7 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
 
   // Variant classes with explicit text colors
   const variantClasses = {
-    primary: 'bg-gradient-to-r from-amber-700 via-amber-600 to-amber-700 text-white hover:from-amber-600 hover:to-amber-600 shadow-lg shadow-amber-600/30 border border-amber-500/40 disabled:bg-gray-400 disabled:text-gray-200',
+    primary: 'bg-[#241F1C] hover:bg-[#322B27] text-[#F7F5F2] shadow-md border border-[#3A332E] disabled:bg-gray-400 disabled:text-gray-200',
     secondary: 'bg-white text-gray-900 hover:bg-gray-50 border border-gray-200 disabled:bg-gray-100 disabled:text-gray-400',
     outline: 'bg-transparent text-gray-900 hover:bg-gray-50 border border-gray-200 disabled:border-gray-300 disabled:text-gray-400',
     icon: 'bg-white/95 text-gray-800 hover:text-gray-900 hover:bg-white shadow-lg hover:shadow-xl disabled:bg-gray-100 disabled:text-gray-400 border border-gray-200/50'
@@ -229,20 +229,20 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
       onClick={handleAddToCart}
       disabled={disabled || isLoading}
       animate={variant === 'primary' && !isAdded && !disabled ? {
-        scale: [1, 1.02, 1],
+        scale: [1, 1.015, 1],
         boxShadow: [
-          "0 6px 18px -4px rgba(217,119,6,0.4)",
-          "0 12px 28px -2px rgba(217,119,6,0.75)",
-          "0 6px 18px -4px rgba(217,119,6,0.4)"
+          "0 4px 14px -2px rgba(36,31,28,0.25)",
+          "0 8px 22px -2px rgba(36,31,28,0.5)",
+          "0 4px 14px -2px rgba(36,31,28,0.25)"
         ]
       } : { scale: 1 }}
       transition={{
-        duration: 2.2,
+        duration: 2.6,
         repeat: Infinity,
         ease: "easeInOut"
       }}
-      whileHover={{ scale: 1.03 }}
-      whileTap={{ scale: 0.97 }}
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
       className={`rounded-xl flex items-center justify-center space-x-2 font-medium tracking-wide transition-all duration-300 disabled:cursor-not-allowed ${sizeClasses[size]} ${variantClasses[variant]} ${className}`}
       aria-label="Add to cart"
       style={{ minWidth: showText ? '120px' : 'auto' }}
