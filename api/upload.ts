@@ -1,4 +1,5 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
+type VercelRequest = any;
+type VercelResponse = any;
 import { put } from '@vercel/blob';
 
 export const config = {

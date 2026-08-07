@@ -1,4 +1,5 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
+type VercelRequest = any;
+type VercelResponse = any;
 import Stripe from 'stripe';
 
 const SHIPPING_THRESHOLD = 149;
