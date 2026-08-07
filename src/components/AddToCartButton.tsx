@@ -92,7 +92,7 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
 
   // Variant classes with explicit text colors
   const variantClasses = {
-    primary: 'bg-gray-900 text-white hover:bg-gray-800 disabled:bg-gray-400 disabled:text-gray-200',
+    primary: 'bg-gradient-to-r from-amber-700 via-amber-600 to-amber-700 text-white hover:from-amber-600 hover:to-amber-600 shadow-lg shadow-amber-600/30 border border-amber-500/40 disabled:bg-gray-400 disabled:text-gray-200',
     secondary: 'bg-white text-gray-900 hover:bg-gray-50 border border-gray-200 disabled:bg-gray-100 disabled:text-gray-400',
     outline: 'bg-transparent text-gray-900 hover:bg-gray-50 border border-gray-200 disabled:border-gray-300 disabled:text-gray-400',
     icon: 'bg-white/95 text-gray-800 hover:text-gray-900 hover:bg-white shadow-lg hover:shadow-xl disabled:bg-gray-100 disabled:text-gray-400 border border-gray-200/50'
@@ -229,15 +229,15 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
       onClick={handleAddToCart}
       disabled={disabled || isLoading}
       animate={variant === 'primary' && !isAdded && !disabled ? {
-        scale: [1, 1.015, 1],
+        scale: [1, 1.02, 1],
         boxShadow: [
-          "0 4px 14px rgba(0, 0, 0, 0.15)",
-          "0 8px 22px rgba(0, 0, 0, 0.28)",
-          "0 4px 14px rgba(0, 0, 0, 0.15)"
+          "0 6px 18px -4px rgba(217,119,6,0.4)",
+          "0 12px 28px -2px rgba(217,119,6,0.75)",
+          "0 6px 18px -4px rgba(217,119,6,0.4)"
         ]
       } : { scale: 1 }}
       transition={{
-        duration: 3,
+        duration: 2.2,
         repeat: Infinity,
         ease: "easeInOut"
       }}

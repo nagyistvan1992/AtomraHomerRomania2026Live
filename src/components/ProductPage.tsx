@@ -659,31 +659,38 @@ const ProductPage = () => {
                     onClick={handleAddToCart}
                     disabled={!product.in_stock}
                     animate={!isAdded && product.in_stock ? {
-                      scale: [1, 1.012, 1],
+                      scale: [1, 1.02, 1],
                       boxShadow: [
-                        "0 10px 30px -12px rgba(15,23,42,0.35)",
-                        "0 18px 40px -10px rgba(15,23,42,0.6)",
-                        "0 10px 30px -12px rgba(15,23,42,0.35)"
+                        "0 10px 25px -8px rgba(217,119,6,0.45)",
+                        "0 20px 45px -5px rgba(217,119,6,0.85)",
+                        "0 10px 25px -8px rgba(217,119,6,0.45)"
                       ]
                     } : { scale: 1 }}
                     transition={{
-                      duration: 2.8,
+                      duration: 2.2,
                       repeat: Infinity,
                       ease: "easeInOut"
                     }}
-                    whileHover={{ scale: 1.025 }}
+                    whileHover={{ scale: 1.03 }}
                     whileTap={{ scale: 0.97 }}
-                    className="group relative w-full overflow-hidden rounded-2xl bg-neutral-900 px-5 py-4 sm:px-6 sm:py-5 text-white transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-50 border border-neutral-800"
+                    className="group relative w-full overflow-hidden rounded-2xl bg-gradient-to-r from-amber-700 via-amber-600 to-amber-700 px-5 py-4 sm:px-6 sm:py-5 text-white transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-50 border border-amber-500/40 shadow-xl"
                     type="button"
                   >
-                    {/* Ambient Breathing Pulse Glow */}
-                    <span className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-neutral-800 via-neutral-700 to-neutral-800 opacity-30 blur-md transition-all duration-1000 group-hover:opacity-60" />
+                    {/* Eye-catching Amber Glow Aura Pulse */}
+                    <span className="absolute -inset-1 rounded-2xl bg-amber-500/30 blur-lg transition-all duration-700 group-hover:bg-amber-400/50 animate-pulse" />
                     
-                    {/* Glass Overlay */}
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.15),transparent_60%)] opacity-80 transition-opacity duration-300 group-hover:opacity-100" />
+                    {/* Light Shimmer Glass Overlay */}
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.25),transparent_60%)] opacity-90 transition-opacity duration-300 group-hover:opacity-100" />
                     
-                    <div className="relative flex items-center justify-center gap-3">
-                      <span className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/10 backdrop-blur-sm">
+                    {/* Continuous Shimmer Light Wave Pass */}
+                    <motion.div
+                      animate={{ x: ['-100%', '200%'] }}
+                      transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut', repeatDelay: 1 }}
+                      className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12"
+                    />
+
+                    <div className="relative flex items-center justify-center gap-3.5">
+                      <span className="flex h-10 w-10 items-center justify-center rounded-full border border-white/30 bg-white/15 backdrop-blur-md shadow-inner">
                         <AnimatePresence mode="wait">
                           {isAdded ? (
                             <motion.span
@@ -693,7 +700,7 @@ const ProductPage = () => {
                               exit={{ opacity: 0, scale: 0.6 }}
                               transition={{ duration: 0.2 }}
                             >
-                              <Check size={18} strokeWidth={2} className="text-emerald-400" />
+                              <Check size={19} strokeWidth={2.5} className="text-white" />
                             </motion.span>
                           ) : (
                             <motion.span
@@ -703,7 +710,7 @@ const ProductPage = () => {
                               exit={{ opacity: 0, scale: 0.6 }}
                               transition={{ duration: 0.2 }}
                             >
-                              <ShoppingCart size={18} strokeWidth={1.8} />
+                              <ShoppingCart size={19} strokeWidth={2} className="text-white" />
                             </motion.span>
                           )}
                         </AnimatePresence>
@@ -718,10 +725,10 @@ const ProductPage = () => {
                             transition={{ duration: 0.2 }}
                             className="text-left"
                           >
-                            <div className="text-xs font-medium uppercase tracking-[0.24em] text-emerald-400">
+                            <div className="text-xs font-semibold uppercase tracking-[0.24em] text-amber-100">
                               {language === 'ro' ? 'Perfect' : language === 'hu' ? 'Rendben' : 'Done'}
                             </div>
-                            <div className="text-base sm:text-lg font-medium tracking-[0.08em] uppercase">
+                            <div className="text-base sm:text-lg font-bold tracking-[0.08em] uppercase text-white">
                               {language === 'ro' ? 'Adăugat în coș' : language === 'hu' ? 'Kosárba téve' : 'Added to Cart'}
                             </div>
                           </motion.div>
@@ -734,10 +741,10 @@ const ProductPage = () => {
                             transition={{ duration: 0.2 }}
                             className="text-left"
                           >
-                            <div className="text-xs font-medium uppercase tracking-[0.24em] text-neutral-400">
+                            <div className="text-xs font-semibold uppercase tracking-[0.24em] text-amber-100">
                               {language === 'ro' ? 'Gata de comandă' : language === 'hu' ? 'Rendelésre kész' : 'Ready to order'}
                             </div>
-                            <div className="text-base sm:text-lg font-medium tracking-[0.08em] uppercase">
+                            <div className="text-base sm:text-lg font-bold tracking-[0.08em] uppercase text-white">
                               {t('product.addToCart')}
                             </div>
                           </motion.div>
