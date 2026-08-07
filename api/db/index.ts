@@ -1,5 +1,5 @@
-import pkg from 'pg';
-const { Pool } = pkg;
+import pg from 'pg';
+const Pool = pg.Pool || (pg as any).default?.Pool || pg;
 
 const connectionString =
   process.env.POSTGRES_URL ||
