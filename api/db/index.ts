@@ -6,12 +6,8 @@ export async function query(text: string, params?: any[]) {
   const connectionString =
     process.env.POSTGRES_URL ||
     process.env.DATABASE_URL ||
-    process.env.POSTGRES_URL_NON_POOLING;
-
-  if (!connectionString) {
-    console.warn('[DB WARNING] No Postgres connection string configured in environment variables.');
-    return { rows: [], rowCount: 0 };
-  }
+    process.env.POSTGRES_URL_NON_POOLING ||
+    'postgresql://neondb_owner:npg_1yQmpo6enEPA@ep-green-brook-zajitt3k-pooler.c-2.eu-west-2.aws.neon.tech/neondb?channel_binding=require&sslmode=require';
 
   try {
     if (connectionString.includes('neon.tech') || connectionString.includes('vercel-storage.com')) {
