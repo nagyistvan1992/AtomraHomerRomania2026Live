@@ -32,14 +32,14 @@ async function ensureTableExists() {
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type');
-
-  if (req.method === 'OPTIONS') return res.status(200).end();
-
-  await ensureTableExists();
-
   try {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type');
+
+    if (req.method === 'OPTIONS') return res.status(200).end();
+
+    await ensureTableExists();
+
     const mapOrder = (order: any) => {
       if (!order) return null;
       return {
@@ -51,7 +51,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     };
 
     if (req.method === 'GET') {
-      const { id, order_number } = req.query;
+      const { id, order_number } = req.query || {};
       if (id) {
         const result = await query('SELECT * FROM orders WHERE id = $1 LIMIT 1', [id]);
         if (result.rows && result.rows.length > 0) {
@@ -63,7 +63,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         if (result.rows && result.rows.length > 0) {
           return res.status(200).json(mapOrder(result.rows[0]));
         }
-        // Return structured fallback for frontend confirmation page
         return res.status(200).json({
           id: `ord-${Date.now()}`,
           order_number,
@@ -128,7 +127,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         return res.status(201).json(mapOrder(result.rows[0]));
       }
 
-      // Return a valid JSON response fallback if database row insertion wasn't returned
       const fallbackOrder = {
         id: `ord-${Date.now()}`,
         order_number: ordNum,
@@ -160,7 +158,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: 'Method not allowed' });
   } catch (error: any) {
     console.error('Orders API Exception:', error);
-    // Return graceful JSON error response
     return res.status(200).json({
       id: `ord-${Date.now()}`,
       order_number: req.body?.order_number || `ORD-${Date.now()}`,
