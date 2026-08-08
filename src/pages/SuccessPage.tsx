@@ -30,6 +30,8 @@ const SuccessPage = () => {
   const sessionId = searchParams.get('session_id');
   const orderNumberParam = searchParams.get('order_number');
   const paymentMethodParam = searchParams.get('payment_method');
+  const emailParam = searchParams.get('email');
+  const totalParam = searchParams.get('total');
   const [domainInfo, setDomainInfo] = useState<DomainInfo | null>(null);
   const [orderDetails, setOrderDetails] = useState<OrderDetails | null>(null);
   const [loading, setLoading] = useState(true);
@@ -191,32 +193,26 @@ const SuccessPage = () => {
                       )}
                     </motion.p>
                     
-                    {orderDetails && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.5 }}
-                        className="bg-slate-50 p-4 rounded-lg mb-8 text-left border border-slate-200"
-                      >
-                        <h3 className="text-lg font-medium text-slate-900 mb-2">Order Summary</h3>
-                        {typeof orderDetails.amount_total === 'number' && (
-                          <p className="text-sm text-slate-600 mb-1">
-                            <span className="font-medium">Total:</span> {sessionId ? orderDetails.amount_total / 100 : orderDetails.amount_total} Lei
-                          </p>
-                        )}
-                        <p className="text-sm text-slate-600 mb-1">
-                          <span className="font-medium">Date:</span> {new Date(orderDetails.created_at || Date.now()).toLocaleDateString()}
-                        </p>
-                        <p className="text-sm text-slate-600">
-                          <span className="font-medium">Email:</span> {orderDetails.customer_email || 'Not available'}
-                        </p>
-                        {orderDetails.payment_method && (
-                          <p className="text-sm text-slate-600 mt-1">
-                            <span className="font-medium">Payment:</span> {orderDetails.payment_method === 'cod' ? 'Cash on delivery' : orderDetails.payment_method}
-                          </p>
-                        )}
-                      </motion.div>
-                    )}
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: 0.5 }}
+                      className="bg-slate-50 p-5 rounded-lg mb-8 text-left border border-slate-200 shadow-sm"
+                    >
+                      <h3 className="text-lg font-medium text-slate-900 mb-3 border-b border-slate-200 pb-2">Rezumatul Comenzii</h3>
+                      <p className="text-sm text-slate-600 mb-2">
+                        <span className="font-medium text-slate-800">Total:</span> {orderDetails?.amount_total ? (sessionId ? orderDetails.amount_total / 100 : orderDetails.amount_total) : (totalParam || '0')} Lei
+                      </p>
+                      <p className="text-sm text-slate-600 mb-2">
+                        <span className="font-medium text-slate-800">Data:</span> {new Date(orderDetails?.created_at || Date.now()).toLocaleDateString('ro-RO')}
+                      </p>
+                      <p className="text-sm text-slate-600 mb-2">
+                        <span className="font-medium text-slate-800">Email:</span> <span className="text-slate-900 font-semibold">{orderDetails?.customer_email || emailParam || 'atomrahomeromania@gmail.com'}</span>
+                      </p>
+                      <p className="text-sm text-slate-600">
+                        <span className="font-medium text-slate-800">Fizetési / Livrare:</span> {(orderDetails?.payment_method || paymentMethodParam) === 'cod' ? 'Plată la livrare (Ramburs)' : 'Plată cu cardul online'}
+                      </p>
+                    </motion.div>
                   </motion.div>
                 )}
               </AnimatePresence>

@@ -463,13 +463,14 @@ const CartPage = () => {
       }
 
       clearCart();
-      navigate(`/success?order_number=${encodeURIComponent(orderNum)}&payment_method=${encodeURIComponent(paymentMethod)}`);
+      navigate(`/success?order_number=${encodeURIComponent(orderNum)}&payment_method=${encodeURIComponent(paymentMethod)}&email=${encodeURIComponent(details.email)}&total=${totalAmount}`);
       return;
     } catch (error) {
       console.error('Error processing COD order:', error);
       const fallbackNum = generateOrderNumber();
+      const details = sanitizeCustomerDetails();
       clearCart();
-      navigate(`/success?order_number=${encodeURIComponent(fallbackNum)}&payment_method=cod`);
+      navigate(`/success?order_number=${encodeURIComponent(fallbackNum)}&payment_method=cod&email=${encodeURIComponent(details.email)}&total=${totalAmount}`);
     } finally {
       setLoading(false);
     }

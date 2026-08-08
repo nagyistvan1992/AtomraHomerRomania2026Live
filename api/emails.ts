@@ -138,8 +138,23 @@ export async function sendOrderEmailNotification(orderData: OrderData) {
     return { success: false, error: 'Informații comandă incomplete' };
   }
 
-  const gmailUsername = process.env.GMAIL_USERNAME;
-  const gmailAppPassword = process.env.GMAIL_APP_PASSWORD;
+  const gmailUsername = (
+    process.env.GMAIL_USERNAME ||
+    process.env.GMAIL_USER ||
+    process.env.SMTP_USER ||
+    process.env.EMAIL_USER ||
+    ''
+  ).trim();
+
+  const gmailAppPassword = (
+    process.env.GMAIL_APP_PASSWORD ||
+    process.env.GMAIL_PASS ||
+    process.env.GMAIL_PASSWORD ||
+    process.env.SMTP_PASS ||
+    process.env.EMAIL_PASS ||
+    ''
+  ).trim().replace(/\s+/g, '');
+
   const resendApiKey = process.env.RESEND_API_KEY;
   const senderEmail = process.env.SENDER_EMAIL || 'onboarding@resend.dev';
 
@@ -151,7 +166,7 @@ export async function sendOrderEmailNotification(orderData: OrderData) {
   // 1. Try Gmail SMTP first if configured
   if (gmailUsername && gmailAppPassword) {
     try {
-      console.log('Sending emails via Gmail SMTP...');
+      console.log(`Sending emails via Gmail SMTP (${gmailUsername})...`);
       let nodemailer: any = null;
       try {
         nodemailer = require('nodemailer');
@@ -161,13 +176,14 @@ export async function sendOrderEmailNotification(orderData: OrderData) {
 
       if (nodemailer) {
         const transporter = nodemailer.createTransport({
-          host: 'smtp.gmail.com',
-          port: 465,
-          secure: true,
+          service: 'gmail',
           auth: {
-            user: gmailUsername.trim(),
-            pass: gmailAppPassword.trim().replace(/\s+/g, ''),
+            user: gmailUsername,
+            pass: gmailAppPassword,
           },
+          tls: {
+            rejectUnauthorized: false
+          }
         });
 
         // Send Email to Customer
