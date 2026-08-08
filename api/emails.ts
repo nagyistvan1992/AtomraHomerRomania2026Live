@@ -187,26 +187,41 @@ export async function sendOrderEmailNotification(orderData: OrderData) {
         });
 
         // Send Email to Customer
-        await transporter.sendMail({
-          from: `"Atomra Home România" <${gmailUsername}>`,
-          to: orderData.customerEmail,
-          subject: `Comandă #${orderData.orderId} confirmată - Atomra Home România`,
-          html: buildCustomerEmailHtml(orderData),
-        });
-        customerSent = true;
+        try {
+          await transporter.sendMail({
+            from: `"Atomra Home România" <${gmailUsername}>`,
+            to: orderData.customerEmail,
+            subject: `Comandă #${orderData.orderId} confirmată - Atomra Home România`,
+            html: buildCustomerEmailHtml(orderData),
+          });
+          customerSent = true;
+          console.log(`[Gmail SMTP] Customer email sent successfully to ${orderData.customerEmail}`);
+        } catch (cErr: any) {
+          console.error(`[Gmail SMTP] Customer email error for ${orderData.customerEmail}:`, cErr);
+          emailErrorDetail = cErr.message || String(cErr);
+        }
 
-        // Send Notification Email to Admin
-        await transporter.sendMail({
-          from: `"Atomra System" <${gmailUsername}>`,
-          to: `${ADMIN_EMAIL}, nagyistvan1992@yahoo.com`,
-          subject: `🔔 COMANDĂ NOUĂ #${orderData.orderId} - ${orderData.customerName} (${orderData.total} Lei)`,
-          html: buildAdminEmailHtml(orderData),
-        });
-        adminSent = true;
-        transportLog = 'Emails successfully dispatched via Gmail SMTP.';
+        // Send Notification Email to Admin (both accounts)
+        try {
+          await transporter.sendMail({
+            from: `"Atomra System" <${gmailUsername}>`,
+            to: `${ADMIN_EMAIL}, nagyistvan1992@yahoo.com`,
+            subject: `🔔 COMANDĂ NOUĂ #${orderData.orderId} - ${orderData.customerName} (${orderData.total} Lei)`,
+            html: buildAdminEmailHtml(orderData),
+          });
+          adminSent = true;
+          console.log(`[Gmail SMTP] Admin email sent successfully to ${ADMIN_EMAIL} & nagyistvan1992@yahoo.com`);
+        } catch (aErr: any) {
+          console.error('[Gmail SMTP] Admin email error:', aErr);
+          if (!emailErrorDetail) emailErrorDetail = aErr.message || String(aErr);
+        }
+
+        if (customerSent || adminSent) {
+          transportLog = `Emails dispatched via Gmail SMTP (Customer: ${customerSent ? 'OK' : 'Failed'}, Admin: ${adminSent ? 'OK' : 'Failed'})`;
+        }
       }
     } catch (gmailErr: any) {
-      console.error('Gmail SMTP Error:', gmailErr);
+      console.error('Gmail SMTP Setup Error:', gmailErr);
       emailErrorDetail = gmailErr.message || 'Gmail SMTP failed';
     }
   }
