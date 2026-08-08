@@ -1,4 +1,3 @@
-import { sendOrderEmailNotification, OrderData } from './emails';
 import { query } from './_db/index';
 
 export default async function handler(req: any, res: any) {
@@ -6,6 +5,14 @@ export default async function handler(req: any, res: any) {
   res.setHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type');
 
   if (req.method === 'OPTIONS') return res.status(200).end();
+
+  let sendOrderEmailNotification: any = null;
+  try {
+    const emailsModule = require('./emails');
+    sendOrderEmailNotification = emailsModule.sendOrderEmailNotification;
+  } catch (modErr) {
+    console.warn('Module require emails notice:', modErr);
+  }
 
   try {
     const body = req.body || {};
@@ -30,7 +37,7 @@ export default async function handler(req: any, res: any) {
         price: typeof it.price === 'number' ? `${it.price} Lei` : (it.price || '0 Lei')
       })) : [];
 
-      const orderData: OrderData = {
+      const orderData = {
         orderId: ordNum,
         customerName: body.customer_name || 'Client',
         customerEmail: body.customer_email || '',
@@ -71,7 +78,7 @@ export default async function handler(req: any, res: any) {
 
       // 2. Dispatch order emails directly via Gmail SMTP / Email handler
       let emailResult = null;
-      if (orderData.customerEmail) {
+      if (orderData.customerEmail && typeof sendOrderEmailNotification === 'function') {
         try {
           emailResult = await sendOrderEmailNotification(orderData);
           console.log(`[Email Dispatch] Triggered for order ${ordNum}:`, emailResult?.message);
