@@ -242,9 +242,8 @@ const Header = () => {
 
   return (
     <>
-      <div className="fixed top-0 left-0 right-0 z-[60] overflow-hidden border-b border-slate-600/20 bg-gradient-to-r from-slate-800/50 via-slate-700/45 to-slate-800/50 shadow-lg backdrop-blur-md">
+      <div className="fixed top-0 left-0 right-0 z-[60] overflow-hidden border-b border-slate-800 bg-slate-900 shadow-md">
         <div className="relative flex h-8 items-center">
-          <div className="absolute inset-0 animate-pulse bg-gradient-to-r from-slate-600/5 via-transparent to-slate-500/5" />
           <div className="w-full overflow-hidden hidden md:block">
             <div className="relative z-10 flex animate-scroll-banner whitespace-nowrap text-xs font-light tracking-wide text-slate-100">
               {Array.from({ length: 12 }, (_, index) => (
@@ -266,11 +265,11 @@ const Header = () => {
 
       <header
         ref={dropdownRef}
-        className={`fixed top-8 left-0 right-0 z-50 transition-all duration-500 ${
+        className={`fixed top-8 left-0 right-0 z-50 transition-transform duration-300 transform-gpu ${
           isHeaderVisible ? 'translate-y-0' : '-translate-y-full'
         }`}
       >
-        <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-[#faf8f5]/95 to-white/95 shadow-md backdrop-blur-sm" />
+        <div className="absolute inset-0 bg-white/98 border-b border-stone-200/80 shadow-sm" />
 
         <div className="relative z-10 hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 md:block">
           <div className="flex justify-center py-4">

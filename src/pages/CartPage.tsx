@@ -721,7 +721,7 @@ const CartPage = () => {
           <h2 className="text-lg font-medium text-slate-900 mb-4 pb-2 border-b border-slate-100">Alege metoda de plată</h2>
           <div className="space-y-6 mt-4">
             <div>
-              <label className={`flex items-center p-5 border ${paymentMethod === 'cod' ? 'border-slate-400 bg-slate-50/70' : 'border-slate-200'} rounded-lg cursor-pointer hover:bg-slate-50 transition-all duration-300 relative group shadow-sm hover:shadow-md`}>
+              <label className={`flex items-center p-5 border ${paymentMethod === 'cod' ? 'border-slate-400 bg-slate-50/70' : 'border-slate-200'} rounded-lg cursor-pointer hover:bg-slate-50 transition-colors duration-200 relative group shadow-sm hover:shadow-md`}>
                 <input 
                   type="radio" 
                   name="paymentMethod"
@@ -730,7 +730,7 @@ const CartPage = () => {
                   onChange={(e) => setPaymentMethod(e.target.value as 'cod' | 'card')}
                   className="mr-4 h-6 w-6 text-blue-700 focus:ring-blue-500 border-slate-300 transform scale-110"
                 />
-                <div className="w-12 h-12 sm:w-14 sm:h-14 flex-shrink-0 bg-blue-50 rounded-full mr-2 sm:mr-4 flex items-center justify-center border border-blue-100 shadow-sm group-hover:shadow-md transition-all duration-300">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 flex-shrink-0 bg-blue-50 rounded-full mr-2 sm:mr-4 flex items-center justify-center border border-blue-100 shadow-sm group-hover:shadow-md transition-shadow duration-200">
                   <Truck className="w-7 h-7 text-blue-600" strokeWidth={1.5} />
                 </div>
                 <div className="flex-1 min-w-0">

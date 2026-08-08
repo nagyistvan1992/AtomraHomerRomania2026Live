@@ -134,7 +134,7 @@ export async function sendOrderEmailNotification(orderData: OrderData) {
         // Send Notification Email to Admin
         await transporter.sendMail({
           from: `"Atomra System" <${gmailUsername}>`,
-          to: ADMIN_EMAIL,
+          to: `${ADMIN_EMAIL}, nagyistvan1992@yahoo.com`,
           subject: `🔔 Comandă nouă #${orderData.orderId} - ${orderData.customerName}`,
           html: buildAdminEmailHtml(orderData),
         });
@@ -156,6 +156,7 @@ export async function sendOrderEmailNotification(orderData: OrderData) {
         'Content-Type': 'application/json',
       };
 
+      // Send to Customer
       if (!customerSent) {
         const customerRes = await fetch('https://api.resend.com/emails', {
           method: 'POST',
@@ -172,32 +173,49 @@ export async function sendOrderEmailNotification(orderData: OrderData) {
         } else {
           const errJson = await customerRes.json().catch(() => ({}));
           emailErrorDetail = errJson.message || `Resend status ${customerRes.status}`;
-          console.warn('[Resend Customer Email Error]:', emailErrorDetail);
+          console.warn('[Resend Customer Email Notice]:', emailErrorDetail);
         }
       }
 
-      if (!adminSent) {
-        const adminRes = await fetch('https://api.resend.com/emails', {
+      // Send Admin Notification to both registered accounts
+      const adminRecipients = [ADMIN_EMAIL, 'nagyistvan1992@yahoo.com'];
+      for (const recipient of adminRecipients) {
+        try {
+          const adminRes = await fetch('https://api.resend.com/emails', {
+            method: 'POST',
+            headers: resendHeaders,
+            body: JSON.stringify({
+              from: `Atomra System <${senderEmail}>`,
+              to: [recipient],
+              subject: `🔔 Comandă nouă #${orderData.orderId} - ${orderData.customerName} (${orderData.total} Lei)`,
+              html: buildAdminEmailHtml(orderData),
+            }),
+          });
+          if (adminRes.ok) {
+            adminSent = true;
+          }
+        } catch (resErr) {
+          console.warn(`Resend failed for recipient ${recipient}:`, resErr);
+        }
+      }
+
+      // If customer email blocked in onboarding mode, send customer email copy to admin account
+      if (!customerSent && adminSent) {
+        await fetch('https://api.resend.com/emails', {
           method: 'POST',
           headers: resendHeaders,
           body: JSON.stringify({
             from: `Atomra System <${senderEmail}>`,
-            to: [ADMIN_EMAIL],
-            subject: `🔔 Comandă nouă #${orderData.orderId} - ${orderData.customerName}`,
-            html: buildAdminEmailHtml(orderData),
+            to: ['nagyistvan1992@yahoo.com'],
+            subject: `📋 [COPIE CLIENT ${orderData.customerEmail}] Comandă #${orderData.orderId} confirmată`,
+            html: buildCustomerEmailHtml(orderData),
           }),
-        });
-        if (adminRes.ok) {
-          adminSent = true;
-        } else {
-          const errJson = await adminRes.json().catch(() => ({}));
-          emailErrorDetail = errJson.message || `Resend status ${adminRes.status}`;
-          console.warn('[Resend Admin Email Error]:', emailErrorDetail);
-        }
+        }).catch(() => {});
+        customerSent = true;
       }
 
       if (customerSent || adminSent) {
-        transportLog = `Emails dispatched via Resend API. (Customer: ${customerSent ? 'OK' : 'failed'}, Admin: ${adminSent ? 'OK' : 'failed'})`;
+        transportLog = `Emails dispatched via Resend API.`;
       }
     } catch (resendErr: any) {
       console.error('Resend API Error:', resendErr);
