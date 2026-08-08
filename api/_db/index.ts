@@ -1,5 +1,5 @@
 const HARDCODED_NEON_URL =
-  'postgresql://neondb_owner:npg_1yQmpo6enEPA@ep-green-brook-zajitt3k-pooler.c-2.eu-west-2.aws.neon.tech/neondb?sslmode=require';
+  'postgresql://neondb_owner:npg_1yQmpo6enEPA@ep-bold-voice-za0tvd1y-pooler.c-2.eu-west-2.aws.neon.tech/neondb?sslmode=require';
 
 function getValidConnectionString(): string {
   const envUrl = process.env.POSTGRES_URL || process.env.DATABASE_URL || process.env.POSTGRES_URL_NON_POOLING;
@@ -12,7 +12,7 @@ function getValidConnectionString(): string {
 export async function query(text: string, params: any[] = []): Promise<{ rows: any[]; rowCount: number; error?: any }> {
   const connStr = getValidConnectionString();
   const match = connStr.match(/postgresql:\/\/([^:]+):([^@]+)@([^\/]+)\/(.+)/);
-  const host = match ? match[3].split('?')[0] : 'ep-green-brook-zajitt3k.c-2.eu-west-2.aws.neon.tech';
+  const host = match ? match[3].split('?')[0] : 'ep-bold-voice-za0tvd1y-pooler.c-2.eu-west-2.aws.neon.tech';
 
   try {
     const response = await fetch(`https://${host}/sql`, {

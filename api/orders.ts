@@ -1,3 +1,6 @@
+import { sendOrderEmailNotification, OrderData } from './emails';
+import { query } from './_db/index';
+
 export default async function handler(req: any, res: any) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type');
@@ -17,51 +20,88 @@ export default async function handler(req: any, res: any) {
         country: 'RO'
       };
 
-      // 1. Dispatch order emails asynchronously via local /api/emails endpoint
-      if (body.customer_email) {
-        const protocol = req.headers['x-forwarded-proto'] || 'https';
-        const host = req.headers['x-forwarded-host'] || req.headers.host || 'www.atomrahomeromania.ro';
-        const emailEndpoint = `${protocol}://${host}/api/emails`;
+      const formattedAddress = typeof shippingAddr === 'object'
+        ? `${shippingAddr.line1 || ''}, ${shippingAddr.city || ''} ${shippingAddr.postal_code || ''}`.trim()
+        : String(shippingAddr);
 
-        void fetch(emailEndpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            orderData: {
-              orderId: ordNum,
-              customerName: body.customer_name || 'Client',
-              customerEmail: body.customer_email,
-              customerPhone: body.customer_phone || '',
-              customerAddress: typeof shippingAddr === 'object'
-                ? `${shippingAddr.line1 || ''}, ${shippingAddr.city || ''} ${shippingAddr.postal_code || ''}`.trim()
-                : String(shippingAddr),
-              items: Array.isArray(body.items) ? body.items.map((it: any) => ({
-                name: it.name || it.product_name || 'Produs Atomra',
-                quantity: it.quantity || 1,
-                price: typeof it.price === 'number' ? `${it.price} Lei` : (it.price || '0 Lei')
-              })) : [],
-              total: totalVal,
-              paymentMethod: body.payment_method || 'Plată la livrare (Ramburs)',
-              orderDate: new Date().toISOString()
-            }
-          })
-        }).catch(() => {});
+      const itemsList = Array.isArray(body.items) ? body.items.map((it: any) => ({
+        name: it.name || it.product_name || 'Produs Atomra',
+        quantity: it.quantity || 1,
+        price: typeof it.price === 'number' ? `${it.price} Lei` : (it.price || '0 Lei')
+      })) : [];
+
+      const orderData: OrderData = {
+        orderId: ordNum,
+        customerName: body.customer_name || 'Client',
+        customerEmail: body.customer_email || '',
+        customerPhone: body.customer_phone || '',
+        customerAddress: formattedAddress,
+        items: itemsList,
+        total: totalVal,
+        paymentMethod: body.payment_method || 'Plată la livrare (Ramburs)',
+        orderDate: new Date().toISOString()
+      };
+
+      // 1. Save order to Neon DB Database
+      try {
+        await query(
+          `INSERT INTO orders (
+            order_number, customer_name, customer_email, customer_phone, 
+            customer_address, items, total_amount, payment_method, 
+            payment_status, order_status, created_at
+          ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, NOW())
+          ON CONFLICT (order_number) DO UPDATE SET total_amount = EXCLUDED.total_amount`,
+          [
+            ordNum,
+            orderData.customerName,
+            orderData.customerEmail,
+            orderData.customerPhone,
+            orderData.customerAddress,
+            JSON.stringify(orderData.items),
+            orderData.total,
+            orderData.paymentMethod,
+            body.payment_status || 'pending',
+            body.order_status || 'pending'
+          ]
+        );
+        console.log(`[Neon DB] Saved order ${ordNum} to database successfully.`);
+      } catch (dbErr) {
+        console.warn('[Neon DB Insert Notice]:', dbErr);
       }
 
-      // 2. Return HTTP 200 OK success immediately
+      // 2. Dispatch order emails directly via Gmail SMTP / Email handler
+      let emailResult = null;
+      if (orderData.customerEmail) {
+        try {
+          emailResult = await sendOrderEmailNotification(orderData);
+          console.log(`[Email Dispatch] Triggered for order ${ordNum}:`, emailResult?.message);
+        } catch (emailErr) {
+          console.error('[Email Dispatch Error]:', emailErr);
+        }
+      }
+
       return res.status(200).json({
         success: true,
         order_number: ordNum,
-        customer_name: body.customer_name || 'Client',
-        customer_email: body.customer_email || '',
+        customer_name: orderData.customerName,
+        customer_email: orderData.customerEmail,
         total: totalVal,
         status: 'pending',
+        emailStatus: emailResult?.message || 'processed',
         created_at: new Date().toISOString()
       });
     }
 
     if (req.method === 'GET') {
       const { order_number } = req.query || {};
+      const dbRes = await query(`SELECT * FROM orders WHERE order_number = $1 LIMIT 1`, [order_number || ordNum]);
+      if (dbRes.rows && dbRes.rows.length > 0) {
+        return res.status(200).json({
+          success: true,
+          ...dbRes.rows[0]
+        });
+      }
+
       return res.status(200).json({
         success: true,
         order_number: order_number || ordNum,
