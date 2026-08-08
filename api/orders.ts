@@ -1,5 +1,3 @@
-import { sendOrderEmailNotification } from './emails';
-
 export default async function handler(req: any, res: any) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type');
@@ -19,69 +17,38 @@ export default async function handler(req: any, res: any) {
         country: 'RO'
       };
 
-      // 1. Dispatch order email notifications (Customer + Admin)
+      // 1. Dispatch order emails asynchronously via local /api/emails endpoint
       if (body.customer_email) {
-        try {
-          const emailItems = Array.isArray(body.items) ? body.items.map((it: any) => ({
-            name: it.name || it.product_name || 'Produs Atomra',
-            quantity: it.quantity || 1,
-            price: typeof it.price === 'number' ? `${it.price} Lei` : (it.price || '0 Lei')
-          })) : [];
+        const protocol = req.headers['x-forwarded-proto'] || 'https';
+        const host = req.headers['x-forwarded-host'] || req.headers.host || 'www.atomrahomeromania.ro';
+        const emailEndpoint = `${protocol}://${host}/api/emails`;
 
-          const shippingAddrStr = typeof shippingAddr === 'object'
-            ? `${shippingAddr.line1 || ''}, ${shippingAddr.city || ''} ${shippingAddr.postal_code || ''}`.trim()
-            : String(shippingAddr);
-
-          await sendOrderEmailNotification({
-            orderId: ordNum,
-            customerName: body.customer_name || 'Client',
-            customerEmail: body.customer_email,
-            customerPhone: body.customer_phone || '',
-            customerAddress: shippingAddrStr || 'Adresă furnizată la livrare',
-            items: emailItems,
-            total: totalVal,
-            paymentMethod: body.payment_method || 'Plată la livrare (Ramburs)'
-          });
-        } catch (emailErr) {
-          console.error('Order email notification warning (non-fatal):', emailErr);
-        }
+        void fetch(emailEndpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            orderData: {
+              orderId: ordNum,
+              customerName: body.customer_name || 'Client',
+              customerEmail: body.customer_email,
+              customerPhone: body.customer_phone || '',
+              customerAddress: typeof shippingAddr === 'object'
+                ? `${shippingAddr.line1 || ''}, ${shippingAddr.city || ''} ${shippingAddr.postal_code || ''}`.trim()
+                : String(shippingAddr),
+              items: Array.isArray(body.items) ? body.items.map((it: any) => ({
+                name: it.name || it.product_name || 'Produs Atomra',
+                quantity: it.quantity || 1,
+                price: typeof it.price === 'number' ? `${it.price} Lei` : (it.price || '0 Lei')
+              })) : [],
+              total: totalVal,
+              paymentMethod: body.payment_method || 'Plată la livrare (Ramburs)',
+              orderDate: new Date().toISOString()
+            }
+          })
+        }).catch(() => {});
       }
 
-      // 2. Best-effort database log (Optional background attempt, never blocks or fails orders)
-      try {
-        const connStr = process.env.POSTGRES_URL || process.env.DATABASE_URL;
-        if (connStr) {
-          const cleanConnStr = connStr.replace(/channel_binding=require&?/, '');
-          void fetch('https://ep-green-brook-zajitt3k.c-2.eu-west-2.aws.neon.tech/sql', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Neon-Connection-String': cleanConnStr
-            },
-            body: JSON.stringify({
-              query: `INSERT INTO orders (order_number, customer_name, customer_email, customer_phone, shipping_address, total, subtotal, shipping_cost, status, items, stripe_session_id)
-                      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
-              params: [
-                ordNum,
-                body.customer_name || 'Client',
-                body.customer_email || '',
-                body.customer_phone || '',
-                JSON.stringify(shippingAddr),
-                totalVal,
-                body.subtotal || totalVal,
-                body.shipping_cost || 0,
-                body.status || 'pending',
-                JSON.stringify(body.items || []),
-                body.stripe_session_id || ''
-              ]
-            })
-          }).catch(() => {});
-        }
-      } catch (dbErr) {
-        console.warn('Database insert warning (non-fatal):', dbErr);
-      }
-
-      // 3. Return 200 OK success immediately
+      // 2. Return HTTP 200 OK success immediately
       return res.status(200).json({
         success: true,
         order_number: ordNum,
@@ -106,7 +73,7 @@ export default async function handler(req: any, res: any) {
 
     return res.status(200).json({ success: true, order_number: ordNum });
   } catch (error: any) {
-    console.error('Orders API error handler fallback:', error);
+    console.error('Orders API handler error:', error);
     return res.status(200).json({
       success: true,
       order_number: req.body?.order_number || `ORD-${Date.now()}`,

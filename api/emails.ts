@@ -1,6 +1,5 @@
 type VercelRequest = any;
 type VercelResponse = any;
-import nodemailer from 'nodemailer';
 
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'atomrahomeromania@gmail.com';
 
@@ -103,36 +102,45 @@ export async function sendOrderEmailNotification(orderData: OrderData) {
   let transportLog = '';
   let emailErrorDetail: string | null = null;
 
-  // 1. Try Gmail SMTP first if configured (No custom domain required!)
+  // 1. Try Gmail SMTP first if configured
   if (gmailUsername && gmailAppPassword) {
     try {
       console.log('Sending emails via Gmail SMTP...');
-      const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          user: gmailUsername,
-          pass: gmailAppPassword,
-        },
-      });
+      let nodemailer: any = null;
+      try {
+        nodemailer = require('nodemailer');
+      } catch (reqErr) {
+        console.warn('Nodemailer require failed:', reqErr);
+      }
 
-      // Send Email to Customer
-      await transporter.sendMail({
-        from: `"Atomra Homer Romania" <${gmailUsername}>`,
-        to: orderData.customerEmail,
-        subject: `Comanda #${orderData.orderId} confirmata`,
-        html: buildCustomerEmailHtml(orderData),
-      });
-      customerSent = true;
+      if (nodemailer) {
+        const transporter = nodemailer.createTransport({
+          service: 'gmail',
+          auth: {
+            user: gmailUsername,
+            pass: gmailAppPassword,
+          },
+        });
 
-      // Send Notification Email to Admin
-      await transporter.sendMail({
-        from: `"Atomra System" <${gmailUsername}>`,
-        to: ADMIN_EMAIL,
-        subject: `🔔 Comandă nouă #${orderData.orderId} - ${orderData.customerName}`,
-        html: buildAdminEmailHtml(orderData),
-      });
-      adminSent = true;
-      transportLog = 'Emails sent via Gmail SMTP.';
+        // Send Email to Customer
+        await transporter.sendMail({
+          from: `"Atomra Homer Romania" <${gmailUsername}>`,
+          to: orderData.customerEmail,
+          subject: `Comanda #${orderData.orderId} confirmata`,
+          html: buildCustomerEmailHtml(orderData),
+        });
+        customerSent = true;
+
+        // Send Notification Email to Admin
+        await transporter.sendMail({
+          from: `"Atomra System" <${gmailUsername}>`,
+          to: ADMIN_EMAIL,
+          subject: `🔔 Comandă nouă #${orderData.orderId} - ${orderData.customerName}`,
+          html: buildAdminEmailHtml(orderData),
+        });
+        adminSent = true;
+        transportLog = 'Emails sent via Gmail SMTP.';
+      }
     } catch (gmailErr: any) {
       console.error('Gmail SMTP Error:', gmailErr);
       emailErrorDetail = gmailErr.message || 'Gmail SMTP failed';
