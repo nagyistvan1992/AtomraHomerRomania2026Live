@@ -39,6 +39,7 @@ export const invokeVercelFunction = async <T = any>(
       ...options.headers,
     },
     body: options.body ? JSON.stringify(options.body) : undefined,
+    keepalive: true,
   });
 
   if (!response.ok) {

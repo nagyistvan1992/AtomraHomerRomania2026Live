@@ -381,7 +381,7 @@ const CartPage = () => {
     return parsedBody.url;
   };
 
-  const sendOrderEmailsInBackground = (orderNum: string, explicitDetails?: CustomerDetails) => {
+  const sendOrderEmails = async (orderNum: string, explicitDetails?: CustomerDetails) => {
     const details = explicitDetails || sanitizeCustomerDetails();
     const emailPayload = {
       orderData: {
@@ -402,24 +402,21 @@ const CartPage = () => {
       }
     };
 
-    void invokeVercelFunction<{ success?: boolean; error?: string; message?: string }>(
-      'emails',
-      {
-        body: emailPayload,
-        timeoutMs: 12000,
-      },
-    )
-      .then((emailData) => {
-        if (emailData && !emailData.success) {
-          console.warn('Email function reported non-success:', emailData.error || emailData.message);
-          return;
-        }
-
+    try {
+      const emailData = await invokeVercelFunction<{ success?: boolean; error?: string; message?: string }>(
+        'emails',
+        {
+          body: emailPayload,
+        },
+      );
+      if (emailData && !emailData.success) {
+        console.warn('Email function reported non-success:', emailData.error || emailData.message);
+      } else {
         console.log('Email function invoked successfully.');
-      })
-      .catch((invokeError) => {
-        console.error('Unexpected error during email function invocation:', invokeError);
-      });
+      }
+    } catch (invokeError) {
+      console.error('Error during email function invocation:', invokeError);
+    }
   };
 
   const handleCheckout = async () => {
@@ -454,7 +451,7 @@ const CartPage = () => {
       };
 
       setOrderNumber(orderNum);
-      sendOrderEmailsInBackground(orderNum, details);
+      await sendOrderEmails(orderNum, details);
 
       try {
         await createOrderWithRecovery(orderData);
