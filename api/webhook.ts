@@ -1,7 +1,7 @@
 type VercelRequest = any;
 type VercelResponse = any;
 import Stripe from 'stripe';
-import { query } from './db/index';
+import { query } from './_db/index';
 
 export const config = { api: { bodyParser: false } };
 

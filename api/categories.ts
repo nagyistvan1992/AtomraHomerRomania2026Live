@@ -1,6 +1,6 @@
 type VercelRequest = any;
 type VercelResponse = any;
-import { query } from './db/index';
+import { query } from './_db/index';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   res.setHeader('Access-Control-Allow-Origin', '*');
