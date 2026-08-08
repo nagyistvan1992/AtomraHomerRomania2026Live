@@ -228,10 +228,16 @@ const CartPage = () => {
   const shippingCost = subtotalAmount > 149 ? 0 : 25;
   const totalAmount = subtotalAmount + shippingCost;
   
-  // Close the cart drawer when CartPage mounts
+  // Close the cart drawer when CartPage mounts and force scroll to top on step changes
   useEffect(() => {
     closeCart();
   }, [closeCart]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }, [step]);
 
   const generateOrderNumber = () => {
     const timestamp = Date.now().toString().slice(-6);

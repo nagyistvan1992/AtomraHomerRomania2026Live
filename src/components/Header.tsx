@@ -269,7 +269,7 @@ const Header = () => {
           isHeaderVisible ? 'translate-y-0' : '-translate-y-full'
         }`}
       >
-        <div className="absolute inset-0 bg-white/98 border-b border-stone-200/80 shadow-sm" />
+        <div className="absolute inset-0 bg-white border-b border-stone-200 shadow-md" />
 
         <div className="relative z-10 hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 md:block">
           <div className="flex justify-center py-4">
