@@ -381,8 +381,8 @@ const CartPage = () => {
     return parsedBody.url;
   };
 
-  const sendOrderEmailsInBackground = (orderNum: string) => {
-    const details = sanitizeCustomerDetails();
+  const sendOrderEmailsInBackground = (orderNum: string, explicitDetails?: CustomerDetails) => {
+    const details = explicitDetails || sanitizeCustomerDetails();
     const emailPayload = {
       orderData: {
         orderId: orderNum,
@@ -397,7 +397,7 @@ const CartPage = () => {
           price: item.price
         })),
         total: totalAmount,
-        paymentMethod: paymentMethod,
+        paymentMethod: paymentMethod === 'cod' ? 'Plată la livrare (Ramburs)' : 'Plată cu cardul online',
         orderDate: new Date().toISOString()
       }
     };
@@ -406,7 +406,7 @@ const CartPage = () => {
       'emails',
       {
         body: emailPayload,
-        timeoutMs: 8000,
+        timeoutMs: 12000,
       },
     )
       .then((emailData) => {
@@ -454,7 +454,7 @@ const CartPage = () => {
       };
 
       setOrderNumber(orderNum);
-      sendOrderEmailsInBackground(orderNum);
+      sendOrderEmailsInBackground(orderNum, details);
 
       try {
         await createOrderWithRecovery(orderData);
