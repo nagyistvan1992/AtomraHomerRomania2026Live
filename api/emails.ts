@@ -175,16 +175,24 @@ export async function sendOrderEmailNotification(orderData: OrderData) {
       }
 
       if (nodemailer) {
-        const transporter = nodemailer.createTransport({
-          service: 'gmail',
-          auth: {
-            user: gmailUsername,
-            pass: gmailAppPassword,
-          },
-          tls: {
-            rejectUnauthorized: false
-          }
-        });
+        const createGmailTransporter = (usePort465: boolean) =>
+          nodemailer.createTransport({
+            ...(usePort465
+              ? { host: 'smtp.gmail.com', port: 465, secure: true }
+              : { service: 'gmail' }),
+            auth: {
+              user: gmailUsername,
+              pass: gmailAppPassword,
+            },
+            connectionTimeout: 12000,
+            greetingTimeout: 12000,
+            socketTimeout: 12000,
+            tls: {
+              rejectUnauthorized: false,
+            },
+          });
+
+        let transporter = createGmailTransporter(true);
 
         // Send Email to Customer
         try {
@@ -197,8 +205,20 @@ export async function sendOrderEmailNotification(orderData: OrderData) {
           customerSent = true;
           console.log(`[Gmail SMTP] Customer email sent successfully to ${orderData.customerEmail}`);
         } catch (cErr: any) {
-          console.error(`[Gmail SMTP] Customer email error for ${orderData.customerEmail}:`, cErr);
-          emailErrorDetail = cErr.message || String(cErr);
+          console.warn(`[Gmail SMTP port 465] Customer email failed, trying service:gmail fallback:`, cErr.message);
+          try {
+            const fallbackTransporter = createGmailTransporter(false);
+            await fallbackTransporter.sendMail({
+              from: `"Atomra Home România" <${gmailUsername}>`,
+              to: orderData.customerEmail,
+              subject: `Comandă #${orderData.orderId} confirmată - Atomra Home România`,
+              html: buildCustomerEmailHtml(orderData),
+            });
+            customerSent = true;
+          } catch (cErr2: any) {
+            console.error(`[Gmail SMTP] Customer email final error for ${orderData.customerEmail}:`, cErr2);
+            emailErrorDetail = cErr2.message || String(cErr2);
+          }
         }
 
         // Send Notification Email to Admin (both accounts)
@@ -212,8 +232,20 @@ export async function sendOrderEmailNotification(orderData: OrderData) {
           adminSent = true;
           console.log(`[Gmail SMTP] Admin email sent successfully to ${ADMIN_EMAIL} & nagyistvan1992@yahoo.com`);
         } catch (aErr: any) {
-          console.error('[Gmail SMTP] Admin email error:', aErr);
-          if (!emailErrorDetail) emailErrorDetail = aErr.message || String(aErr);
+          console.warn('[Gmail SMTP port 465] Admin email failed, trying service:gmail fallback:', aErr.message);
+          try {
+            const fallbackTransporter = createGmailTransporter(false);
+            await fallbackTransporter.sendMail({
+              from: `"Atomra System" <${gmailUsername}>`,
+              to: `${ADMIN_EMAIL}, nagyistvan1992@yahoo.com`,
+              subject: `🔔 COMANDĂ NOUĂ #${orderData.orderId} - ${orderData.customerName} (${orderData.total} Lei)`,
+              html: buildAdminEmailHtml(orderData),
+            });
+            adminSent = true;
+          } catch (aErr2: any) {
+            console.error('[Gmail SMTP] Admin email final error:', aErr2);
+            if (!emailErrorDetail) emailErrorDetail = aErr2.message || String(aErr2);
+          }
         }
 
         if (customerSent || adminSent) {
@@ -310,11 +342,15 @@ export async function sendOrderEmailNotification(orderData: OrderData) {
     transportLog = 'Order confirmation recorded successfully.';
   }
 
+  const isSuccess = customerSent || adminSent;
+
   return {
-    success: true,
+    success: isSuccess,
     customerEmailStatus: customerSent ? 'sent' : 'failed',
     adminEmailStatus: adminSent ? 'sent' : 'failed',
-    message: transportLog,
+    message: transportLog || (isSuccess ? 'Emails sent' : 'Email sending failed'),
+    error: isSuccess ? null : (emailErrorDetail || 'No email transport succeeded'),
+    gmailUserDetected: Boolean(gmailUsername),
     orderId: orderData.orderId,
   };
 }
