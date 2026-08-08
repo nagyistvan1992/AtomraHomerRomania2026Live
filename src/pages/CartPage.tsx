@@ -33,14 +33,6 @@ const DetailsStep = React.memo(({ initialDetails, initialNotes, onBack, onContin
   const [draftDetails, setDraftDetails] = useState<CustomerDetails>(initialDetails);
   const [draftNotes, setDraftNotes] = useState(initialNotes);
 
-  useEffect(() => {
-    setDraftDetails(initialDetails);
-  }, [initialDetails]);
-
-  useEffect(() => {
-    setDraftNotes(initialNotes);
-  }, [initialNotes]);
-
   const updateField = (field: keyof CustomerDetails, value: string) => {
     setDraftDetails((current) => ({
       ...current,

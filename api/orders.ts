@@ -60,32 +60,34 @@ export default async function handler(req: any, res: any) {
         }
       }
 
-      // Dispatch automatic order confirmation email
+      // Dispatch automatic order confirmation email in background without blocking HTTP response
       if (body.customer_email) {
-        try {
-          const emailItems = Array.isArray(body.items) ? body.items.map((it: any) => ({
-            name: it.name || it.product_name || 'Produs Atomra',
-            quantity: it.quantity || 1,
-            price: typeof it.price === 'number' ? `${it.price} Lei` : (it.price || '0 Lei')
-          })) : [];
+        void (async () => {
+          try {
+            const emailItems = Array.isArray(body.items) ? body.items.map((it: any) => ({
+              name: it.name || it.product_name || 'Produs Atomra',
+              quantity: it.quantity || 1,
+              price: typeof it.price === 'number' ? `${it.price} Lei` : (it.price || '0 Lei')
+            })) : [];
 
-          const shippingAddrStr = typeof shippingAddr === 'object'
-            ? `${shippingAddr.line1 || ''}, ${shippingAddr.city || ''} ${shippingAddr.postal_code || ''}`.trim()
-            : String(shippingAddr);
+            const shippingAddrStr = typeof shippingAddr === 'object'
+              ? `${shippingAddr.line1 || ''}, ${shippingAddr.city || ''} ${shippingAddr.postal_code || ''}`.trim()
+              : String(shippingAddr);
 
-          await sendOrderEmailNotification({
-            orderId: ordNum,
-            customerName: body.customer_name || 'Client',
-            customerEmail: body.customer_email,
-            customerPhone: body.customer_phone || '',
-            customerAddress: shippingAddrStr || 'Adresă furnizată la livrare',
-            items: emailItems,
-            total: totalVal,
-            paymentMethod: body.payment_method || 'Plată la livrare (Ramburs)'
-          });
-        } catch (emailErr) {
-          console.error('Order email notification error:', emailErr);
-        }
+            await sendOrderEmailNotification({
+              orderId: ordNum,
+              customerName: body.customer_name || 'Client',
+              customerEmail: body.customer_email,
+              customerPhone: body.customer_phone || '',
+              customerAddress: shippingAddrStr || 'Adresă furnizată la livrare',
+              items: emailItems,
+              total: totalVal,
+              paymentMethod: body.payment_method || 'Plată la livrare (Ramburs)'
+            });
+          } catch (emailErr) {
+            console.error('Order email notification background error:', emailErr);
+          }
+        })();
       }
     } else if (req.method === 'GET') {
       const { id, order_number } = req.query || {};
@@ -114,16 +116,6 @@ export default async function handler(req: any, res: any) {
         const rows = data.rows || [];
         if (id || order_number) {
           if (rows.length > 0) return res.status(200).json(rows[0]);
-          if (order_number) {
-            return res.status(200).json({
-              id: `ord-${Date.now()}`,
-              order_number,
-              total_amount: 0,
-              status: 'pending',
-              customer_email: '',
-              created_at: new Date().toISOString()
-            });
-          }
           return res.status(404).json({ error: 'Order not found' });
         }
         return res.status(200).json(rows);
