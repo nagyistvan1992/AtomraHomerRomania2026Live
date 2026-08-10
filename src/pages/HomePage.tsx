@@ -74,7 +74,7 @@ const HomePage = () => {
         keywords={seo.keywords}
         url={getSiteUrl('/')}
         structuredData={homeStructuredData}
-        preloadImages={['/hero-desktop.webp']}
+        preloadImages={['/hero-mobile.webp', '/hero-desktop.webp']}
       />
 
       <div className="fixed inset-0 pointer-events-none z-0 hidden overflow-hidden md:block">
