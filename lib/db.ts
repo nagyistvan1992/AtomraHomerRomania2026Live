@@ -1,5 +1,5 @@
 const HARDCODED_NEON_URL =
-  'postgresql://neondb_owner:npg_1yQmpo6enEPA@ep-bold-voice-za0tvd1y-pooler.c-2.eu-west-2.aws.neon.tech/neondb?sslmode=require';
+  'postgresql://authenticator:npg_TFRx9K3pUSnY@ep-bold-voice-za0tvd1y-pooler.c-2.eu-west-2.aws.neon.tech/neondb?sslmode=require';
 
 function getValidConnectionString(): string {
   const envUrl = process.env.POSTGRES_URL || process.env.DATABASE_URL || process.env.POSTGRES_URL_NON_POOLING;
