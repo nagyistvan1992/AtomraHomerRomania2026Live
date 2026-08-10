@@ -88,13 +88,19 @@ const SEOHead: React.FC<SEOHeadProps> = ({
     };
 
     const addLink = (rel: string, href: string, extraAttributes?: Record<string, string>) => {
+      if (!href || typeof href !== 'string' || href.trim().length === 0) {
+        return;
+      }
+
       const link = createManagedElement<HTMLLinkElement>('link');
       link.rel = rel;
       link.href = href;
 
       if (extraAttributes) {
         Object.entries(extraAttributes).forEach(([key, value]) => {
-          link.setAttribute(key, value);
+          if (value !== undefined && value !== null) {
+            link.setAttribute(key, value);
+          }
         });
       }
     };
@@ -144,9 +150,9 @@ const SEOHead: React.FC<SEOHeadProps> = ({
     (preloadImages || [])
       .filter((imgSrc) => typeof imgSrc === 'string' && imgSrc.trim().length > 0)
       .forEach((imgSrc) => {
-        const cleanPath = getAssetPath(imgSrc.trim());
-        if (cleanPath && cleanPath.trim().length > 0) {
-          addLink('preload', cleanPath, { as: 'image' });
+        const fullUrl = getAbsoluteAssetUrl(imgSrc.trim());
+        if (fullUrl && fullUrl.trim().length > 0) {
+          addLink('preload', fullUrl, { as: 'image' });
         }
       });
 
