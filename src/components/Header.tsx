@@ -3,7 +3,6 @@ import { ShoppingCart, ChevronDown, Menu, X } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useLanguage, type Language } from '../context/LanguageContext';
-import { SECRET_ADMIN_ROUTE, SECRET_ADMIN_TAP_COUNT, SECRET_ADMIN_TAP_WINDOW_MS } from '../constants/adminAccess';
 
 type NavItem = {
   id: string;
@@ -218,29 +217,6 @@ const Header = () => {
     }, 100);
   };
 
-  const handleBrandClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    const nextTapCount = brandTapCount + 1;
-
-    if (brandTapTimeoutRef.current) {
-      clearTimeout(brandTapTimeoutRef.current);
-    }
-
-    if (nextTapCount >= SECRET_ADMIN_TAP_COUNT) {
-      event.preventDefault();
-      setBrandTapCount(0);
-      setActiveDropdown(null);
-      setHoveredDropdown(null);
-      setIsMobileMenuOpen(false);
-      navigate(SECRET_ADMIN_ROUTE);
-      return;
-    }
-
-    setBrandTapCount(nextTapCount);
-    brandTapTimeoutRef.current = setTimeout(() => {
-      setBrandTapCount(0);
-    }, SECRET_ADMIN_TAP_WINDOW_MS);
-  };
-
   const totalItems = getTotalItems();
 
   return (
@@ -276,7 +252,7 @@ const Header = () => {
 
         <div className="relative z-10 hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 md:block">
           <div className="flex justify-center py-4">
-            <Link to="/" className="group text-center" onClick={(event) => { handleBrandClick(event); handleLinkClick(); }}>
+            <Link to="/" className="group text-center" onClick={handleLinkClick}>
               <span className="block text-xl font-extralight tracking-super-wide text-[#1e1e1e] transition-colors duration-300 group-hover:text-[#333333] sm:text-2xl">
                 ATOMRA
               </span>

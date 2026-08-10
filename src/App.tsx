@@ -4,7 +4,6 @@ import { LanguageProvider } from './context/LanguageContext';
 import { CartProvider } from './context/CartContext';
 import MainLayout from './components/MainLayout';
 import ScrollToTop from './components/ScrollToTop';
-import { SECRET_ADMIN_ROUTE } from './constants/adminAccess';
 
 // Lazy load pages for better performance
 const HomePage = lazy(() => import('./pages/HomePage'));
@@ -16,8 +15,6 @@ const ComingSoonPage = lazy(() => import('./pages/ComingSoonPage'));
 const ProductPage = lazy(() => import('./components/ProductPage'));
 const SuccessPage = lazy(() => import('./pages/SuccessPage'));
 const CancelPage = lazy(() => import('./pages/CancelPage'));
-const AdminPageRoute = lazy(() => import('./routes/AdminPageRoute'));
-const AdminLoginRoute = lazy(() => import('./routes/AdminLoginRoute'));
 const IdeasPage = lazy(() => import('./pages/IdeasPage'));
 const ContactPage = lazy(() => import('./pages/ContactPage'));
 const WholesalePage = lazy(() => import('./pages/WholesalePage'));
@@ -46,7 +43,6 @@ const LegacyProductRoute = lazy(() => import('./routes/LegacyProductRoute'));
 
 // Loading component
 const PageLoader = () => {
-  // Ensure scroll to top when loading new pages
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -69,18 +65,10 @@ function App() {
           <div className="min-h-screen bg-white">
             <ScrollToTop />
             <Routes>
-              {/* Admin Routes */}
+              {/* Legacy Admin Redirects */}
+              <Route path="/admin" element={<Navigate to="/" replace />} />
               <Route path="/admin-login" element={<Navigate to="/" replace />} />
-              <Route path={SECRET_ADMIN_ROUTE} element={
-                <Suspense fallback={<PageLoader />}>
-                  <AdminLoginRoute />
-                </Suspense>
-              } />
-              <Route path="/admin" element={
-                <Suspense fallback={<PageLoader />}>
-                  <AdminPageRoute />
-                </Suspense>
-              } />
+
               {/* Public Routes with Main Layout */}
               <Route element={
                 <Suspense fallback={<PageLoader />}>
