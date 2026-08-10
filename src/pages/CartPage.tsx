@@ -22,6 +22,54 @@ type CustomerDetails = {
   postalCode: string;
 };
 
+const CUSTOMER_DETAILS_STORAGE_KEY = 'atomra_saved_customer_details_v1';
+const CUSTOMER_NOTES_STORAGE_KEY = 'atomra_saved_customer_notes_v1';
+
+const loadSavedCustomerDetails = (): CustomerDetails => {
+  try {
+    const saved = localStorage.getItem(CUSTOMER_DETAILS_STORAGE_KEY);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      return {
+        name: typeof parsed.name === 'string' ? parsed.name : '',
+        email: typeof parsed.email === 'string' ? parsed.email : '',
+        phone: typeof parsed.phone === 'string' ? parsed.phone : '',
+        address: typeof parsed.address === 'string' ? parsed.address : '',
+        city: typeof parsed.city === 'string' ? parsed.city : '',
+        postalCode: typeof parsed.postalCode === 'string' ? parsed.postalCode : '',
+      };
+    }
+  } catch (e) {}
+  return {
+    name: '',
+    email: '',
+    phone: '',
+    address: '',
+    city: '',
+    postalCode: '',
+  };
+};
+
+const saveCustomerDetails = (details: CustomerDetails) => {
+  try {
+    localStorage.setItem(CUSTOMER_DETAILS_STORAGE_KEY, JSON.stringify(details));
+  } catch (e) {}
+};
+
+const loadSavedNotes = (): string => {
+  try {
+    return localStorage.getItem(CUSTOMER_NOTES_STORAGE_KEY) || '';
+  } catch (e) {
+    return '';
+  }
+};
+
+const saveNotes = (notes: string) => {
+  try {
+    localStorage.setItem(CUSTOMER_NOTES_STORAGE_KEY, notes);
+  } catch (e) {}
+};
+
 type DetailsStepProps = {
   initialDetails: CustomerDetails;
   initialNotes: string;
@@ -30,14 +78,26 @@ type DetailsStepProps = {
 };
 
 const DetailsStep = React.memo(({ initialDetails, initialNotes, onBack, onContinue }: DetailsStepProps) => {
-  const [draftDetails, setDraftDetails] = useState<CustomerDetails>(initialDetails);
-  const [draftNotes, setDraftNotes] = useState(initialNotes);
+  const saved = useMemo(() => loadSavedCustomerDetails(), []);
+  const [draftDetails, setDraftDetails] = useState<CustomerDetails>(() => ({
+    name: initialDetails.name || saved.name,
+    email: initialDetails.email || saved.email,
+    phone: initialDetails.phone || saved.phone,
+    address: initialDetails.address || saved.address,
+    city: initialDetails.city || saved.city,
+    postalCode: initialDetails.postalCode || saved.postalCode,
+  }));
+  const [draftNotes, setDraftNotes] = useState(() => initialNotes || loadSavedNotes());
 
   const updateField = (field: keyof CustomerDetails, value: string) => {
-    setDraftDetails((current) => ({
-      ...current,
-      [field]: value,
-    }));
+    setDraftDetails((current) => {
+      const updated = {
+        ...current,
+        [field]: value,
+      };
+      saveCustomerDetails(updated);
+      return updated;
+    });
   };
 
   const isValid =
@@ -154,7 +214,11 @@ const DetailsStep = React.memo(({ initialDetails, initialNotes, onBack, onContin
             </label>
             <textarea
               value={draftNotes}
-              onChange={(e) => setDraftNotes(e.target.value)}
+              onChange={(e) => {
+                const val = e.target.value;
+                setDraftNotes(val);
+                saveNotes(val);
+              }}
               rows={3}
               className="w-full px-4 py-3 border border-slate-200 rounded-md focus:ring-1 focus:ring-slate-400 focus:border-slate-400 font-light text-slate-800"
               placeholder="Instrucțiuni speciale de livrare..."
@@ -162,10 +226,10 @@ const DetailsStep = React.memo(({ initialDetails, initialNotes, onBack, onContin
           </div>
         </form>
 
-        <div className="flex items-center space-x-2 mt-6 p-4 bg-blue-50 rounded-md border border-blue-100 text-blue-800">
-          <User size={18} className="flex-shrink-0" strokeWidth={1.5} />
-          <p className="text-sm font-light">
-            Datele tale sunt securizate și utilizate doar pentru livrarea comenzii
+        <div className="flex items-center space-x-3 mt-6 p-4 bg-emerald-50/90 rounded-md border border-emerald-100 text-emerald-900">
+          <Check size={18} className="flex-shrink-0 text-emerald-600" strokeWidth={2} />
+          <p className="text-sm font-light leading-relaxed">
+            Datele tale sunt salvate automat în siguranță pe dispozitivul tău. Dacă părăsești pagina sau navighezi în magazin, datele rămân completate!
           </p>
         </div>
 
