@@ -422,16 +422,16 @@ const Header = () => {
       </header>
 
       <div
-        className={`fixed inset-y-0 left-0 z-50 w-full max-w-xs overflow-hidden bg-white/95 backdrop-blur-md transition-transform duration-300 ease-in-out md:hidden ${
+        className={`fixed inset-y-0 left-0 z-[70] w-full max-w-xs overflow-hidden bg-white shadow-2xl transition-transform duration-300 ease-in-out md:hidden ${
           isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        <div className="flex h-full flex-col">
-          <div className="flex items-center justify-between border-b border-[#e8dfc8]/20 p-4">
-            <div className="text-lg font-light text-[#1e1e1e]">{content.menuLabel}</div>
+        <div className="flex h-full flex-col pt-8">
+          <div className="flex items-center justify-between border-b border-stone-200 px-5 py-4 bg-stone-50/90">
+            <div className="text-base font-medium tracking-wide text-stone-900">{content.menuLabel}</div>
             <button
               onClick={() => setIsMobileMenuOpen(false)}
-              className="p-2 text-[#666666] transition-colors duration-200 hover:text-[#333333] focus:outline-none"
+              className="rounded-full p-2 text-stone-600 transition-colors hover:bg-stone-200 hover:text-stone-900 focus:outline-none"
               aria-label="Close menu"
             >
               <X size={20} strokeWidth={1.5} />
@@ -527,7 +527,7 @@ const Header = () => {
 
       {isMobileMenuOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm md:hidden"
+          className="fixed inset-0 z-[65] bg-black/40 backdrop-blur-sm md:hidden"
           onClick={() => setIsMobileMenuOpen(false)}
           aria-hidden="true"
         />

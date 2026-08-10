@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Star, ArrowLeft, ShoppingBag, Filter, ArrowDownUp, AlertCircle, RefreshCw, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
@@ -422,25 +422,22 @@ const AllProductsPage = () => {
                               
                               {/* In stock indicator */}
                               {product.in_stock ? (
-                                <div className="absolute top-3 left-3 bg-green-100 text-green-800 text-xs py-1 px-2 rounded-md font-light">
+                                <div className="absolute top-3 left-3 bg-green-100 text-green-800 text-xs py-1 px-2 rounded-md font-light z-10">
                                   În stoc
                                 </div>
                               ) : (
-                                <div className="absolute top-3 left-3 bg-red-100 text-red-800 text-xs py-1 px-2 rounded-md font-light">
+                                <div className="absolute top-3 left-3 bg-red-100 text-red-800 text-xs py-1 px-2 rounded-md font-light z-10">
                                   Stoc epuizat
                                 </div>
                               )}
-                              
+
+                              {/* Category Tag Pill */}
+                              {product.category && (
+                                <div className="absolute top-3 right-3 bg-white/90 text-slate-700 text-xs py-1 px-2.5 rounded-full font-light shadow-sm backdrop-blur-sm z-10">
+                                  {product.category}
+                                </div>
+                              )}
                             </Link>
-                            {/* This remains outside the product link: buttons may not be nested in anchors. */}
-                            <div className="absolute bottom-3 right-3 z-10">
-                              <AddToCartButton
-                                product={product}
-                                variant="icon"
-                                size="lg"
-                                disabled={!product.in_stock}
-                              />
-                            </div>
                             
                             {/* Product Info */}
                             <div className="p-4 flex-1 flex flex-col">
@@ -468,13 +465,16 @@ const AllProductsPage = () => {
                                   </span>
                                 </div>
                                 
-                                <div className="flex items-center justify-between mt-2">
+                                <div className="flex items-center justify-between mt-2 pt-2 border-t border-slate-100">
                                   <span className="text-xl font-light text-slate-900">
                                     {product.price.toFixed(0)} Lei
                                   </span>
-                                  <span className="text-xs bg-slate-100 px-2 py-1 rounded-full text-slate-600">
-                                    {product.category}
-                                  </span>
+                                  <AddToCartButton
+                                    product={product}
+                                    variant="icon"
+                                    size="lg"
+                                    disabled={!product.in_stock}
+                                  />
                                 </div>
                               </div>
                             </div>

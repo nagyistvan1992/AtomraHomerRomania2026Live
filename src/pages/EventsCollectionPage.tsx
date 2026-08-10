@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Star, ArrowLeft, ArrowRight, ShoppingCart, AlertCircle, RefreshCw } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
@@ -270,15 +270,12 @@ const EventsCollectionPage = () => {
                               </div>
                             )}
 
-                            {/* Add to cart button */}
-                            <div className="absolute bottom-3 right-3 z-10">
-                              <AddToCartButton 
-                                product={product}
-                                variant="icon"
-                                size="lg"
-                                disabled={!product.in_stock}
-                              />
-                            </div>
+                            {/* Category Tag Pill */}
+                            {product.category && (
+                              <div className="absolute top-3 right-3 bg-white/90 text-slate-700 text-xs py-1 px-2.5 rounded-full font-light shadow-sm backdrop-blur-sm z-10">
+                                {product.category}
+                              </div>
+                            )}
                           </Link>
 
                           {/* Product Info */}
@@ -300,10 +297,19 @@ const EventsCollectionPage = () => {
                             <div className="mt-auto space-y-3">
                               {renderStars(product.rating)}
                           
-                              <div className="flex items-center justify-between">
+                              <div className="flex items-center justify-between pt-2 border-t border-slate-100">
                                 <p className="text-lg font-light text-slate-900 tracking-wide">
                                   {product.price.toFixed(0)} Lei
                                 </p>
+
+                                <AddToCartButton 
+                                  product={product}
+                                  variant="icon"
+                                  size="lg"
+                                  disabled={!product.in_stock}
+                                />
+                              </div>
+                            </div>
                             
                                 <AnimatePresence>
                                   {hoveredProduct === product.id && (
@@ -326,9 +332,7 @@ const EventsCollectionPage = () => {
                                 </AnimatePresence>
                               </div>
                             </div>
-                          </div>
-                        </div>
-                      </motion.div>
+                        </motion.div>
                     ))}
                   </motion.div>
                 </AnimatePresence>

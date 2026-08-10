@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Star, ArrowLeft, ArrowRight, ShoppingCart, AlertCircle, RefreshCw } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
@@ -233,9 +233,7 @@ const AccessoriesCollectionPage = () => {
                         onMouseEnter={() => setHoveredProduct(accessory.id)}
                         onMouseLeave={() => setHoveredProduct(null)}
                       >
-                        <div className="luxury-card overflow-hidden hover:shadow-2xl transition-all duration-500 relative rounded-lg">
-                          <div className="relative overflow-hidden bg-slate-50/50">
-                            <div className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 h-full flex flex-col border border-slate-100">
+                        <div className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 h-full flex flex-col border border-slate-100">
                               {/* Product Image */}
                               <Link 
                                 to={`/product/${accessory.slug}`} 
@@ -268,15 +266,12 @@ const AccessoriesCollectionPage = () => {
                                     </div>
                                   )}
 
-                                  {/* Add to cart button */}
-                                  <div className="absolute bottom-3 right-3 z-10">
-                                    <AddToCartButton 
-                                      product={accessory}
-                                      variant="icon"
-                                      size="lg"
-                                      disabled={!accessory.in_stock}
-                                    />
-                                  </div>
+                                  {/* Category Tag Pill */}
+                                  {accessory.category && (
+                                    <div className="absolute top-3 right-3 bg-white/90 text-slate-700 text-xs py-1 px-2.5 rounded-full font-light shadow-sm backdrop-blur-sm z-10">
+                                      {accessory.category}
+                                    </div>
+                                  )}
                                 </div>
                               </Link>
 
@@ -299,10 +294,19 @@ const AccessoriesCollectionPage = () => {
                                 <div className="mt-auto space-y-3">
                                   {renderStars(accessory.rating)}
                           
-                                  <div className="flex items-center justify-between">
+                                  <div className="flex items-center justify-between pt-2 border-t border-slate-100">
                                     <p className="text-lg font-light text-slate-900 tracking-wide">
                                       {accessory.price.toFixed(0)} Lei
                                     </p>
+
+                                    <AddToCartButton 
+                                      product={accessory}
+                                      variant="icon"
+                                      size="lg"
+                                      disabled={!accessory.in_stock}
+                                    />
+                                  </div>
+                                </div>
                             
                                     <AnimatePresence>
                                       {hoveredProduct === accessory.id && (
@@ -325,10 +329,6 @@ const AccessoriesCollectionPage = () => {
                                     </AnimatePresence>
                                   </div>
                                 </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
                       </motion.div>
                     ))}
                   </motion.div>
