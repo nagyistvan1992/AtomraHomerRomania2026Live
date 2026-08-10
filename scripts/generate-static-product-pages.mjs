@@ -170,6 +170,10 @@ for (const product of catalogProducts.filter((entry) => entry.in_stock)) {
     `<link rel="alternate" hrefLang="x-default" href="${escapeHtml(productUrl)}" />`,
   );
   productHtml = productHtml.replace(
+    /<link rel="preload"[^>]*\/?>/gi,
+    `<link rel="preload" href="${escapeHtml(imageUrl)}" as="image" type="image/webp" fetchpriority="high">`,
+  );
+  productHtml = productHtml.replace(
     /<script type="application\/ld\+json">[\s\S]*?<\/script>/i,
     `<script type="application/ld+json">${structuredData}</script>`,
   );

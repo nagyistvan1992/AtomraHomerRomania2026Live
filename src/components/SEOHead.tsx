@@ -141,9 +141,14 @@ const SEOHead: React.FC<SEOHeadProps> = ({
     addLink('alternate', resolvedCanonical, { hreflang: 'ro' });
     addLink('alternate', resolvedCanonical, { hreflang: 'x-default' });
 
-    preloadImages.forEach((imgSrc) => {
-      addLink('preload', getAssetPath(imgSrc), { as: 'image' });
-    });
+    (preloadImages || [])
+      .filter((imgSrc) => typeof imgSrc === 'string' && imgSrc.trim().length > 0)
+      .forEach((imgSrc) => {
+        const cleanPath = getAssetPath(imgSrc.trim());
+        if (cleanPath && cleanPath.trim().length > 0) {
+          addLink('preload', cleanPath, { as: 'image' });
+        }
+      });
 
     const script = createManagedElement<HTMLScriptElement>('script');
     script.type = 'application/ld+json';
