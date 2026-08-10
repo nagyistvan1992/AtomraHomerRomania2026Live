@@ -1,18 +1,11 @@
 import { query } from '../lib/db';
+import { sendOrderEmailNotification } from './emails';
 
 export default async function handler(req: any, res: any) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type');
 
   if (req.method === 'OPTIONS') return res.status(200).end();
-
-  let sendOrderEmailNotification: any = null;
-  try {
-    const emailsModule = require('./emails');
-    sendOrderEmailNotification = emailsModule.sendOrderEmailNotification;
-  } catch (modErr) {
-    console.warn('Module require emails notice:', modErr);
-  }
 
   try {
     const body = req.body || {};

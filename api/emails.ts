@@ -1,5 +1,6 @@
 type VercelRequest = any;
 type VercelResponse = any;
+import nodemailer from 'nodemailer';
 
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'atomrahomeromania@gmail.com';
 
@@ -167,13 +168,6 @@ export async function sendOrderEmailNotification(orderData: OrderData) {
   if (gmailUsername && gmailAppPassword) {
     try {
       console.log(`Sending emails via Gmail SMTP (${gmailUsername})...`);
-      let nodemailer: any = null;
-      try {
-        nodemailer = require('nodemailer');
-      } catch (reqErr) {
-        console.warn('Nodemailer require failed:', reqErr);
-      }
-
       if (nodemailer) {
         const createGmailTransporter = (usePort465: boolean) =>
           nodemailer.createTransport({
