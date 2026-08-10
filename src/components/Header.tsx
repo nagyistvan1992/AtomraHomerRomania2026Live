@@ -115,6 +115,7 @@ const HEADER_CONTENT: Record<
 
 const Header = () => {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [mobileExpandedDropdown, setMobileExpandedDropdown] = useState<string | null>(null);
   const [isHeaderVisible, setIsHeaderVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -159,6 +160,7 @@ const Header = () => {
     setIsMobileMenuOpen(false);
     setActiveDropdown(null);
     setHoveredDropdown(null);
+    setMobileExpandedDropdown(null);
   }, [location.pathname]);
 
   useEffect(() => {
@@ -180,6 +182,7 @@ const Header = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
     setActiveDropdown(null);
     setHoveredDropdown(null);
+    setMobileExpandedDropdown(null);
     setIsMobileMenuOpen(false);
   };
 
@@ -422,53 +425,68 @@ const Header = () => {
       </header>
 
       <div
-        className={`fixed inset-y-0 left-0 z-[70] w-full max-w-xs overflow-hidden bg-white shadow-2xl transition-transform duration-300 ease-in-out md:hidden ${
+        className={`fixed inset-y-0 left-0 z-[70] w-80 max-w-[85vw] overflow-hidden bg-[#faf9f6] shadow-2xl transition-transform duration-300 ease-in-out md:hidden ${
           isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         <div className="flex h-full flex-col pt-8">
-          <div className="flex items-center justify-between border-b border-stone-200 px-5 py-4 bg-stone-50/90">
-            <div className="text-base font-medium tracking-wide text-stone-900">{content.menuLabel}</div>
+          {/* Header */}
+          <div className="flex items-center justify-between border-b border-[#e8dfc8]/40 px-6 py-4 bg-[#1e1e1e] text-[#F7F5F2]">
+            <div>
+              <span className="block text-base font-light tracking-super-wide text-[#F7F5F2]">
+                ATOMRA
+              </span>
+              <span className="block text-[9px] font-light tracking-super-wide text-[#d4c8bc]">
+                HOME ROMANIA
+              </span>
+            </div>
             <button
               onClick={() => setIsMobileMenuOpen(false)}
-              className="rounded-full p-2 text-stone-600 transition-colors hover:bg-stone-200 hover:text-stone-900 focus:outline-none"
+              className="rounded-full p-2 text-[#d4c8bc] transition-colors hover:bg-white/10 hover:text-white focus:outline-none"
               aria-label="Close menu"
             >
               <X size={20} strokeWidth={1.5} />
             </button>
           </div>
 
-          <div className="flex-1 overflow-y-auto py-4">
-            <div className="mb-6 px-4">
-              <div className="mb-2 px-2 text-xs uppercase tracking-wider text-[#a8a29e]">
+          {/* Navigation Links */}
+          <div className="flex-1 overflow-y-auto px-6 py-6 space-y-6">
+            <div>
+              <div className="mb-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#9a8c7d] border-b border-[#e8dfc8]/30 pb-2">
                 {t('common.navigation')}
               </div>
               <nav className="space-y-1">
                 {navItems.map((item) => (
-                  <div key={item.id}>
+                  <div key={item.id} className="py-0.5">
                     {item.dropdown ? (
                       <>
                         <button
-                          onClick={() => handleDropdownToggle(item.id)}
-                          className="flex w-full items-center justify-between px-2 py-3 text-[#666666] transition-colors duration-200 hover:text-[#333333] focus:outline-none"
+                          onClick={() => setMobileExpandedDropdown((current) => (current === item.id ? null : item.id))}
+                          className={`flex w-full items-center justify-between px-3 py-3 rounded-lg text-sm transition-all duration-200 focus:outline-none ${
+                            mobileExpandedDropdown === item.id
+                              ? 'bg-[#f0eafe]/50 font-medium text-[#1e1e1e]'
+                              : 'text-[#3a3532] hover:bg-[#f4efe6] hover:text-[#1e1e1e]'
+                          }`}
                         >
-                          <span className="text-sm font-light">{item.name}</span>
+                          <span className="font-light tracking-wide">{item.name}</span>
                           <ChevronDown
                             size={16}
-                            className={`transition-transform duration-300 ${activeDropdown === item.id ? 'rotate-180' : ''}`}
+                            className={`transition-transform duration-300 ease-out text-[#8c7a6b] ${
+                              mobileExpandedDropdown === item.id ? 'rotate-180 text-[#1e1e1e]' : ''
+                            }`}
                           />
                         </button>
 
                         <div
-                          className={`ml-4 overflow-hidden border-l border-[#e8dfc8]/20 pl-2 transition-all duration-300 ease-in-out ${
-                            activeDropdown === item.id ? 'max-h-96 py-1 opacity-100' : 'max-h-0 opacity-0'
+                          className={`ml-3 overflow-hidden border-l-2 border-[#d8ccbc] pl-3 transition-all duration-300 ease-in-out ${
+                            mobileExpandedDropdown === item.id ? 'max-h-96 py-2 opacity-100' : 'max-h-0 py-0 opacity-0'
                           }`}
                         >
                           {item.dropdown.map((dropdownItem) => (
                             <Link
                               key={dropdownItem.path}
                               to={dropdownItem.path}
-                              className="block py-2 text-sm text-[#888888] transition-colors duration-200 hover:text-[#333333]"
+                              className="block py-2 text-xs font-light tracking-wider text-[#5c544d] transition-colors duration-200 hover:text-[#1e1e1e] hover:translate-x-1 transform"
                               onClick={handleLinkClick}
                             >
                               {dropdownItem.name}
@@ -479,8 +497,10 @@ const Header = () => {
                     ) : (
                       <Link
                         to={item.path || '/'}
-                        className={`block w-full px-2 py-3 text-left text-sm font-light ${
-                          location.pathname === item.path ? 'text-[#1e1e1e]' : 'text-[#666666] hover:text-[#333333]'
+                        className={`block w-full px-3 py-3 rounded-lg text-left text-sm font-light tracking-wide transition-colors duration-200 ${
+                          location.pathname === item.path
+                            ? 'bg-[#1e1e1e] text-white font-normal'
+                            : 'text-[#3a3532] hover:bg-[#f4efe6] hover:text-[#1e1e1e]'
                         }`}
                         onClick={handleLinkClick}
                       >
@@ -492,28 +512,31 @@ const Header = () => {
               </nav>
             </div>
 
-            <div className="mb-6 px-4">
-              <div className="mb-2 px-2 text-xs uppercase tracking-wider text-[#a8a29e]">
+            {/* Utilities / Free Shipping info */}
+            <div>
+              <div className="mb-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#9a8c7d] border-b border-[#e8dfc8]/30 pb-2">
                 {t('common.utilities')}
               </div>
-              <div className="px-2 py-3 text-sm font-light text-[#888888]">
-                {t('banner.freeShipping')}
+              <div className="bg-[#f3eee5] border border-[#e5dcce] p-3 rounded-lg text-xs font-light text-[#594d40] flex items-center space-x-2">
+                <span className="text-amber-700">✨</span>
+                <span>{t('banner.freeShipping')}</span>
               </div>
             </div>
 
-            <div className="mb-6 px-4">
-              <div className="mb-2 px-2 text-xs uppercase tracking-wider text-[#a8a29e]">
+            {/* Language Selector */}
+            <div>
+              <div className="mb-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#9a8c7d] border-b border-[#e8dfc8]/30 pb-2">
                 {content.languageLabel}
               </div>
-              <div className="flex space-x-2 px-2">
+              <div className="grid grid-cols-3 gap-2">
                 {(['ro', 'hu', 'en'] as Language[]).map((lang) => (
                   <button
                     key={lang}
                     onClick={() => handleLanguageChange(lang)}
-                    className={`rounded px-3 py-2 text-sm font-light ${
+                    className={`py-2 text-xs font-light tracking-wider rounded-lg transition-all duration-200 ${
                       language === lang
-                        ? 'bg-[#f5f2eb] text-[#1e1e1e]'
-                        : 'text-[#666666] hover:bg-[#f5f2eb]/40 hover:text-[#333333]'
+                        ? 'bg-[#1e1e1e] text-white shadow-sm font-normal'
+                        : 'bg-[#f4efe6] text-[#594d40] hover:bg-[#e8dfc8]/60 hover:text-[#1e1e1e]'
                     }`}
                   >
                     {lang.toUpperCase()}
