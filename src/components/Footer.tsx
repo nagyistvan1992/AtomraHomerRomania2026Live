@@ -30,7 +30,7 @@ const FOOTER_CONTENT: Record<
     about: 'Despre noi',
     contact: 'Contact',
     wholesale: 'Vânzări angro',
-    contactTitle: 'Contact & Szállítás',
+    contactTitle: 'Contact & Livrare',
     address: 'Satu Mare, str. Mesteacanului, nr. 1B (Livrare Națională RO)',
     hours: 'Program',
     follow: 'Urmareste-ne',
