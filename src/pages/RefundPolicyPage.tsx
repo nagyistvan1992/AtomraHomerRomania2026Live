@@ -144,6 +144,23 @@ const RefundPolicyPage = () => {
                 </section>
               ))}
             </div>
+
+            <div className="mt-12 pt-8 border-t border-slate-200">
+              <h2 className="text-xl font-medium text-slate-900 mb-4">Formular Model de Retragere (Conform OUG 34/2014)</h2>
+              <p className="text-sm font-light text-slate-600 mb-4">
+                (Completează și trimite acest formular doar dacă dorești să te retragi din contract)
+              </p>
+              <div className="p-6 bg-slate-50 rounded-xl border border-slate-200 text-sm font-light text-slate-700 space-y-3 leading-relaxed">
+                <p><strong>Către:</strong> ATOMRA HOME ROMANIA ({CONTACT_EMAIL} / {formattedAddress})</p>
+                <p>Vă informez prin prezenta cu privire la retragerea mea din contractul referitor la vânzarea următoarelor produse:</p>
+                <p>- Produse comandate: _____________________________________________</p>
+                <p>- Comandate la data / Primite la data: _____________________________</p>
+                <p>- Numele consumatorului: __________________________________________</p>
+                <p>- Adresa consumatorului: ________________________________________</p>
+                <p>- Cont IBAN pentru restituire (dacă plata s-a făcut ramburs): ____________________</p>
+                <p>- Data: _______________</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>

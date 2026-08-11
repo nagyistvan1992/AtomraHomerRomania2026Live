@@ -3,6 +3,7 @@ import { Outlet } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import Header from './Header';
 import Footer from './Footer';
+import CookieBanner from './CookieBanner';
 
 const CartDrawer = lazy(() => import('./CartDrawer'));
 
@@ -20,6 +21,7 @@ const MainLayout: React.FC = () => {
         <Outlet />
       </main>
       <Footer />
+      <CookieBanner />
     </>
   );
 };

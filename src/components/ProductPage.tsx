@@ -572,9 +572,12 @@ const ProductPage = () => {
                   {product.name}
                 </h1>
                 <div className="flex flex-wrap items-center gap-4 mb-4">
-                  <span className="text-2xl sm:text-3xl font-light text-gray-900">
-                    {product.price.toFixed(0)} Lei
-                  </span>
+                  <div className="flex items-baseline space-x-2">
+                    <span className="text-2xl sm:text-3xl font-light text-gray-900">
+                      {product.price.toFixed(0)} Lei
+                    </span>
+                    <span className="text-xs text-slate-500 font-light">(Prețurile includ TVA)</span>
+                  </div>
                   {product.in_stock ? (
                     <span className="text-green-600 text-sm font-light">{t('product.inStock')}</span>
                   ) : (

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Instagram, Facebook, Mail, Phone, MapPin, Clock } from 'lucide-react';
+import { Instagram, Facebook, Mail, Phone, MapPin, Clock, ShieldCheck, Scale, Globe } from 'lucide-react';
 import { useLanguage, type Language } from '../context/LanguageContext';
 import { Link } from 'react-router-dom';
 
@@ -226,6 +226,44 @@ const Footer = () => {
                 {content.terms}
               </Link>
             </p>
+
+            <div className="mt-8 pt-6 border-t border-slate-200/60 flex flex-col items-center space-y-3">
+              <span className="text-[11px] font-light text-slate-500 tracking-wide uppercase">Informații Protecția Consumatorilor (Ordinul ANPC 432/2022)</span>
+              <div className="flex flex-wrap items-center justify-center gap-3 text-xs">
+                <a
+                  href="https://anpc.ro/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center space-x-2 px-3.5 py-2 rounded border border-slate-300 bg-white hover:bg-slate-50 transition-colors shadow-xs"
+                  title="Autoritatea Națională pentru Protecția Consumatorilor"
+                >
+                  <ShieldCheck size={16} className="text-blue-600 flex-shrink-0" strokeWidth={1.5} />
+                  <span className="font-medium text-slate-800 tracking-tight">ANPC.ro</span>
+                </a>
+
+                <a
+                  href="https://anpc.ro/ce-este-sal/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center space-x-2 px-3.5 py-2 rounded border border-slate-300 bg-white hover:bg-slate-50 transition-colors shadow-xs"
+                  title="Soluționarea Alternativă a Litigiilor"
+                >
+                  <Scale size={16} className="text-amber-600 flex-shrink-0" strokeWidth={1.5} />
+                  <span className="font-medium text-slate-800 tracking-tight">SAL - Litigii ANPC</span>
+                </a>
+
+                <a
+                  href="https://ec.europa.eu/consumers/odr"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center space-x-2 px-3.5 py-2 rounded border border-slate-300 bg-white hover:bg-slate-50 transition-colors shadow-xs"
+                  title="Soluționarea Online a Litigiilor - Comisia Europeană"
+                >
+                  <Globe size={16} className="text-emerald-600 flex-shrink-0" strokeWidth={1.5} />
+                  <span className="font-medium text-slate-800 tracking-tight">SOL - Platforma UE</span>
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </div>

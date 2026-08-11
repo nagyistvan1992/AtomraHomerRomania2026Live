@@ -122,8 +122,10 @@ function App() {
                 <Route path="/plant-based" element={<PlantBasedPage />} />
                 <Route path="/refillable" element={<RefillablePage />} />
                 <Route path="/privacy-policy" element={<LegalInfoPage variant="privacy" />} />
+                <Route path="/cookie-policy" element={<LegalInfoPage variant="privacy" />} />
                 <Route path="/refund-policy" element={<RefundPolicyPage />} />
                 <Route path="/terms" element={<LegalInfoPage variant="terms" />} />
+                <Route path="/livrare-si-plata" element={<RefundPolicyPage />} />
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Route>
             </Routes>

@@ -900,7 +900,10 @@ const CartPage = () => {
             <div className="border-t border-slate-100 pt-3 mt-3">
               <div className="flex justify-between items-center">
                 <span className="text-base font-medium text-slate-900">Total:</span>
-                <span className="text-xl font-medium text-slate-900">{totalAmount.toFixed(0)} Lei</span>
+                <div className="text-right">
+                  <span className="text-xl font-medium text-slate-900">{totalAmount.toFixed(0)} Lei</span>
+                  <span className="text-[11px] text-slate-500 font-light block">Prețurile includ TVA</span>
+                </div>
               </div>
             </div>
           </div>
@@ -942,7 +945,7 @@ const CartPage = () => {
             ) : (
               <>
                 <ShieldCheck className="w-5 h-5" strokeWidth={1.5} />
-                <span>Finalizează comanda - {totalAmount.toFixed(0)} Lei</span>
+                <span>Comandă cu obligație de plată - {totalAmount.toFixed(0)} Lei</span>
               </>
             )}
           </button>
