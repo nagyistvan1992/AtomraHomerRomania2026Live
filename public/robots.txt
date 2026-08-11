@@ -1,30 +1,43 @@
 User-agent: *
 Allow: /
 
-# Sitemap location
+# Sitemap & LLMs location
 Sitemap: https://www.atomrahomeromania.ro/sitemap.xml
+LLMs-txt: https://www.atomrahomeromania.ro/llms.txt
 
 # Crawl-delay for polite crawling
 Crawl-delay: 1
 
-# Allow all search engines to index images
-User-agent: Googlebot-Image
+# Explicit AI Search Engine crawlers
+User-agent: GPTBot
 Allow: /
 
-# Block access to admin or sensitive areas (if any)
-Disallow: /admin/
-Disallow: /studio-access-7c4d9f
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# Block access to API endpoints
 Disallow: /api/
 Disallow: /*.json$
 
-# Allow access to CSS and JS files for better rendering
+# Allow access to assets for rendering
 Allow: /assets/
 Allow: /*.css$
 Allow: /*.js$
 
-# Important SEO keywords
-# lumanare ceara naturala
-# ceara de soia
-# lumanari ceara naturala
-# lumanare personalizata
-# lumanari din ceara naturala
+# Target GEO AI search queries
+# lumanari perlate
+# lumanare naturala din ceara
+# idei cadou lumanare
+# lumanare perlata cadou

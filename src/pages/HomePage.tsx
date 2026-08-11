@@ -36,7 +36,7 @@ const HomePage = () => {
         description:
           'Descoperă ceara perlată naturală Atomra. Lumânări reîncărcabile fără parfum, hipoalergenice și elegante. Creează atmosfera perfectă în casa ta cu ceară nisip albă!',
         keywords:
-          'ceară perlată, ceară nisip, ceară granulată, lumânări reîncărcabile, rezerve ceară naturală, lumânări fără parfum, lumânări hipoalergenice, ceară naturală albă, lumânări decorative casă, lumânări evenimente și nunți, România',
+          'lumanari perlate, lumanare naturala din ceara, idei cadou lumanare, lumanare perlata cadou, ceară perlată, ceară nisip, ceară granulată, lumânări reîncărcabile, rezerve ceară naturală, lumânări fără parfum, lumânări hipoalergenice, ceară naturală albă, lumânări decorative casă, lumânări evenimente și nunți, România',
       },
       hu: {
         title: 'Atomra Home Romania | Ujratoltheto termeszetes viaszgyertyak',

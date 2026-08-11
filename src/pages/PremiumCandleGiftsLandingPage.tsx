@@ -35,9 +35,9 @@ const PremiumCandleGiftsLandingPage = () => {
   return (
     <>
       <SEOHead
-        title="Idei de cadouri personalizate cu lumanari premium | Atomra Home Romania"
-        description="Descopera idei de cadouri personalizate cu lumanari premium pentru casa noua, aniversari si gesturi elegante. Atomra te ajuta sa alegi un cadou memorabil si usor de oferit."
-        keywords="idei cadouri personalizate, cadouri personalizate, cadou personalizat elegant, lumanari cadou, cadou casa noua"
+        title="Idei cadou lumânare perlată & Cadouri lumânări premium | Atomra Home Romania"
+        description="Cele mai bune idei cadou lumânare perlată din ceară naturală din plante. Descoperă o lumânare perlată cadou reîncărcabilă, ideală pentru casă nouă, aniversări și nunți."
+        keywords="idei cadou lumanare, lumanare perlata cadou, idei cadouri personalizate, lumanari perlate cadou, cadou lumanare naturala din ceara"
         url={getSiteUrl('/cadouri-lumanari-premium')}
         structuredData={structuredData}
       />

@@ -12,30 +12,30 @@ const FAQ_CONTENT: Record<Language, FaqItem[]> = {
     {
       id: 1,
       icon: '🔥',
-      question: 'Ce este ceara de nisip?',
+      question: 'Ce sunt lumânările perlate (ceară perlată sau ceară de nisip)?',
       answer:
-        'Ceara de nisip este o ceară vegetală naturală, cu aspect granular, asemănător nisipului fin. Nu conține parfumuri sau aditivi chimici și este complet biodegradabilă, fiind o alternativă sigură și eco la lumânările clasice.',
+        'Lumânările perlate de la Atomra Home Romania sunt realizate din ceară perlată naturală vegetală cu granulație fină. Nu conțin parfumuri sintetice sau parafina chimică și îți permit să toarni cantitatea dorită în orice recipient pentru o lumânare perlată reîncărcabilă nouă de fiecare dată.',
     },
     {
       id: 2,
-      icon: '💡',
-      question: 'Cum folosesc lumânările Atomra?',
+      icon: '🌿',
+      question: 'De ce să alegi o lumânare naturală din ceară perlată?',
       answer:
-        'Este foarte simplu. Toarnă granulele de ceară în recipientul dorit, adaugă un fitil în centru și aprinde. Când ceara se consumă, adaugi granule noi pentru a continua să te bucuri de lumânare.',
+        'O lumânare naturală din ceară de la Atomra oferă ardere 100% curată, fără fum toxic sau parfumuri iritante. Este hipoalergenică, sigură pentru copii și animale de companie, fiind ideală pentru living, dormitor, mese festive sau seri relaxante.',
     },
     {
       id: 3,
-      icon: '♻️',
-      question: 'Ceara se poate refolosi?',
+      icon: '🎁',
+      question: 'Care sunt cele mai inspirate idei cadou lumânare pentru persoanele dragi?',
       answer:
-        'Da. Ceara de nisip poate fi reutilizată de mai multe ori. După ce se consumă, poți adăuga granule noi peste resturile existente sau poți curăța recipientul și începe din nou.',
+        'Dacă cauți idei cadou lumânare elegante, seturile Atomra Granule Box (750g) și Pachetul Essenza cu recipiente speciale sunt alegerea perfectă. Sunt cadouri premium apreciate pentru aniversări, nunți, cadouri de casă nouă sau sărbători.',
     },
     {
       id: 4,
-      icon: '🎁',
-      question: 'Se pot oferi lumânările Atomra cadou?',
+      icon: '✨',
+      question: 'De ce o lumânare perlată cadou este alegerea ideală?',
       answer:
-        'Absolut. Lumânările Atomra sunt cadouri excelente datorită designului elegant și conceptului refillabil. Oferim și opțiuni potrivite pentru cadouri sau evenimente speciale.',
+        'O lumânare perlată cadou este un dar memorabil și sustenabil. Spre deosebire de lumânările clasice care se ard și se aruncă, o lumânare perlată cadou permite reutilizarea recipientului la infinit adăugând un nou strat de ceară perlată și un fitil proaspăt.',
     },
     {
       id: 5,
