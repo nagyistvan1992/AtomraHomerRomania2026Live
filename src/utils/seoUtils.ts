@@ -99,6 +99,42 @@ export const generateProductStructuredData = (product: ProductSeoData) => {
         '@type': 'Organization',
         name: SITE_NAME,
       },
+      shippingDetails: {
+        '@type': 'OfferShippingDetails',
+        shippingRate: {
+          '@type': 'MonetaryAmount',
+          value: product.price > 149 ? 0 : 25,
+          currency: product.currency || 'RON',
+        },
+        shippingDestination: {
+          '@type': 'DefinedRegion',
+          addressCountry: 'RO',
+        },
+        deliveryTime: {
+          '@type': 'ShippingDeliveryTime',
+          handlingTime: {
+            '@type': 'QuantitativeValue',
+            minValue: 0,
+            maxValue: 1,
+            unitCode: 'DAY',
+          },
+          transitTime: {
+            '@type': 'QuantitativeValue',
+            minValue: 1,
+            maxValue: 2,
+            unitCode: 'DAY',
+          },
+        },
+      },
+      hasMerchantReturnPolicy: {
+        '@type': 'MerchantReturnPolicy',
+        applicableCountry: 'RO',
+        returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',
+        merchantReturnDays: 14,
+        returnMethod: 'https://schema.org/ReturnByMail',
+        returnFees: 'https://schema.org/ReturnFeesCustomerPaying',
+        merchantReturnLink: `${SITE_URL}/refund-policy`,
+      },
     },
     keywords,
   };
