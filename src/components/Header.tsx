@@ -221,33 +221,39 @@ const Header = () => {
 
   return (
     <>
-      <div className="fixed top-0 left-0 right-0 z-[60] h-8 overflow-hidden bg-[#1e1e1e] shadow-sm">
-        <div className="relative flex h-full items-center justify-between px-6 text-xs text-[#d4c8bc]">
-          <div className="hidden md:flex items-center space-x-6 font-light">
-            <span className="flex items-center tracking-wide">
-              <span className="mr-1.5 font-normal text-amber-600">✓</span> {t('banner.ecoFriendly')}
+      <div className="fixed top-0 left-0 right-0 z-[60] h-8 overflow-hidden bg-[#1e1e1e] shadow-sm flex items-center">
+        <div className="w-full overflow-hidden whitespace-nowrap">
+          <div className="animate-marquee-continuous flex items-center space-x-10 text-[11px] sm:text-xs uppercase tracking-widest text-[#f5f2eb] font-light">
+            <span className="flex items-center space-x-2">
+              <span className="text-amber-500">✨</span>
+              <span>TRANSPORT GRATUIT LA COMENZI PESTE 149 LEI ÎN TOATĂ ROMÂNIA</span>
             </span>
-            <span className="flex items-center tracking-wide">
-              <span className="mr-1.5 font-normal text-amber-600">✓</span> {t('banner.plantBased')}
+            <span className="text-[#888888]">✦</span>
+            <span className="flex items-center space-x-2">
+              <span className="text-amber-500">🌱</span>
+              <span>LUMÂNĂRI PERLATE ȘI CEARĂ NATURALĂ 100% VEGETALĂ</span>
             </span>
-          </div>
-
-          <div className="flex-1 text-center font-light tracking-wider text-[#f5f2eb]">
-            <span className="truncate">{t('banner.freeShipping')}</span>
-          </div>
-
-          <div className="hidden md:flex items-center space-x-4">
-            {(['ro', 'hu', 'en'] as Language[]).map((lang) => (
-              <button
-                key={lang}
-                onClick={() => handleLanguageChange(lang)}
-                className={`text-[11px] font-light tracking-widest uppercase transition-colors duration-200 ${
-                  language === lang ? 'font-normal text-[#f5f2eb]' : 'text-[#888888] hover:text-[#cccccc]'
-                }`}
-              >
-                {lang}
-              </button>
-            ))}
+            <span className="text-[#888888]">✦</span>
+            <span className="flex items-center space-x-2">
+              <span className="text-amber-500">🔥</span>
+              <span>CONCEPT REÎNCĂRCABIL ECO-FRIENDLY & REFILLABIL DE LUX</span>
+            </span>
+            <span className="text-[#888888]">✦</span>
+            <span className="flex items-center space-x-2">
+              <span className="text-amber-500">✨</span>
+              <span>TRANSPORT GRATUIT LA COMENZI PESTE 149 LEI ÎN TOATĂ ROMÂNIA</span>
+            </span>
+            <span className="text-[#888888]">✦</span>
+            <span className="flex items-center space-x-2">
+              <span className="text-amber-500">🌱</span>
+              <span>LUMÂNĂRI PERLATE ȘI CEARĂ NATURALĂ 100% VEGETALĂ</span>
+            </span>
+            <span className="text-[#888888]">✦</span>
+            <span className="flex items-center space-x-2">
+              <span className="text-amber-500">🔥</span>
+              <span>CONCEPT REÎNCĂRCABIL ECO-FRIENDLY & REFILLABIL DE LUX</span>
+            </span>
+            <span className="text-[#888888]">✦</span>
           </div>
         </div>
       </div>

@@ -394,3 +394,19 @@
     font-size: 16px !important; /* Prevents iOS zoom on focus */
   }
 }
+
+/* Continuous Marquee Banner */
+@keyframes marquee-scroll {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee-continuous {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll 28s linear infinite;
+}
+
+.animate-marquee-continuous:hover {
+  animation-play-state: paused;
+}
