@@ -55,16 +55,43 @@ const BlogPage = () => {
     }
 
     return {
-      title: 'Blog | Atomra Home Romania',
-      description: 'Articole scurte despre atmosferă, decor și ritualuri mai lente cu lumânări refillabile.',
-      heading: 'Blog',
-      subtitle: 'Idei practice pentru acasă, evenimente și seri mai liniștite.',
-      readMore: 'Deschide articolul',
-      back: 'Înapoi',
+      title: 'Blog & Ghid Ceară Perlată | Atomra Home Romania',
+      description: 'Ghiduri complete despre ceară perlată, ceară nisip și lumânări reîncărcabile fără parfum.',
+      heading: 'Ghid & Blog Atomra',
+      subtitle: 'Află totul despre ceara perlată naturală, decoruri pentru casă și nunți elegante.',
+      readMore: 'Citește articolul',
+      back: 'Înapoi la articole',
       posts: [
-        { ...commonPosts[0], title: 'Cum creezi o atmosferă mai caldă seara', date: '15 ianuarie 2026', excerpt: 'O cameră pare imediat mai calmă când lucrezi cu câteva puncte de lumină bine alese.', body: ['Joacă-te cu înălțimi diferite și lasă spațiu între obiecte pentru un rezultat mai elegant.', 'Sistemul refillabil te ajută să păstrezi aceeași atmosferă fără risipă și fără complicații.'] },
-        { ...commonPosts[1], title: 'Decor de eveniment cu lumânări refillabile', date: '28 decembrie 2025', excerpt: 'Soluții curate și coerente pentru mese lungi, nunți și decoruri festive.', body: ['Mai multe surse mici de lumină creează un ritm mai intim decât câteva piese foarte mari.', 'Materialul și forma recipientului trebuie alese în acord cu locația și restul decorului.'] },
-        { ...commonPosts[2], title: 'Un ritual de seară mai lent', date: '10 decembrie 2025', excerpt: 'Nu ai nevoie de o rutină complicată ca să închizi ziua într-un mod mai bun.', body: ['Un ceai, o pătură și o lumânare pot deveni un semnal clar că e timpul să încetinești.', 'Importantă este repetarea, nu perfecțiunea. Așa se construiește un obicei real.'] }
+        {
+          ...commonPosts[0],
+          title: 'Ce este ceara perlată și cum funcționează lumânările reîncărcabile?',
+          date: '15 ianuarie 2026',
+          excerpt: 'Descoperă tehnologia inovatoare din spatele cerii granulate din plante și cum poți crea o lumânare nouă de fiecare dată.',
+          body: [
+            'Ceara perlată (sau ceara nisip) reprezintă o alternativă ecologică și sustenabilă la lumânările clasice turnate din parafină.',
+            'Turnând granulele vegetale în recipientul tău favorit și poziționând fitilul în centru, obții o ardere curată, fără fum și 100% hipoalergenică. Când dorești reîmprospătarea, doar schimbi fitilul și adaugi un strat proaspăt de perle.'
+          ]
+        },
+        {
+          ...commonPosts[1],
+          title: 'De ce să alegi lumânări fără parfum pentru masa de sufragerie sau evenimente?',
+          date: '28 decembrie 2025',
+          excerpt: 'De ce lumânările naturale fără miros sunt alegerea ideală pentru cine romantice, mese festive și nunți elegante.',
+          body: [
+            'În timpul meselor festive sau evenimentelor, parfumurile sintetice puternice pot interfera cu gustul preparatelor și aroma vinului.',
+            'Lumânările Atomra din ceară naturală nisip oferă o lumină caldă, relaxantă și hipoalergenică, creând o atmosferă intimă fără a emite fum sau substanțe toxice.'
+          ]
+        },
+        {
+          ...commonPosts[2],
+          title: 'Cum să transformi orice recipient într-o lumânare elegantă cu ceară nisip',
+          date: '10 decembrie 2025',
+          excerpt: 'Ghid practic de decor interior: dă o nouă viață vaselor din sticlă, ceramică sau piatră folosind perle de ceară.',
+          body: [
+            'Cu ceara perlată Atomra, posibilitățile de decor sunt nelimitate. Poți folosi boluri mari din sticlă, vaze înalte, sau recipiente vintage din ceramică.',
+            'Toarnă cantitatea dorită de ceară nisip, fixează unul sau mai multe fitiluri în funcție de dimensiunea vasului, și transformă instant orice spațiu într-o oază de lumină.'
+          ]
+        }
       ]
     };
   }, [language]);

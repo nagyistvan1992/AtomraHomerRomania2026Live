@@ -24,14 +24,14 @@ const FOOTER_CONTENT: Record<
   }
 > = {
   ro: {
-    tagline: 'Lumanari reincarcabile din ceara vegetala, gandite pentru decor calm si reutilizare eleganta.',
+    tagline: 'Lumânări reîncărcabile și ceară perlată naturală. Livrare rapidă prin curier în toată România: București, Cluj-Napoca, Timișoara, Iași, Constanța, Brașov, Satu Mare și în orice altă localitate.',
     quickLinks: 'Linkuri rapide',
     allProducts: 'Toate produsele',
     about: 'Despre noi',
     contact: 'Contact',
-    wholesale: 'Vanzari angro',
-    contactTitle: 'Contact',
-    address: 'Satu Mare, str. Mesteacanului, nr. 1B',
+    wholesale: 'Vânzări angro',
+    contactTitle: 'Contact & Szállítás',
+    address: 'Satu Mare, str. Mesteacanului, nr. 1B (Livrare Națională RO)',
     hours: 'Program',
     follow: 'Urmareste-ne',
     followText: 'Urmareste-ne pentru noutati, oferte si inspiratie.',

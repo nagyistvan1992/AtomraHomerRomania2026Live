@@ -32,11 +32,11 @@ const HomePage = () => {
   const getLocalizedSEO = () => {
     const seoData = {
       ro: {
-        title: 'Atomra Home Romania | Lumanari naturale, nunta si cadouri premium',
+        title: 'Atomra Home Romania | Ceară Perlată Naturală & Lumânări Reîncărcabile',
         description:
-          'Descopera lumanari naturale, lumanari nunta, lumanari din ceara de soia, lumanari handmade si idei de cadouri personalizate de la Atomra Home Romania.',
+          'Descoperă ceara perlată naturală Atomra. Lumânări reîncărcabile fără parfum, hipoalergenice și elegante. Creează atmosfera perfectă în casa ta cu ceară nisip albă!',
         keywords:
-          'lumanari naturale, lumanare naturala, lumanari nunta, lumanare nunta, lumanari din ceara de soia, lumanari handmade, idei cadouri personalizate, cadouri personalizate, Romania',
+          'ceară perlată, ceară nisip, ceară granulată, lumânări reîncărcabile, rezerve ceară naturală, lumânări fără parfum, lumânări hipoalergenice, ceară naturală albă, lumânări decorative casă, lumânări evenimente și nunți, România',
       },
       hu: {
         title: 'Atomra Home Romania | Ujratoltheto termeszetes viaszgyertyak',
