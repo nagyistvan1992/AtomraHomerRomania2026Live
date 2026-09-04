@@ -1,5 +1,4 @@
-/* eslint-disable react-refresh/only-export-components */
-import React, { createContext, useContext, useReducer, ReactNode, useEffect } from 'react';
+import React, { createContext, useContext, useReducer, ReactNode, useEffect, useCallback, useMemo } from 'react';
 
 export interface CartItem {
   id: string | number;  // Allow string IDs for product slugs
@@ -105,34 +104,42 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
       };
     
     case 'CLEAR_CART':
-      return {
-        ...state,
-        items: []
-      };
+      return state.items.length === 0
+        ? state
+        : {
+            ...state,
+            items: [],
+          };
     
     case 'TOGGLE_CART':
       return {
         ...state,
-        isOpen: !state.isOpen
+        isOpen: !state.isOpen,
       };
 
     case 'OPEN_CART':
-      return {
-        ...state,
-        isOpen: true
-      };
+      return state.isOpen
+        ? state
+        : {
+            ...state,
+            isOpen: true,
+          };
     
     case 'CLOSE_CART':
-      return {
-        ...state,
-        isOpen: false
-      };
+      return !state.isOpen
+        ? state
+        : {
+            ...state,
+            isOpen: false,
+          };
     
     case 'HIDE_ADD_ANIMATION':
-      return {
-        ...state,
-        showAddAnimation: false
-      };
+      return !state.showAddAnimation
+        ? state
+        : {
+            ...state,
+            showAddAnimation: false,
+          };
     
     default:
       return state;
@@ -210,59 +217,72 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     }
   }, [state.showAddAnimation]);
 
-  const addItem = (item: Omit<CartItem, 'quantity'> & { quantity?: number }) => {
+  const addItem = useCallback((item: Omit<CartItem, 'quantity'> & { quantity?: number }) => {
     dispatch({ type: 'ADD_ITEM', payload: item });
-  };
+  }, []);
 
-  const removeItem = (id: string | number) => {
+  const removeItem = useCallback((id: string | number) => {
     dispatch({ type: 'REMOVE_ITEM', payload: id });
-  };
+  }, []);
 
-  const updateQuantity = (id: string | number, quantity: number) => {
+  const updateQuantity = useCallback((id: string | number, quantity: number) => {
     dispatch({ type: 'UPDATE_QUANTITY', payload: { id, quantity } });
-  };
+  }, []);
 
-  const clearCart = () => {
+  const clearCart = useCallback(() => {
     dispatch({ type: 'CLEAR_CART' });
-  };
+  }, []);
 
-  const toggleCart = () => {
+  const toggleCart = useCallback(() => {
     dispatch({ type: 'TOGGLE_CART' });
-  };
+  }, []);
 
-  const openCart = () => {
+  const openCart = useCallback(() => {
     dispatch({ type: 'OPEN_CART' });
-    // When opening cart, ensure we're at the top for better mobile view
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  }, []);
 
-  const closeCart = () => {
+  const closeCart = useCallback(() => {
     dispatch({ type: 'CLOSE_CART' });
-  };
+  }, []);
 
-  const getTotalItems = () => {
+  const getTotalItems = useCallback(() => {
     return state.items.reduce((total, item) => total + item.quantity, 0);
-  };
+  }, [state.items]);
 
-  const getTotalPrice = () => {
+  const getTotalPrice = useCallback(() => {
     return state.items.reduce((total, item) => {
       const price = parseFloat(item.price.replace(/[^\d.]/g, ''));
       return total + (price * item.quantity);
     }, 0);
-  };
+  }, [state.items]);
 
-  const value: CartContextType = {
-    state,
-    addItem,
-    removeItem,
-    updateQuantity,
-    clearCart,
-    toggleCart,
-    openCart,
-    closeCart,
-    getTotalItems,
-    getTotalPrice
-  };
+  const value: CartContextType = useMemo(
+    () => ({
+      state,
+      addItem,
+      removeItem,
+      updateQuantity,
+      clearCart,
+      toggleCart,
+      openCart,
+      closeCart,
+      getTotalItems,
+      getTotalPrice,
+    }),
+    [
+      state,
+      addItem,
+      removeItem,
+      updateQuantity,
+      clearCart,
+      toggleCart,
+      openCart,
+      closeCart,
+      getTotalItems,
+      getTotalPrice,
+    ],
+  );
 
   return (
     <CartContext.Provider value={value}>

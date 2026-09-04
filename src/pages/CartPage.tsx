@@ -280,6 +280,7 @@ const CartPage = () => {
   const [notes, setNotes] = useState('');
   const [loading, setLoading] = useState(false);
   const [orderNumber, setOrderNumber] = useState('');
+  const isSubmittingRef = React.useRef(false);
 
   const subtotalAmount = useMemo(
     () =>
@@ -292,10 +293,10 @@ const CartPage = () => {
   const shippingCost = subtotalAmount > 149 ? 0 : 25;
   const totalAmount = subtotalAmount + shippingCost;
   
-  // Close the cart drawer when CartPage mounts and force scroll to top on step changes
+  // Close the cart drawer once when CartPage mounts
   useEffect(() => {
     closeCart();
-  }, [closeCart]);
+  }, []);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -484,6 +485,7 @@ const CartPage = () => {
   };
 
   const handleCheckout = async () => {
+    if (loading || isSubmittingRef.current) return;
     if (paymentMethod === 'cod') {
       await processOrder();
     } else {
@@ -492,7 +494,10 @@ const CartPage = () => {
   };
 
   const processOrder = async () => {
+    if (isSubmittingRef.current) return;
+    isSubmittingRef.current = true;
     setLoading(true);
+
     try {
       const details = sanitizeCustomerDetails();
       const orderNum = generateOrderNumber();
@@ -508,32 +513,53 @@ const CartPage = () => {
         subtotal: subtotalAmount,
         shipping_cost: shippingCost,
         total_amount: totalAmount,
-        payment_method: paymentMethod,
-        payment_status: paymentMethod === 'cod' ? ('pending' as const) : ('paid' as const),
+        payment_method: 'cod' as const,
+        payment_status: 'pending' as const,
         order_status: 'pending' as const,
-        notes: notes || null
+        notes: notes || null,
       };
 
       setOrderNumber(orderNum);
-      await sendOrderEmails(orderNum, details);
 
+      let orderSaved = false;
       try {
-        await createOrderWithRecovery(orderData);
+        const { error } = await withTimeout(
+          apiClient.from('orders').insert([orderData]),
+          9000,
+          'Order creation timed out.',
+        );
+        if (!error) {
+          orderSaved = true;
+        }
       } catch (insertErr) {
         console.warn('Order database logging notice (non-fatal):', insertErr);
       }
 
+      // If /api/orders failed or timed out, send emails via /api/emails fallback
+      if (!orderSaved) {
+        try {
+          await withTimeout(sendOrderEmails(orderNum, details), 7000, 'Email invocation timed out.');
+        } catch (emailErr) {
+          console.warn('Fallback email dispatch notice:', emailErr);
+        }
+      }
+
       clearCart();
-      navigate(`/success?order_number=${encodeURIComponent(orderNum)}&payment_method=${encodeURIComponent(paymentMethod)}&email=${encodeURIComponent(details.email)}&total=${totalAmount}`);
+      navigate(
+        `/success?order_number=${encodeURIComponent(orderNum)}&payment_method=cod&email=${encodeURIComponent(details.email)}&total=${totalAmount}`
+      );
       return;
     } catch (error) {
       console.error('Error processing COD order:', error);
       const fallbackNum = generateOrderNumber();
       const details = sanitizeCustomerDetails();
       clearCart();
-      navigate(`/success?order_number=${encodeURIComponent(fallbackNum)}&payment_method=cod&email=${encodeURIComponent(details.email)}&total=${totalAmount}`);
+      navigate(
+        `/success?order_number=${encodeURIComponent(fallbackNum)}&payment_method=cod&email=${encodeURIComponent(details.email)}&total=${totalAmount}`
+      );
     } finally {
       setLoading(false);
+      isSubmittingRef.current = false;
     }
   };
 
@@ -612,9 +638,9 @@ const CartPage = () => {
     }
   };
 
-  // If no items in cart, redirect to home
+  // If no items in cart, redirect to cart step (unless submitting order)
   useEffect(() => {
-    if (state.items.length === 0 && step !== 'confirmation') {
+    if (state.items.length === 0 && step !== 'confirmation' && !isSubmittingRef.current) {
       setStep('cart');
     }
   }, [state.items.length, step]);

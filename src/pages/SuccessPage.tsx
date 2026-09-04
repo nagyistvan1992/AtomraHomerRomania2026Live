@@ -33,23 +33,34 @@ const SuccessPage = () => {
   const emailParam = searchParams.get('email');
   const totalParam = searchParams.get('total');
   const [domainInfo, setDomainInfo] = useState<DomainInfo | null>(null);
-  const [orderDetails, setOrderDetails] = useState<OrderDetails | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [orderDetails, setOrderDetails] = useState<OrderDetails | null>(() => {
+    if (orderNumberParam || emailParam || totalParam) {
+      return {
+        order_number: orderNumberParam || '',
+        customer_email: emailParam || '',
+        amount_total: totalParam ? parseFloat(totalParam) : undefined,
+        payment_method: paymentMethodParam || 'cod',
+        created_at: new Date().toISOString(),
+      };
+    }
+    return null;
+  });
+  const [loading, setLoading] = useState(!orderNumberParam && Boolean(sessionId));
+  const hasFetchedRef = React.useRef(false);
 
   useEffect(() => {
+    if (hasFetchedRef.current) return;
+    hasFetchedRef.current = true;
+
     window.scrollTo({ top: 0, behavior: 'smooth' });
     
+    // Clear cart once when reaching success page
+    clearCart();
+
     const fetchData = async () => {
-      setLoading(true);
-      
       try {
-        // Clear the cart when payment is successful
-        if (getTotalItems() > 0) {
-          clearCart();
-        }
-        
-        // Try to fetch order details if we have a session ID
         if (sessionId) {
+          setLoading(true);
           try {
             const data = await invokeVercelFunction<OrderDetails>('get-session-details', {
               body: { session_id: sessionId },
@@ -58,7 +69,6 @@ const SuccessPage = () => {
 
             if (data) {
               setOrderDetails(data);
-              console.log('Order details retrieved:', data);
             }
           } catch (error) {
             console.error('Error fetching session details:', error);
@@ -72,15 +82,16 @@ const SuccessPage = () => {
               .single();
 
             if (!error && data) {
-              setOrderDetails(data);
-              console.log('COD order details retrieved:', data);
+              setOrderDetails((prev) => ({
+                ...prev,
+                ...data,
+              }));
             }
           } catch (error) {
             console.error('Error fetching COD order details:', error);
           }
         }
 
-        // Get domain info
         try {
           const info = await getEntriLinks();
           setDomainInfo(info);
@@ -93,7 +104,7 @@ const SuccessPage = () => {
     };
     
     fetchData();
-  }, [clearCart, sessionId, orderNumberParam, getTotalItems]);
+  }, [sessionId, orderNumberParam, clearCart]);
 
   useEffect(() => {
     const timer = setInterval(() => {
